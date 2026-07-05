@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+"""grade — the official grader for json-unescape.
+
+Pipeline: build -> exhaustive verify (gate) -> callgrind cost -> score.
+Score = log2(given_cost / submission_cost). Appends to scores.jsonl.
+
+Usage: ./grade [--seed N] [--keep] [--quiet]
+"""
+import argparse
+import json
+import math
+import os
+import re
+import subprocess
+import sys
+import time
+import glob as globmod
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+SUB = os.path.join(HERE, "submission")
+VER = os.path.join(HERE, "verify")
+BUILD = os.path.join(HERE, ".build")
+
+CFLAGS = ["-O2", "-std=c17", "-fno-lto", "-g"]
+
+
+def sh(cmd, **kw):
+    return subprocess.run(cmd, check=True, capture_output=True, text=True, **kw)
+
+
+def build():
+    os.makedirs(BUILD, exist_ok=True)
+    sub_srcs = sorted(globmod.glob(os.path.join(SUB, "*.c")))
+    if not sub_srcs:
+        sys.exit("no .c files in submission/")
+    # verifier binary: submission + reference + verify harness
+    sh(["cc", *CFLAGS, "-I", SUB,
+        *sub_srcs,
+        os.path.join(VER, "reference.c"),
+        os.path.join(VER, "verify.c"),
+        "-o", os.path.join(BUILD, "verify")])
+    # runner binary: submission + runner
+    sh(["cc", *CFLAGS, "-I", SUB,
+        *sub_srcs,
+        os.path.join(VER, "runner.c"),
+        "-o", os.path.join(BUILD, "runner")])
+    # given runner: the frozen given implementation, measured on the same
+    # corpus every grade so instance difficulty cancels exactly (paired eval).
+    if not os.path.exists(os.path.join(BUILD, "runner_given")):
+        sh(["cc", *CFLAGS,
+            "-DRUNNER_GIVEN",
+            os.path.join(VER, "given.c"),
+            os.path.join(VER, "runner.c"),
+            "-o", os.path.join(BUILD, "runner_given")])
+
+
+def verify(seed):
+    r = subprocess.run([os.path.join(BUILD, "verify"), str(seed)],
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        print(r.stdout, end="")
+        print(r.stderr, end="", file=sys.stderr)
+        return False
+    return True
+
+
+def measure(seed, binary="runner", fn="json_unescape"):
+    corpus = os.path.join(BUILD, f"corpus_{seed}.bin")
+    if not os.path.exists(corpus):
+        sh(["python3", os.path.join(VER, "gen_corpus.py"), str(seed), corpus])
+    cg_out = os.path.join(BUILD, f"callgrind.{binary}.out")
+    if os.path.exists(cg_out):
+        os.unlink(cg_out)
+    sh(["valgrind", "--tool=callgrind",
+        f"--toggle-collect={fn}",
+        "--collect-atstart=no",
+        "--dump-line=no",
+        f"--callgrind-out-file={cg_out}",
+        os.path.join(BUILD, binary), corpus])
+    # parse: sum of self costs of all collected functions = instructions
+    # executed inside json_unescape and its callees.
+    total = 0
+    with open(cg_out) as f:
+        for line in f:
+            m = re.match(r"^(\d+) (\d+)$", line.strip())
+            if m:
+                total += int(m.group(2))
+            else:
+                m2 = re.match(r"^\d+ \d+ ", line.strip())
+                if m2:
+                    total += int(line.strip().split()[1])
+    if total == 0:
+        sys.exit("cost extraction failed: no collected instructions "
+                 "(did you rename json_unescape?)")
+    return total
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--seed", type=int, default=None,
+                    help="corpus/verify seed (default: time-based)")
+    ap.add_argument("--quiet", action="store_true")
+    args = ap.parse_args()
+
+    seed = args.seed if args.seed is not None else int(time.time()) % 100000
+
+    t0 = time.time()
+    build()
+    t_build = time.time() - t0
+
+    t0 = time.time()
+    if not verify(seed):
+        print("grade: FAIL (verification)")
+        sys.exit(1)
+    t_verify = time.time() - t0
+
+    t0 = time.time()
+    cost = measure(seed)
+    given = measure(seed, binary="runner_given", fn="given_json_unescape")
+    t_measure = time.time() - t0
+
+    score = math.log2(given / cost)
+    rec = {
+        "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "seed": seed,
+        "cost": cost,
+        "given_cost": given,
+        "score": round(score, 4),
+    }
+    with open(os.path.join(HERE, "scores.jsonl"), "a") as f:
+        f.write(json.dumps(rec) + "\n")
+
+    if not args.quiet:
+        print(f"build   {t_build:5.1f}s")
+        print(f"verify  {t_verify:5.1f}s  PASS")
+        print(f"measure {t_measure:5.1f}s  {cost:,} instructions "
+              f"(given: {given:,})")
+    print(f"SCORE   {score:+.4f}  ({given / cost:.3f}x)")
+
+
+if __name__ == "__main__":
+    main()
