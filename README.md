@@ -26,9 +26,9 @@ score-over-time curve.
 
 | task | status | verify | one-liner |
 |---|---|---|---|
-| json-unescape | ready | exhaustive | decode JSON string escapes faster |
-| float-print | planned | all 2^32 floats | shortest round-trip float to decimal |
-| utf16-transcode | planned | exhaustive bounded | UTF-16 <-> UTF-8 |
+| json-unescape | live | exhaustive | decode JSON string escapes faster |
+| float-print | live | all 2^32 floats (--full) | shortest round-trip float to decimal |
+| utf16-transcode | live | exhaustive | UTF-16 -> UTF-8 |
 
 ## Run
 
