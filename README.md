@@ -41,6 +41,13 @@ Edit `submission/solve.c`, re-run `./grade`. That's the whole loop.
 
 Requirements: gcc or clang, valgrind, python3, linux x86-64.
 
+### GPT-5.6 Sol harness comparison
+
+The reproducible Modal runner for Codex versus Jcode, each with native
+multi-agent support enabled and disabled, lives in [`modal/`](modal/README.md).
+It pins model, reasoning effort, agent versions, resource limits, prompts, and
+benchmark commit, and persists logs and checkpoints to a Modal Volume.
+
 ## Rules
 
 - Edit only files in `submission/`.

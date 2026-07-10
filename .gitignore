@@ -1,3 +1,4 @@
 .build/
 scores.jsonl
+modal/launches/
 __pycache__/
