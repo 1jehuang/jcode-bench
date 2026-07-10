@@ -48,6 +48,10 @@ multi-agent support enabled and disabled, lives in [`modal/`](modal/README.md).
 It pins model, reasoning effort, agent versions, resource limits, prompts, and
 benchmark commit, and persists logs and checkpoints to a Modal Volume.
 
+The completed 12-cell GPT-5.6 Sol high comparison is available as
+[`Markdown`](modal/runs/2026-07-10-gpt56-sol-high-results.md) and
+[`JSON`](modal/runs/2026-07-10-gpt56-sol-high-results.json).
+
 ## Rules
 
 - Edit only files in `submission/`.

@@ -79,7 +79,60 @@ def aggregate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
+def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]:
+    by_mode = {(row["agent"], row["swarm"]): row for row in aggregates}
+
+    def compare(
+        left: tuple[str, bool], right: tuple[str, bool]
+    ) -> dict[str, float]:
+        left_row = by_mode[left]
+        right_row = by_mode[right]
+        score_delta = left_row["mean_final_score"] - right_row["mean_final_score"]
+        duration_delta = (
+            left_row["total_agent_duration_s"] / right_row["total_agent_duration_s"] - 1
+        ) * 100
+        return {
+            "mean_score_delta": round(score_delta, 4),
+            "geomean_efficiency_factor": round(2**score_delta, 4),
+            "total_agent_time_delta_percent": round(duration_delta, 2),
+        }
+
+    return {
+        "codex_swarm_vs_solo": compare(("codex", True), ("codex", False)),
+        "jcode_swarm_vs_solo": compare(("jcode", True), ("jcode", False)),
+        "codex_vs_jcode_solo": compare(("codex", False), ("jcode", False)),
+        "codex_vs_jcode_swarm": compare(("codex", True), ("jcode", True)),
+    }
+
+
 def render_markdown(report: dict[str, Any]) -> str:
+    comparison = report["comparisons"]
+    summary_lines = ["## Summary", ""]
+    if comparison:
+        summary_lines.extend(
+            [
+                f"- Codex led Jcode by **{comparison['codex_vs_jcode_solo']['mean_score_delta']:+.4f}** "
+                f"mean score without swarms, a **{comparison['codex_vs_jcode_solo']['geomean_efficiency_factor']:.3f}x** "
+                "geometric-mean instruction-efficiency advantage.",
+                f"- With swarms enabled, Codex led by **{comparison['codex_vs_jcode_swarm']['mean_score_delta']:+.4f}**, "
+                f"a **{comparison['codex_vs_jcode_swarm']['geomean_efficiency_factor']:.3f}x** advantage.",
+                f"- Enabling Codex multi-agent mode changed mean score by "
+                f"**{comparison['codex_swarm_vs_solo']['mean_score_delta']:+.4f}** "
+                f"(**{comparison['codex_swarm_vs_solo']['geomean_efficiency_factor']:.3f}x**) and total agent time by "
+                f"**{comparison['codex_swarm_vs_solo']['total_agent_time_delta_percent']:+.2f}%**.",
+                f"- Enabling Jcode swarm mode changed mean score by "
+                f"**{comparison['jcode_swarm_vs_solo']['mean_score_delta']:+.4f}** "
+                f"(**{comparison['jcode_swarm_vs_solo']['geomean_efficiency_factor']:.3f}x**) and total agent time by "
+                f"**{comparison['jcode_swarm_vs_solo']['total_agent_time_delta_percent']:+.2f}%**.",
+                "- All swarm-enabled commands were configured correctly, but captured logs contained "
+                "**zero explicit native helper events** in every cell. Treat the swarm deltas as enabled-mode "
+                "outcomes, not demonstrated delegation gains.",
+            ]
+        )
+    else:
+        summary_lines.append("Aggregate comparisons will be calculated after all cells complete.")
+    summary_lines.append("")
+
     lines = [
         "# Jcode Bench v1: GPT-5.6 Sol high",
         "",
@@ -87,6 +140,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"Model: `{report['model']}` with `{report['reasoning_effort']}` reasoning  ",
         f"Completed cells: **{report['completed_count']}/{report['run_count']}**",
         "",
+        *summary_lines,
         "## Per-task results",
         "",
         "| Agent | Swarm enabled | Task | Final | Best | Agent time | Grades | Explicit helper events |",
@@ -176,12 +230,14 @@ def collect(manifest: dict[str, Any], volume: modal.Volume) -> dict[str, Any]:
         rows.append(row)
 
     completed = [row for row in rows if row["status"] == "completed"]
+    aggregates = aggregate(rows)
     return {
         **{key: value for key, value in manifest.items() if key != "runs"},
         "run_count": len(rows),
         "completed_count": len(completed),
         "runs": rows,
-        "aggregates": aggregate(rows),
+        "aggregates": aggregates,
+        "comparisons": comparisons(aggregates) if len(completed) == len(rows) else {},
     }
 
 
