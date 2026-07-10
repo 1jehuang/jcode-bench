@@ -213,6 +213,9 @@ def run_grade_with_retries(workdir: Path, log_path: Path) -> int:
     cpu=4,
     memory=8192,
     max_containers=12,
+    single_use_containers=True,
+    region="us-west",
+    retries=modal.Retries(max_retries=3, initial_delay=5.0, backoff_coefficient=2.0),
 )
 def run_case(agent: str, swarm: bool, task: str, run_id: str) -> dict[str, object]:
     if agent not in AGENTS:
@@ -264,7 +267,7 @@ def run_case(agent: str, swarm: bool, task: str, run_id: str) -> dict[str, objec
         failed = {**metadata, "status": "baseline_failed", "exit_code": baseline_exit_code, "finished_at": utc_now()}
         write_json(result_path, failed)
         results.commit()
-        return failed
+        raise RuntimeError("baseline grader failed after infrastructure retries")
 
     copy_checkpoint(workdir, result_dir, "baseline")
     command, env = command_for(agent, swarm, workdir, prompt_for(task), home)

@@ -13,7 +13,10 @@ Every cell uses `gpt-5.6-sol`, high reasoning, the OpenAI API, the historical
 benchmark prompt, four CPUs, 8 GiB RAM, and at most eight concurrent helper
 agents. Each run gets its own Modal function and persists metadata, logs,
 submission snapshots, `scores.jsonl`, and final grading output to the
-`jcode-bench-v1-results` Volume.
+`jcode-bench-v1-results` Volume. Runs use single-use containers so failed
+Callgrind host probes are never reused for another matrix cell. The deployed
+worker uses Modal's `us-west` pool and retries failed baseline host probes or
+preempted calls on fresh containers.
 
 ## Deploy and run
 
