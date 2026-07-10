@@ -42,3 +42,6 @@ modal deploy modal/benchmark_app.py
 
 The OpenAI key is attached through `modal.Secret.from_local_environ`; it is not
 written to the repository, image, command metadata, logs, or result Volume.
+
+Canonical launch manifests are checked into [`runs/`](runs/). Ad-hoc launcher
+manifests remain ignored because failed infrastructure calls may be replaced.
