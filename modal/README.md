@@ -38,6 +38,12 @@ modal deploy modal/benchmark_app.py
 
 # Non-blocking status check.
 ~/.local/share/uv/tools/modal/bin/python modal/status.py modal/launches/<manifest>.json
+
+# Validate completed artifacts and generate reports. Exits 2 while cells remain active.
+~/.local/share/uv/tools/modal/bin/python modal/collect_results.py \
+  modal/runs/2026-07-10-gpt56-sol-high.json \
+  --json-output modal/runs/2026-07-10-gpt56-sol-high-results.json \
+  --markdown-output modal/runs/2026-07-10-gpt56-sol-high-results.md
 ```
 
 The OpenAI key is attached through `modal.Secret.from_local_environ`; it is not
