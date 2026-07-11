@@ -1,0 +1,72 @@
+{
+  "comparison": "Jcode solo: GPT-5.6 Sol high vs Claude Opus 4.8 high thinking",
+  "score_semantics": "score = log2(given_cost / optimized_cost); higher is better",
+  "sources": {
+    "sol": "modal/runs/2026-07-10-gpt56-sol-high-results.json",
+    "opus_json": "../jcode-website/public/benchmarks/data/jcode-bench-json-unescape-2026-07-05.json",
+    "opus_float_utf16": "../jcode-website/public/benchmarks/data/jcode-bench-4way-2026-07-06.json"
+  },
+  "runs": [
+    {
+      "task": "json-unescape",
+      "sol": {"best_score": 1.9173, "minutes": 9.23985, "grades": 21, "tool_calls": 97, "todo_calls": 4},
+      "opus": {"best_score": 2.6889, "minutes": 158.0, "grades": 163, "tool_calls": 260, "todo_calls": 0},
+      "opus_minus_sol_score": 0.7716,
+      "opus_efficiency_factor": 1.707,
+      "opus_score_at_sol_stop_time": 1.5413,
+      "opus_minutes_to_first_surpass_sol_final": 12.6
+    },
+    {
+      "task": "float-print",
+      "sol": {"best_score": 7.1501, "minutes": 42.2839, "grades": 48, "tool_calls": 90, "todo_calls": 4},
+      "opus": {"best_score": 8.6385, "minutes": 637.5, "grades": 28, "tool_calls": 321, "todo_calls": 0},
+      "opus_minus_sol_score": 1.4884,
+      "opus_efficiency_factor": 2.806,
+      "opus_score_at_sol_stop_time": 7.4958,
+      "opus_minutes_to_first_surpass_sol_final": 29.8
+    },
+    {
+      "task": "utf16-transcode",
+      "sol": {"best_score": 1.4713, "minutes": 8.219867, "grades": 17, "tool_calls": 79, "todo_calls": 7},
+      "opus": {"best_score": 3.2797, "minutes": 627.5, "grades": 116, "tool_calls": 370, "todo_calls": 0},
+      "opus_minus_sol_score": 1.8084,
+      "opus_efficiency_factor": 3.503,
+      "opus_score_at_sol_stop_time": null,
+      "opus_minutes_to_first_surpass_sol_final": 14.2
+    }
+  ],
+  "aggregate": {
+    "sol_mean_best_score": 3.5129,
+    "opus_mean_best_score": 4.869033,
+    "opus_minus_sol_score": 1.356133,
+    "opus_efficiency_factor": 2.559981,
+    "sol_total_minutes": 59.743617,
+    "opus_total_minutes": 1423.0,
+    "opus_time_ratio": 23.818444,
+    "sol_total_grades": 86,
+    "opus_total_grades": 307,
+    "sol_total_tool_calls": 266,
+    "opus_total_tool_calls": 951,
+    "sol_total_todo_calls": 15,
+    "opus_total_todo_calls": 0
+  },
+  "todo_confidence": {
+    "sol": {
+      "todo_calls": 15,
+      "final_todo_counts": {"json-unescape": 4, "float-print": 5, "utf16-transcode": 7},
+      "final_completion_confidence_mean": {"json-unescape": 95.5, "float-print": 92.6, "utf16-transcode": 95.0},
+      "notes": "All final todos were completed. Intermediate completion-confidence usage was inconsistent in a few updates."
+    },
+    "opus": {
+      "todo_calls": 0,
+      "confidence_data_available": false,
+      "notes": "The persisted Opus Jcode sessions contain no todo tool calls and no confidence fields."
+    }
+  },
+  "caveats": [
+    "The runs were not time-budget matched: Opus used 23.8x more total active time.",
+    "The Opus runs used Jcode v0.36.x; Sol used Jcode v0.41.1-dev.",
+    "Opus json-unescape ran on the original json-only commit before the shared harness port; float-print and utf16-transcode used the three-task benchmark commit.",
+    "Each model has one run per task, so model variance is unmeasured."
+  ]
+}

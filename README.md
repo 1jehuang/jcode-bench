@@ -51,6 +51,12 @@ benchmark commit, and persists logs and checkpoints to a Modal Volume.
 The completed 12-cell GPT-5.6 Sol high comparison is available as
 [`Markdown`](modal/runs/2026-07-10-gpt56-sol-high-results.md) and
 [`JSON`](modal/runs/2026-07-10-gpt56-sol-high-results.json).
+The three Jcode-solo todo and confidence traces are also published as
+[`Markdown`](modal/runs/2026-07-10-gpt56-sol-high-jcode-solo-todos.md) and
+[`JSON`](modal/runs/2026-07-10-gpt56-sol-high-jcode-solo-todos.json).
+The Jcode-solo GPT-5.6 Sol versus Opus 4.8 comparison is available as
+[`Markdown`](modal/runs/2026-07-10-jcode-solo-sol56-vs-opus48.md) and
+[`JSON`](modal/runs/2026-07-10-jcode-solo-sol56-vs-opus48.json).
 
 ## Rules
 
