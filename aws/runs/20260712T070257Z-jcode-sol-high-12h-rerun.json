@@ -74,5 +74,55 @@
   "scheduled_checks": {
     "midpoint": "sched_70aafc2c",
     "final": "sched_7188de28"
+  },
+  "midpoint_check": {
+    "status": "healthy",
+    "checked_at": "2026-07-12T13:11:39Z",
+    "cloudwatch_events_scanned": 71,
+    "cloudwatch_fatal_events": 0,
+    "jcode_error_events": 0,
+    "api_failure_events": 0,
+    "repair_action": "none",
+    "tasks": [
+      {
+        "task": "json-unescape",
+        "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/9fbcb78f99c4407ebcb6a1dc5152319c",
+        "ecs_status": "RUNNING",
+        "container_status": "RUNNING",
+        "connectivity": "CONNECTED",
+        "checkpoint_updated_at": "2026-07-12T13:10:11.531447+00:00",
+        "elapsed_s": 21976.67,
+        "remaining_s": 21223.33,
+        "segment": 50,
+        "grade_count": 2090,
+        "best_score": 2.6201
+      },
+      {
+        "task": "float-print",
+        "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/9ac8482d888f4438a708c4085a3dc0f5",
+        "ecs_status": "RUNNING",
+        "container_status": "RUNNING",
+        "connectivity": "CONNECTED",
+        "checkpoint_updated_at": "2026-07-12T13:06:40.694484+00:00",
+        "elapsed_s": 21761.058,
+        "remaining_s": 21438.942,
+        "segment": 3,
+        "grade_count": 124,
+        "best_score": 7.6311
+      },
+      {
+        "task": "utf16-transcode",
+        "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/37f6af82de6d47debd1e7a6c54408c1b",
+        "ecs_status": "RUNNING",
+        "container_status": "RUNNING",
+        "connectivity": "CONNECTED",
+        "checkpoint_updated_at": "2026-07-12T13:10:04.604695+00:00",
+        "elapsed_s": 21970.247,
+        "remaining_s": 21229.753,
+        "segment": 56,
+        "grade_count": 1560,
+        "best_score": 2.5179
+      }
+    ]
   }
 }
