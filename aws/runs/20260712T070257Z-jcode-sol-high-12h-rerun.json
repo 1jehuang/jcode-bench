@@ -1,0 +1,44 @@
+{
+  "run_group": "20260712T070257Z-jcode-sol-high-12h-rerun",
+  "status": "launched",
+  "launched_at": "2026-07-12T07:03:19Z",
+  "expected_finish_after": "2026-07-12T19:18:19Z",
+  "region": "us-east-1",
+  "cluster": "jcode-bench-v1",
+  "task_definition_arn": "arn:aws:ecs:us-east-1:280196252242:task-definition/jcode-bench-v1-sol-high-12h:1",
+  "image": "280196252242.dkr.ecr.us-east-1.amazonaws.com/jcode-bench-v1@sha256:c9adfa1111bebe57fda31bc0eef14bd464ee49bdf996f708350d6aa6bab3fcbf",
+  "image_tag": "sol-high-12h-20260712T070257Z-54139a205e6f",
+  "image_digest": "sha256:c9adfa1111bebe57fda31bc0eef14bd464ee49bdf996f708350d6aa6bab3fcbf",
+  "s3_uri": "s3://jcode-bench-v1-280196252242-us-east-1/runs/20260712T070257Z-jcode-sol-high-12h-rerun/",
+  "cloudwatch_log_group": "/jcode-bench/v1",
+  "agent": "jcode",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "swarm": false,
+  "budget_seconds": 43200,
+  "fargate": {
+    "cpu_units": 4096,
+    "memory_mib": 8192,
+    "ephemeral_storage_gib": 40,
+    "launch_type": "FARGATE",
+    "capacity": "on-demand"
+  },
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "benchmark_archive_sha256": "575223243219accb1af3c11c3892688812399e9302a6001b06bb1024ba876c78",
+  "jcode_version": "jcode v0.44.0-dev (ee9476aec, dirty)",
+  "jcode_sha256": "54139a205e6f289aef2ab767f12bdd8312af0d8df047f59398c7ff405c7bdf54",
+  "tasks": [
+    {
+      "task": "json-unescape",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/9fbcb78f99c4407ebcb6a1dc5152319c"
+    },
+    {
+      "task": "float-print",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/9ac8482d888f4438a708c4085a3dc0f5"
+    },
+    {
+      "task": "utf16-transcode",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/37f6af82de6d47debd1e7a6c54408c1b"
+    }
+  ]
+}
