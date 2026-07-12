@@ -1,6 +1,6 @@
 {
   "run_group": "20260712T070257Z-jcode-sol-high-12h-rerun",
-  "status": "launched",
+  "status": "running",
   "launched_at": "2026-07-12T07:03:19Z",
   "expected_finish_after": "2026-07-12T19:18:19Z",
   "region": "us-east-1",
@@ -40,5 +40,39 @@
       "task": "utf16-transcode",
       "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/37f6af82de6d47debd1e7a6c54408c1b"
     }
-  ]
+  ],
+  "first_checkpoint_verified_at": "2026-07-12T07:10:30Z",
+  "first_checkpoint": [
+    {
+      "task": "float-print",
+      "elapsed_s": 328.339,
+      "remaining_s": 42871.661,
+      "segment": 1,
+      "grade_count": 7,
+      "best_score": 7.1122,
+      "updated_at": "2026-07-12T07:09:27.974517+00:00"
+    },
+    {
+      "task": "json-unescape",
+      "elapsed_s": 303.911,
+      "remaining_s": 42896.089,
+      "segment": 1,
+      "grade_count": 14,
+      "best_score": 1.4447,
+      "updated_at": "2026-07-12T07:08:58.772452+00:00"
+    },
+    {
+      "task": "utf16-transcode",
+      "elapsed_s": 303.804,
+      "remaining_s": 42896.196,
+      "segment": 1,
+      "grade_count": 12,
+      "best_score": 0.9789,
+      "updated_at": "2026-07-12T07:08:58.162511+00:00"
+    }
+  ],
+  "scheduled_checks": {
+    "midpoint": "sched_70aafc2c",
+    "final": "sched_7188de28"
+  }
 }
