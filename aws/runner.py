@@ -94,8 +94,12 @@ WORK_ROOT = Path("/work/run")
 WORKDIR = WORK_ROOT / "tasks" / TASK
 HOME = WORK_ROOT / "home"
 RESULT_DIR = Path("/work/result")
+RUNTIME_DIR = WORK_ROOT / "runtime"
+SERVER_SOCKET = RUNTIME_DIR / "jcode.sock"
 STOP = threading.Event()
 CURRENT_PROCESS: subprocess.Popen[str] | None = None
+SERVER_PROCESS: subprocess.Popen[str] | None = None
+ROOT_SESSION_ID: str | None = None
 
 
 def utc_now() -> str:
@@ -202,6 +206,33 @@ def configure_jcode_home() -> tuple[str, str]:
     return config, SWARM_PROMPT
 
 
+def initialize_worktree() -> str:
+    commands = [
+        ["git", "init", "-q"],
+        ["git", "config", "user.name", "JcodeBench"],
+        ["git", "config", "user.email", "jcodebench@localhost"],
+        ["git", "add", "."],
+    ]
+    for command in commands:
+        response = run(command, cwd=WORKDIR)
+        if response.returncode != 0:
+            raise RuntimeError(f"worktree initialization failed: {response.stdout[-1000:]}")
+    commit_env = os.environ.copy()
+    commit_env.update(
+        {
+            "GIT_AUTHOR_DATE": "2026-07-10T00:00:00Z",
+            "GIT_COMMITTER_DATE": "2026-07-10T00:00:00Z",
+        }
+    )
+    commit = run(["git", "commit", "-q", "-m", "Frozen JcodeBench baseline"], cwd=WORKDIR, env=commit_env)
+    if commit.returncode != 0:
+        raise RuntimeError(f"worktree baseline commit failed: {commit.stdout[-1000:]}")
+    revision = run(["git", "rev-parse", "HEAD"], cwd=WORKDIR)
+    if revision.returncode != 0:
+        raise RuntimeError(f"could not read worktree revision: {revision.stdout[-1000:]}")
+    return revision.stdout.strip()
+
+
 def parse_scores() -> list[dict[str, Any]]:
     path = WORKDIR / "scores.jsonl"
     if not path.exists():
@@ -284,12 +315,103 @@ def run_grade(log_name: str, *, full: bool = False) -> int:
     return grade.returncode
 
 
-def newest_session_id() -> str | None:
-    sessions = HOME / ".jcode" / "sessions"
-    candidates = list(sessions.glob("session_*.json")) if sessions.exists() else []
-    if not candidates:
-        return None
-    return max(candidates, key=lambda path: path.stat().st_mtime).stem
+def start_jcode_server(env: dict[str, str]) -> None:
+    global SERVER_PROCESS
+    RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+    SERVER_SOCKET.unlink(missing_ok=True)
+    command = [
+        "jcode",
+        "--no-update",
+        "--no-selfdev",
+        "-m",
+        MODEL,
+        "--socket",
+        str(SERVER_SOCKET),
+        "serve",
+    ]
+    server_log = (RESULT_DIR / "server.log").open("a", buffering=1)
+    SERVER_PROCESS = subprocess.Popen(
+        command,
+        cwd=WORKDIR,
+        env=env,
+        stdin=subprocess.DEVNULL,
+        stdout=server_log,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
+    deadline = time.monotonic() + 30
+    while time.monotonic() < deadline:
+        if SERVER_SOCKET.exists():
+            return
+        if SERVER_PROCESS.poll() is not None:
+            raise RuntimeError(f"Jcode server exited before creating {SERVER_SOCKET}")
+        time.sleep(0.1)
+    raise RuntimeError(f"Jcode server did not create {SERVER_SOCKET} within 30 seconds")
+
+
+def debug_command(env: dict[str, str], session_id: str | None, command: str) -> subprocess.CompletedProcess[str]:
+    argv = [
+        "jcode",
+        "--no-update",
+        "--no-selfdev",
+        "--socket",
+        str(SERVER_SOCKET),
+        "debug",
+    ]
+    if session_id:
+        argv.extend(["--session", session_id])
+    argv.append(command)
+    return run(argv, cwd=WORKDIR, env=env)
+
+
+def create_root_session(env: dict[str, str]) -> str:
+    response = debug_command(env, None, f"create_session:{WORKDIR}")
+    if response.returncode != 0:
+        raise RuntimeError(f"could not create daemon-hosted root session: {response.stdout[-2000:]}")
+    try:
+        payload = json.loads(response.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"invalid root session response: {response.stdout[-2000:]}") from exc
+    session_id = payload.get("session_id")
+    if not isinstance(session_id, str) or not session_id:
+        raise RuntimeError(f"root session response has no session_id: {response.stdout[-2000:]}")
+    write_json(RESULT_DIR / "root-session.json", payload)
+    return session_id
+
+
+def cancel_root_session(env: dict[str, str]) -> None:
+    if ROOT_SESSION_ID and SERVER_SOCKET.exists():
+        response = debug_command(env, ROOT_SESSION_ID, "cancel")
+        with (RESULT_DIR / "agent.log").open("a") as log:
+            log.write(f"\n=== cancel response {utc_now()} exit={response.returncode} ===\n")
+            log.write(response.stdout[-2000:])
+            log.write("\n")
+
+
+def stop_jcode_server(env: dict[str, str]) -> None:
+    global SERVER_PROCESS
+    if SERVER_SOCKET.exists():
+        run(
+            [
+                "jcode",
+                "--no-update",
+                "--no-selfdev",
+                "--socket",
+                str(SERVER_SOCKET),
+                "server",
+                "stop",
+            ],
+            cwd=WORKDIR,
+            env=env,
+        )
+    if SERVER_PROCESS is not None and SERVER_PROCESS.poll() is None:
+        SERVER_PROCESS.terminate()
+        try:
+            SERVER_PROCESS.wait(timeout=15)
+        except subprocess.TimeoutExpired:
+            SERVER_PROCESS.kill()
+            SERVER_PROCESS.wait(timeout=5)
+    SERVER_PROCESS = None
 
 
 def initial_prompt() -> str:
@@ -330,29 +452,23 @@ def continuation_prompt(segment: int, remaining_s: float) -> str:
 {swarm_reminder} Do not just summarize or declare the current result sufficient. Re-read the current submission and scores.jsonl, identify a genuinely different optimization angle or a weakness in the present approach, update your todo list, implement and grade experiments, preserve only verified improvements, and keep working until this turn is ended by the supervisor."""
 
 
-def run_jcode_segment(env: dict[str, str], prompt: str, session_id: str | None, remaining_s: float, segment: int) -> int:
+def run_jcode_segment(env: dict[str, str], prompt: str, session_id: str, remaining_s: float, segment: int) -> int:
     global CURRENT_PROCESS
     command = [
         "jcode",
         "--no-update",
         "--no-selfdev",
-        "-p",
-        "openai-api",
-        "-m",
-        MODEL,
-        "-C",
-        str(WORKDIR),
-        "run",
-        "--ndjson",
-        "--trace",
-        "--quiet",
+        "--socket",
+        str(SERVER_SOCKET),
+        "debug",
+        "--session",
+        session_id,
+        "--wait",
+        f"message:{prompt}",
     ]
-    if session_id:
-        command.extend(["--resume", session_id])
-    command.append(prompt)
 
     with (RESULT_DIR / "agent.log").open("a", buffering=1) as log:
-        log.write(f"\n=== segment {segment} started {utc_now()} session={session_id or 'new'} ===\n")
+        log.write(f"\n=== segment {segment} started {utc_now()} session={session_id} ===\n")
         CURRENT_PROCESS = subprocess.Popen(
             command,
             cwd=WORKDIR,
@@ -366,7 +482,8 @@ def run_jcode_segment(env: dict[str, str], prompt: str, session_id: str | None, 
             return CURRENT_PROCESS.wait(timeout=max(1, remaining_s))
         except subprocess.TimeoutExpired:
             log.write(f"\n=== fixed budget reached; terminating segment {segment} ===\n")
-            CURRENT_PROCESS.send_signal(signal.SIGINT)
+            cancel_root_session(env)
+            CURRENT_PROCESS.terminate()
             try:
                 return CURRENT_PROCESS.wait(timeout=60)
             except subprocess.TimeoutExpired:
@@ -378,14 +495,21 @@ def run_jcode_segment(env: dict[str, str], prompt: str, session_id: str | None, 
 
 def handle_signal(signum: int, _frame: object) -> None:
     STOP.set()
+    signal_env = os.environ.copy()
+    signal_env["HOME"] = str(HOME)
+    signal_env["XDG_RUNTIME_DIR"] = str(RUNTIME_DIR)
+    cancel_root_session(signal_env)
     if CURRENT_PROCESS is not None and CURRENT_PROCESS.poll() is None:
         CURRENT_PROCESS.terminate()
+    if SERVER_PROCESS is not None and SERVER_PROCESS.poll() is None:
+        SERVER_PROCESS.terminate()
     snapshot("termination")
     upload()
     raise SystemExit(128 + signum)
 
 
 def main() -> None:
+    global ROOT_SESSION_ID
     signal.signal(signal.SIGTERM, handle_signal)
     signal.signal(signal.SIGINT, handle_signal)
 
@@ -396,6 +520,7 @@ def main() -> None:
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
     shutil.copytree(Path("/opt/jcode-bench/harness"), WORK_ROOT / "harness")
     shutil.copytree(Path("/opt/jcode-bench/tasks") / TASK, WORKDIR, ignore=shutil.ignore_patterns(".build", "scores.jsonl"))
+    worktree_commit = initialize_worktree()
     config_text, swarm_prompt_text = configure_jcode_home()
     configuration_dir = RESULT_DIR / "configuration"
     configuration_dir.mkdir(parents=True, exist_ok=True)
@@ -419,6 +544,7 @@ def main() -> None:
         "reasoning_effort": REASONING_EFFORT,
         "budget_seconds": BUDGET_SECONDS,
         "bench_commit": BENCH_COMMIT,
+        "worktree_commit": worktree_commit,
         "jcode_version": JCODE_VERSION,
         "jcode_sha256": JCODE_SHA256,
         "swarm_concurrency": SWARM_CONCURRENCY if SWARM_ENABLED else 0,
@@ -452,6 +578,7 @@ def main() -> None:
     env.update(
         {
             "HOME": str(HOME),
+            "XDG_RUNTIME_DIR": str(RUNTIME_DIR),
             "CI": "1",
             "TERM": "dumb",
             "NO_COLOR": "1",
@@ -465,34 +592,40 @@ def main() -> None:
             "JCODE_SWARM_MAX_CONCURRENT_AGENTS": str(SWARM_CONCURRENCY),
             "JCODE_MEMORY_ENABLED": "false",
             "JCODE_AUTO_UPDATE": "false",
+            "JCODE_DEBUG_CONTROL": "1",
         }
     )
     if provider_keys["ANTHROPIC_API_KEY"]:
         env["ANTHROPIC_API_KEY"] = provider_keys["ANTHROPIC_API_KEY"]
 
     segment_ref = [0]
-    checkpointer = threading.Thread(
-        target=checkpoint_loop,
-        args=(started_monotonic, deadline, segment_ref),
-        daemon=True,
-    )
-    checkpointer.start()
-
+    checkpointer: threading.Thread | None = None
     segment_results = []
     try:
-        session_id = None
+        start_jcode_server(env)
+        ROOT_SESSION_ID = create_root_session(env)
+        metadata["root_session_id"] = ROOT_SESSION_ID
+        metadata["status"] = "running"
+        write_json(RESULT_DIR / "metadata.json", metadata)
+        upload()
+        checkpointer = threading.Thread(
+            target=checkpoint_loop,
+            args=(started_monotonic, deadline, segment_ref),
+            daemon=True,
+        )
+        checkpointer.start()
+
         while time.monotonic() < deadline and not STOP.is_set():
             segment_ref[0] += 1
             remaining_s = deadline - time.monotonic()
             prompt = initial_prompt() if segment_ref[0] == 1 else continuation_prompt(segment_ref[0], remaining_s)
-            exit_code = run_jcode_segment(env, prompt, session_id, remaining_s, segment_ref[0])
-            session_id = newest_session_id() or session_id
+            exit_code = run_jcode_segment(env, prompt, ROOT_SESSION_ID, remaining_s, segment_ref[0])
             segment_results.append(
                 {
                     "segment": segment_ref[0],
                     "finished_at": utc_now(),
                     "exit_code": exit_code,
-                    "session_id": session_id,
+                    "session_id": ROOT_SESSION_ID,
                     "remaining_s": max(0, round(deadline - time.monotonic(), 3)),
                 }
             )
@@ -502,11 +635,14 @@ def main() -> None:
             upload()
             if time.monotonic() < deadline:
                 time.sleep(5)
+        snapshot("agent-final")
     finally:
         STOP.set()
-        checkpointer.join(timeout=15)
+        if checkpointer is not None:
+            checkpointer.join(timeout=15)
+        stop_jcode_server(env)
+        snapshot("daemon-stopped")
 
-    snapshot("agent-final")
     final_grade_exit = run_grade("final-grade.log", full=TASK == "float-print")
     snapshot("final-grade")
     scores = parse_scores()

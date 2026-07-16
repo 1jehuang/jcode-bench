@@ -70,6 +70,44 @@ def session_usage(session: dict[str, Any]) -> dict[str, int]:
     return dict(total)
 
 
+def journal_usage(path: Path) -> dict[str, int]:
+    total = defaultdict(int)
+    if not path.exists():
+        return {}
+    for line in path.read_text(errors="replace").splitlines():
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        for message in entry.get("append_messages", []):
+            if not isinstance(message, dict):
+                continue
+            usage = message.get("token_usage")
+            if not isinstance(usage, dict):
+                continue
+            for source, target in (
+                ("input_tokens", "input"),
+                ("output_tokens", "output"),
+                ("cache_read_input_tokens", "cache_read"),
+                ("cache_creation_input_tokens", "cache_write"),
+            ):
+                total[target] += int(usage.get(source) or 0)
+    return dict(total)
+
+
+def swarm_members(cell: Path) -> dict[str, dict[str, Any]]:
+    members: dict[str, dict[str, Any]] = {}
+    for path in sorted((cell / "state" / "swarm").glob("*.json")):
+        try:
+            value = json.loads(path.read_text())
+        except (json.JSONDecodeError, OSError):
+            continue
+        for member in value.get("members", []):
+            if isinstance(member, dict) and isinstance(member.get("session_id"), str):
+                members[member["session_id"]] = member
+    return members
+
+
 def estimate_cost(route_usage: dict[str, dict[str, int]], pricing: dict[str, Any]) -> float | None:
     prices = pricing.get("usd_per_million_tokens", {}) if isinstance(pricing, dict) else {}
     total = 0.0
@@ -106,25 +144,41 @@ def analyze_cell(root: Path, task: str, condition: str) -> dict[str, Any]:
     metadata = read_json(cell / "metadata.json")
     scores = read_scores(cell / "scores.jsonl")
 
-    sessions: list[dict[str, Any]] = []
+    sessions: list[tuple[dict[str, Any], Path]] = []
     for path in sorted((cell / "sessions").glob("session_*.json")):
         try:
             value = json.loads(path.read_text())
         except (json.JSONDecodeError, OSError):
             continue
         if isinstance(value, dict):
-            sessions.append(value)
+            sessions.append((value, path))
+
+    members = swarm_members(cell)
+    root_session_id = result.get("root_session_id") or metadata.get("root_session_id")
+    if not root_session_id:
+        root_session_id = next(
+            (session_id for session_id, member in members.items() if member.get("role") == "coordinator"),
+            None,
+        )
+    helper_ids = {
+        session_id
+        for session_id, member in members.items()
+        if member.get("report_back_to_session_id")
+    }
+    if not helper_ids and root_session_id:
+        helper_ids = {session.get("id") for session, _path in sessions if session.get("id") != root_session_id}
 
     route_sessions = defaultdict(int)
     route_usage: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
     helper_routes = defaultdict(int)
     helper_efforts = defaultdict(int)
-    for session in sessions:
+    for session, path in sessions:
         route = canonical_route(session)
         route_sessions[route] += 1
-        for key, value in session_usage(session).items():
+        usage = journal_usage(path.with_suffix(".journal.jsonl")) or session_usage(session)
+        for key, value in usage.items():
             route_usage[route][key] += value
-        if session.get("parent_id"):
+        if session.get("id") in helper_ids:
             helper_routes[route] += 1
             helper_efforts[f"{route}@{session.get('reasoning_effort') or 'unknown'}"] += 1
 
@@ -185,6 +239,8 @@ def analyze_cell(root: Path, task: str, condition: str) -> dict[str, Any]:
         else None,
         "session_count": len(sessions),
         "helper_count": helper_count,
+        "root_session_id": root_session_id,
+        "helper_session_ids": sorted(str(session_id) for session_id in helper_ids if session_id),
         "route_session_counts": dict(sorted(route_sessions.items())),
         "helper_route_counts": dict(sorted(helper_routes.items())),
         "helper_route_effort_counts": dict(sorted(helper_efforts.items())),

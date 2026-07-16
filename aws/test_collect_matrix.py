@@ -25,6 +25,7 @@ class CollectMatrixTests(unittest.TestCase):
             "jcode_sha256": "abc",
             "jcode_config_sha256": "cfg",
             "swarm_prompt_sha256": "prompt",
+            "root_session_id": "root",
             "pricing_snapshot": {
                 "usd_per_million_tokens": {
                     "openai-api:gpt-5.6-sol": {
@@ -72,10 +73,27 @@ class CollectMatrixTests(unittest.TestCase):
             ],
         }
         (sessions / "session_root.json").write_text(json.dumps(root_session))
+        (sessions / "session_root.journal.jsonl").write_text(
+            json.dumps(
+                {
+                    "append_messages": [
+                        {
+                            "role": "assistant",
+                            "token_usage": {
+                                "input_tokens": 1000,
+                                "output_tokens": 100,
+                                "cache_read_input_tokens": 200,
+                            },
+                        }
+                    ]
+                }
+            )
+            + "\n"
+        )
         if condition == "swarm":
             manager = {
                 "id": "manager",
-                "parent_id": "root",
+                "parent_id": None,
                 "model": "claude-api:claude-fable-5",
                 "provider_key": "anthropic",
                 "reasoning_effort": "low",
@@ -93,7 +111,7 @@ class CollectMatrixTests(unittest.TestCase):
             }
             worker = {
                 "id": "worker",
-                "parent_id": "manager",
+                "parent_id": None,
                 "model": "openai-api:gpt-5.6-sol",
                 "provider_key": "openai",
                 "reasoning_effort": "high",
@@ -101,6 +119,20 @@ class CollectMatrixTests(unittest.TestCase):
             }
             (sessions / "session_manager.json").write_text(json.dumps(manager))
             (sessions / "session_worker.json").write_text(json.dumps(worker))
+            state = cell / "state" / "swarm"
+            state.mkdir(parents=True)
+            (state / "test.json").write_text(
+                json.dumps(
+                    {
+                        "coordinator_session_id": "root",
+                        "members": [
+                            {"session_id": "root", "role": "coordinator", "report_back_to_session_id": None},
+                            {"session_id": "manager", "role": "agent", "report_back_to_session_id": "root"},
+                            {"session_id": "worker", "role": "agent", "report_back_to_session_id": "manager"},
+                        ],
+                    }
+                )
+            )
 
     def test_valid_matrix_and_pair_summary(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

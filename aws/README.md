@@ -21,7 +21,7 @@ benchmark revision, Jcode binary, root model, and reasoning effort for every cel
 The only intended treatment difference is swarm availability and required
 delegation.
 
-The swarm result gate requires persisted child-session evidence of both:
+The swarm result gate requires persisted daemon swarm-membership and session evidence of both:
 
 - `claude-api:claude-fable-5` at `low` effort;
 - `openai-api:gpt-5.6-sol` at `high` effort.
@@ -104,11 +104,12 @@ Every worker independently:
 2. saves the effective Jcode config and both local-source and API-adapted swarm prompts;
 3. records ECS task metadata, prompt/config hashes, Jcode hash, and a pricing snapshot;
 4. grades the baseline before provider credentials are fetched;
-5. runs or resumes one root Jcode session until the fixed deadline;
-6. snapshots the submission, scores, root and helper sessions, swarm state, and logs;
-7. uploads checkpoints, heartbeats, and artifacts to S3 every five minutes;
-8. runs the final grader, including the full gate for `float-print`;
-9. uploads `result.json` and a terminal `status.json`.
+5. starts an isolated Jcode daemon on a run-local Unix socket so swarm control calls work;
+6. creates one server-hosted root session and sends every optimization turn to that same session until the fixed deadline;
+7. snapshots the submission, scores, root and helper sessions, swarm state, and logs;
+8. uploads checkpoints, heartbeats, and artifacts to S3 every five minutes;
+9. stops the daemon and runs the final grader, including the full gate for `float-print`;
+10. uploads `result.json` and a terminal `status.json`.
 
 CloudWatch receives the container stream through the task definition's `awslogs`
 driver. S3 remains the authoritative long-term artifact store.
