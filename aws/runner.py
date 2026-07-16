@@ -381,11 +381,44 @@ def create_root_session(env: dict[str, str]) -> str:
 
 def cancel_root_session(env: dict[str, str]) -> None:
     if ROOT_SESSION_ID and SERVER_SOCKET.exists():
-        response = debug_command(env, ROOT_SESSION_ID, "cancel")
+        argv = [
+            "jcode",
+            "--no-update",
+            "--no-selfdev",
+            "--socket",
+            str(SERVER_SOCKET),
+            "debug",
+            "--session",
+            ROOT_SESSION_ID,
+            "cancel",
+        ]
         with (RESULT_DIR / "agent.log").open("a") as log:
-            log.write(f"\n=== cancel response {utc_now()} exit={response.returncode} ===\n")
-            log.write(response.stdout[-2000:])
+            try:
+                response = subprocess.run(
+                    argv,
+                    cwd=WORKDIR,
+                    env=env,
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    check=False,
+                    timeout=5,
+                )
+                log.write(f"\n=== cancel response {utc_now()} exit={response.returncode} ===\n")
+                log.write(response.stdout[-2000:])
+            except subprocess.TimeoutExpired:
+                log.write(f"\n=== cancel command timed out {utc_now()} ===\n")
             log.write("\n")
+
+
+def terminate_jcode_server() -> None:
+    if SERVER_PROCESS is not None and SERVER_PROCESS.poll() is None:
+        SERVER_PROCESS.terminate()
+        try:
+            SERVER_PROCESS.wait(timeout=15)
+        except subprocess.TimeoutExpired:
+            SERVER_PROCESS.kill()
+            SERVER_PROCESS.wait(timeout=5)
 
 
 def stop_jcode_server(env: dict[str, str]) -> None:
@@ -404,13 +437,7 @@ def stop_jcode_server(env: dict[str, str]) -> None:
             cwd=WORKDIR,
             env=env,
         )
-    if SERVER_PROCESS is not None and SERVER_PROCESS.poll() is None:
-        SERVER_PROCESS.terminate()
-        try:
-            SERVER_PROCESS.wait(timeout=15)
-        except subprocess.TimeoutExpired:
-            SERVER_PROCESS.kill()
-            SERVER_PROCESS.wait(timeout=5)
+    terminate_jcode_server()
     SERVER_PROCESS = None
 
 
@@ -483,6 +510,7 @@ def run_jcode_segment(env: dict[str, str], prompt: str, session_id: str, remaini
         except subprocess.TimeoutExpired:
             log.write(f"\n=== fixed budget reached; terminating segment {segment} ===\n")
             cancel_root_session(env)
+            terminate_jcode_server()
             CURRENT_PROCESS.terminate()
             try:
                 return CURRENT_PROCESS.wait(timeout=60)
@@ -501,8 +529,7 @@ def handle_signal(signum: int, _frame: object) -> None:
     cancel_root_session(signal_env)
     if CURRENT_PROCESS is not None and CURRENT_PROCESS.poll() is None:
         CURRENT_PROCESS.terminate()
-    if SERVER_PROCESS is not None and SERVER_PROCESS.poll() is None:
-        SERVER_PROCESS.terminate()
+    terminate_jcode_server()
     snapshot("termination")
     upload()
     raise SystemExit(128 + signum)
