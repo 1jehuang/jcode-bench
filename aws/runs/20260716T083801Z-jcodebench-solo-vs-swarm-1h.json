@@ -1,0 +1,85 @@
+{
+  "bucket": "jcode-bench-v1-280196252242-us-east-1",
+  "budget_seconds": 3600,
+  "cells": [
+    {
+      "cluster_arn": "arn:aws:ecs:us-east-1:280196252242:cluster/jcode-bench-v1",
+      "condition": "solo",
+      "created_at": "2026-07-16T01:38:03.761000-07:00",
+      "last_status": "PROVISIONING",
+      "task": "json-unescape",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/969b6b10cc4f49fbb064d510e1c7903c",
+      "task_definition_arn": "arn:aws:ecs:us-east-1:280196252242:task-definition/jcode-bench-v1-swarm-compare-1h:3"
+    },
+    {
+      "cluster_arn": "arn:aws:ecs:us-east-1:280196252242:cluster/jcode-bench-v1",
+      "condition": "solo",
+      "created_at": "2026-07-16T01:38:05.856000-07:00",
+      "last_status": "PROVISIONING",
+      "task": "float-print",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/7075309a11294198b483015113fd136d",
+      "task_definition_arn": "arn:aws:ecs:us-east-1:280196252242:task-definition/jcode-bench-v1-swarm-compare-1h:3"
+    },
+    {
+      "cluster_arn": "arn:aws:ecs:us-east-1:280196252242:cluster/jcode-bench-v1",
+      "condition": "solo",
+      "created_at": "2026-07-16T01:38:07.928000-07:00",
+      "last_status": "PROVISIONING",
+      "task": "utf16-transcode",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/a66ad85d47d7447abb6240a99d5ccbb6",
+      "task_definition_arn": "arn:aws:ecs:us-east-1:280196252242:task-definition/jcode-bench-v1-swarm-compare-1h:3"
+    },
+    {
+      "cluster_arn": "arn:aws:ecs:us-east-1:280196252242:cluster/jcode-bench-v1",
+      "condition": "swarm",
+      "created_at": "2026-07-16T01:38:10.360000-07:00",
+      "last_status": "PROVISIONING",
+      "task": "json-unescape",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/e2a4b9bbc6d1452eb41ee5af0a422b20",
+      "task_definition_arn": "arn:aws:ecs:us-east-1:280196252242:task-definition/jcode-bench-v1-swarm-compare-1h:3"
+    },
+    {
+      "cluster_arn": "arn:aws:ecs:us-east-1:280196252242:cluster/jcode-bench-v1",
+      "condition": "swarm",
+      "created_at": "2026-07-16T01:38:12.917000-07:00",
+      "last_status": "PROVISIONING",
+      "task": "float-print",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/ec68b0d1d5b3422b927c2f1c36ae8aa0",
+      "task_definition_arn": "arn:aws:ecs:us-east-1:280196252242:task-definition/jcode-bench-v1-swarm-compare-1h:3"
+    },
+    {
+      "cluster_arn": "arn:aws:ecs:us-east-1:280196252242:cluster/jcode-bench-v1",
+      "condition": "swarm",
+      "created_at": "2026-07-16T01:38:15.195000-07:00",
+      "last_status": "PROVISIONING",
+      "task": "utf16-transcode",
+      "task_arn": "arn:aws:ecs:us-east-1:280196252242:task/jcode-bench-v1/6cb0f21a4ea149ccb602a37030be8e9d",
+      "task_definition_arn": "arn:aws:ecs:us-east-1:280196252242:task-definition/jcode-bench-v1-swarm-compare-1h:3"
+    }
+  ],
+  "cluster": "jcode-bench-v1",
+  "container_name": "jcode-bench",
+  "jcode_sha256": "767f76be8a03337812bf016b124bed76d4c3345764acaae4a0cca4c1780c4341",
+  "jcode_version": "jcode v0.48.19-dev (66589859a, dirty)",
+  "launched_at": "2026-07-16T08:38:15.279988+00:00",
+  "network": {
+    "awsvpcConfiguration": {
+      "assignPublicIp": "ENABLED",
+      "securityGroups": [
+        "sg-0a5b27f95e8bf33dc"
+      ],
+      "subnets": [
+        "subnet-0e5517a395d11a5f4",
+        "subnet-0eb42027d56bb360f",
+        "subnet-01ba282410b443311",
+        "subnet-0a7d993e1d35c959f",
+        "subnet-058b46a891236e960",
+        "subnet-02caea4c2be65af26"
+      ]
+    }
+  },
+  "run_group": "20260716T083801Z-jcodebench-solo-vs-swarm-1h",
+  "secret_id": "jcode-bench/openai-api-key",
+  "swarm_concurrency": 32,
+  "task_definition": "jcode-bench-v1-swarm-compare-1h:3"
+}
