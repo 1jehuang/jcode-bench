@@ -1,0 +1,21 @@
+{
+  "app": "jcode-bench-v1-gpt56",
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "launched_at": "2026-07-17T21:20:42.519933+00:00",
+  "mode": "pilot",
+  "model": "gpt-5.6-sol",
+  "opencode_version": "1.0.203",
+  "reasoning_effort": "high",
+  "runner_commit": "f33abc0b66adda6ca84edf4154fb3e1834bdb985",
+  "runs": [
+    {
+      "agent": "opencode",
+      "cell": "opencode-sol56",
+      "function_call_id": "fc-01KXRZ7YCN3DYWGABNC4KEX9TT",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260717T212042Z-opencode-sol56-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    }
+  ]
+}
