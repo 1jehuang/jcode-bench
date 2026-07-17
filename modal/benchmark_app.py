@@ -1,11 +1,12 @@
-"""Modal worker for the GPT-5.6 Sol Jcode Bench v1 comparison.
+"""Modal worker for the Jcode Bench v1 harness comparison.
 
-Deploy with OPENAI_API_KEY in the local environment:
+Deploy with OPENAI_API_KEY and ANTHROPIC_API_KEY in the local environment:
 
     modal deploy modal/benchmark_app.py
 
-The worker intentionally pins every relevant variable. The only matrix axes are
-the agent harness (Codex or Jcode) and native multi-agent support (off or on).
+The worker intentionally pins every relevant variable. OpenCode runs use an
+inline, key-free config so the effective provider, model, and reasoning options
+are persisted without writing API credentials.
 """
 
 from __future__ import annotations
@@ -27,13 +28,31 @@ BENCH_COMMIT = "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0"
 CODEX_VERSION = "0.144.1"
 JCODE_VERSION = "v0.41.1-dev (825c96f16)"
 JCODE_SHA256 = "7038d838daaf4b2185a42e36d88a8b1b327517ba3fc7dfcd507661a3d3129aa0"
+OPENCODE_VERSION = "1.0.203"
 MODEL = "gpt-5.6-sol"
+OPUS_MODEL = "claude-opus-4-8"
 REASONING_EFFORT = "high"
 SWARM_CONCURRENCY = 8
 CHECKPOINT_SECONDS = 300
 GRADE_ATTEMPTS = 5
 TASKS = ("json-unescape", "float-print", "utf16-transcode")
-AGENTS = ("codex", "jcode")
+AGENTS = ("codex", "jcode", "opencode")
+OPENCODE_MODELS = {
+    MODEL: {
+        "provider": "openai",
+        "model_options": {
+            "reasoningEffort": REASONING_EFFORT,
+            "reasoningSummary": "auto",
+            "include": ["reasoning.encrypted_content"],
+        },
+    },
+    OPUS_MODEL: {
+        "provider": "anthropic",
+        # opencode-ai 1.0.203 pins @ai-sdk/anthropic 2.0.50, whose
+        # provider options map this to output_config.effort on the wire.
+        "model_options": {"effort": REASONING_EFFORT},
+    },
+}
 
 ROOT = Path(__file__).resolve().parents[1]
 JCODE_BIN = Path(os.environ.get("JCODE_BENCH_JCODE_BIN", Path.home() / ".local/bin/jcode")).resolve()
@@ -41,12 +60,14 @@ JCODE_BIN = Path(os.environ.get("JCODE_BENCH_JCODE_BIN", Path.home() / ".local/b
 app = modal.App(APP_NAME)
 results = modal.Volume.from_name("jcode-bench-v1-results", create_if_missing=True)
 openai_secret = modal.Secret.from_local_environ(["OPENAI_API_KEY"])
+anthropic_secret = modal.Secret.from_local_environ(["ANTHROPIC_API_KEY"])
 
 image = (
     modal.Image.from_registry("archlinux:base")
     .run_commands(
         "pacman -Syu --noconfirm --needed base-devel valgrind git nodejs npm jq python",
         f"npm install -g @openai/codex@{CODEX_VERSION}",
+        f"npm install -g opencode-ai@{OPENCODE_VERSION}",
     )
     .add_local_dir(
         ROOT,
@@ -99,7 +120,51 @@ Rules: edit only files under submission/. Self-contained C17, libc only. Do not 
 Work until you genuinely cannot improve further. Aim as high as you can; +1.0 means 2x, +2.0 means 4x. Report your final score."""
 
 
-def command_for(agent: str, swarm: bool, workdir: Path, prompt: str, home: Path) -> tuple[list[str], dict[str, str]]:
+def opencode_config(model: str) -> dict[str, object]:
+    profile = OPENCODE_MODELS.get(model)
+    if profile is None:
+        raise ValueError(f"Unsupported OpenCode model: {model}")
+
+    provider = str(profile["provider"])
+    model_config: dict[str, object] = {
+        "options": profile["model_options"],
+    }
+    if model == MODEL:
+        # gpt-5.6-sol was not yet present in OpenCode's fetched models.dev list
+        # when this runner was written, so declare its capabilities explicitly.
+        model_config.update(
+            {
+                "name": "GPT-5.6 Sol",
+                "reasoning": True,
+                "tool_call": True,
+            }
+        )
+
+    return {
+        "$schema": "https://opencode.ai/config.json",
+        "autoupdate": False,
+        "share": "disabled",
+        "model": f"{provider}/{model}",
+        # Non-interactive benchmark containers cannot answer permission prompts.
+        "permission": {"*": "allow"},
+        "provider": {
+            provider: {
+                "models": {
+                    model: model_config,
+                }
+            }
+        },
+    }
+
+
+def command_for(
+    agent: str,
+    swarm: bool,
+    workdir: Path,
+    prompt: str,
+    home: Path,
+    model: str = MODEL,
+) -> tuple[list[str], dict[str, str]]:
     env = os.environ.copy()
     env.update({"HOME": str(home), "CI": "1", "TERM": "dumb", "NO_COLOR": "1"})
 
@@ -128,7 +193,7 @@ def command_for(agent: str, swarm: bool, workdir: Path, prompt: str, home: Path)
             "-C",
             str(workdir),
             "-m",
-            MODEL,
+            model,
             "-c",
             f'model_reasoning_effort="{REASONING_EFFORT}"',
             "-c",
@@ -145,10 +210,10 @@ def command_for(agent: str, swarm: bool, workdir: Path, prompt: str, home: Path)
         env.update(
             {
                 "JCODE_PROVIDER": "openai-api",
-                "JCODE_MODEL": MODEL,
+                "JCODE_MODEL": model,
                 "JCODE_OPENAI_REASONING_EFFORT": REASONING_EFFORT,
                 "JCODE_SWARM_ENABLED": "true" if swarm else "false",
-                "JCODE_SWARM_MODEL": f"openai-api:{MODEL}",
+                "JCODE_SWARM_MODEL": f"openai-api:{model}",
                 "JCODE_SWARM_SPAWN_MODE": "headless",
                 "JCODE_SWARM_MAX_CONCURRENT_AGENTS": str(SWARM_CONCURRENCY),
                 "JCODE_MEMORY_ENABLED": "false",
@@ -161,11 +226,39 @@ def command_for(agent: str, swarm: bool, workdir: Path, prompt: str, home: Path)
             "-p",
             "openai-api",
             "-m",
-            MODEL,
+            model,
             "-C",
             str(workdir),
             "run",
             "--ndjson",
+            prompt,
+        ]
+        return command, env
+
+    if agent == "opencode":
+        if swarm:
+            raise ValueError("OpenCode benchmark cell does not define a swarm mode")
+        profile = OPENCODE_MODELS.get(model)
+        if profile is None:
+            raise ValueError(f"Unsupported OpenCode model: {model}")
+        provider = str(profile["provider"])
+        env.update(
+            {
+                "OPENCODE_CONFIG_CONTENT": json.dumps(opencode_config(model), sort_keys=True),
+                # Freeze the model catalog bundled into opencode-ai@1.0.203.
+                "OPENCODE_DISABLE_MODELS_FETCH": "true",
+            }
+        )
+        command = [
+            "opencode",
+            "run",
+            "--print-logs",
+            "--log-level",
+            "INFO",
+            "--format",
+            "json",
+            "--model",
+            f"{provider}/{model}",
             prompt,
         ]
         return command, env
@@ -205,9 +298,59 @@ def run_grade_with_retries(workdir: Path, log_path: Path) -> int:
     return last_returncode
 
 
+def verify_opencode_preflight(model: str, env: dict[str, str], cwd: Path) -> dict[str, object]:
+    """Prove the pinned CLI parsed the intended key-free model configuration."""
+    version = subprocess.run(
+        ["opencode", "--version"],
+        cwd=cwd,
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=True,
+        timeout=60,
+    ).stdout.strip()
+    if version != OPENCODE_VERSION:
+        raise RuntimeError(f"Expected OpenCode {OPENCODE_VERSION}, got {version!r}")
+
+    effective = subprocess.run(
+        ["opencode", "debug", "config"],
+        cwd=cwd,
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=True,
+        timeout=60,
+    )
+    parsed = json.loads(effective.stdout)
+    expected = opencode_config(model)
+    provider = str(OPENCODE_MODELS[model]["provider"])
+    expected_model = f"{provider}/{model}"
+    actual_options = parsed["provider"][provider]["models"][model]["options"]
+    expected_options = OPENCODE_MODELS[model]["model_options"]
+    if parsed.get("model") != expected_model or actual_options != expected_options:
+        raise RuntimeError(
+            f"OpenCode effective config mismatch: model={parsed.get('model')!r}, "
+            f"options={actual_options!r}"
+        )
+
+    return {
+        "opencode_version": version,
+        "provider": provider,
+        "model": parsed["model"],
+        "reasoning_effort": REASONING_EFFORT,
+        "model_options": actual_options,
+        "permission": parsed.get("permission"),
+        "autoupdate": parsed.get("autoupdate"),
+        "share": parsed.get("share"),
+        "expected_config": expected,
+    }
+
+
 @app.function(
     image=image,
-    secrets=[openai_secret],
+    secrets=[openai_secret, anthropic_secret],
     volumes={"/results": results},
     timeout=86_400,
     cpu=4,
@@ -217,11 +360,21 @@ def run_grade_with_retries(workdir: Path, log_path: Path) -> int:
     region="us-west",
     retries=modal.Retries(max_retries=3, initial_delay=5.0, backoff_coefficient=2.0),
 )
-def run_case(agent: str, swarm: bool, task: str, run_id: str) -> dict[str, object]:
+def run_case(
+    agent: str,
+    swarm: bool,
+    task: str,
+    run_id: str,
+    model: str = MODEL,
+) -> dict[str, object]:
     if agent not in AGENTS:
         raise ValueError(f"agent must be one of {AGENTS}")
     if task not in TASKS:
         raise ValueError(f"task must be one of {TASKS}")
+    if agent != "opencode" and model != MODEL:
+        raise ValueError(f"{agent} only supports {MODEL} in this runner")
+    if agent == "opencode" and model not in OPENCODE_MODELS:
+        raise ValueError(f"unsupported OpenCode model: {model}")
 
     result_dir = Path("/results/runs") / run_id
     result_path = result_dir / "result.json"
@@ -248,13 +401,15 @@ def run_case(agent: str, swarm: bool, task: str, run_id: str) -> dict[str, objec
         "agent": agent,
         "swarm": swarm,
         "task": task,
-        "model": MODEL,
+        "model": model,
+        "provider": OPENCODE_MODELS[model]["provider"] if agent == "opencode" else "openai",
         "reasoning_effort": REASONING_EFFORT,
         "swarm_concurrency": SWARM_CONCURRENCY,
         "bench_commit": BENCH_COMMIT,
         "codex_version": CODEX_VERSION,
         "jcode_version": JCODE_VERSION,
         "jcode_sha256": JCODE_SHA256,
+        "opencode_version": OPENCODE_VERSION,
         "started_at": started_at,
         "prompt": prompt_for(task),
     }
@@ -270,12 +425,16 @@ def run_case(agent: str, swarm: bool, task: str, run_id: str) -> dict[str, objec
         raise RuntimeError("baseline grader failed after infrastructure retries")
 
     copy_checkpoint(workdir, result_dir, "baseline")
-    command, env = command_for(agent, swarm, workdir, prompt_for(task), home)
+    command, env = command_for(agent, swarm, workdir, prompt_for(task), home, model)
     write_json(result_dir / "command.json", {"argv": command, "environment_overrides": {
         key: env[key]
         for key in sorted(env)
-        if key.startswith("JCODE_") or key in {"CODEX_HOME", "HOME", "CI", "TERM", "NO_COLOR"}
+        if key.startswith("JCODE_")
+        or key.startswith("OPENCODE_")
+        or key in {"CODEX_HOME", "HOME", "CI", "TERM", "NO_COLOR"}
     }})
+    if agent == "opencode":
+        write_json(result_dir / "opencode-preflight.json", verify_opencode_preflight(model, env, workdir))
     results.commit()
 
     stop = threading.Event()

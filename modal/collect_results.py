@@ -29,6 +29,20 @@ def helper_event_count(agent: str, log: str) -> int:
     if agent == "jcode":
         return log.count('"name":"swarm"') + log.count('"name": "swarm"')
 
+    if agent == "opencode":
+        count = 0
+        for line in log.splitlines():
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(event, dict) or event.get("type") != "tool_use":
+                continue
+            part = event.get("part")
+            if isinstance(part, dict) and part.get("tool") == "task":
+                count += 1
+        return count
+
     event_types = {
         "collab_tool_call",
         "collab_tool_call_output",
@@ -52,17 +66,18 @@ def helper_event_count(agent: str, log: str) -> int:
 
 
 def aggregate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    groups: dict[tuple[str, bool], list[dict[str, Any]]] = defaultdict(list)
+    groups: dict[tuple[str, bool, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         if row["status"] == "completed":
-            groups[(row["agent"], row["swarm"])].append(row)
+            groups[(row["agent"], row["swarm"], row.get("model", "unknown"))].append(row)
 
     result = []
-    for (agent, swarm), values in sorted(groups.items()):
+    for (agent, swarm, model), values in sorted(groups.items()):
         result.append(
             {
                 "agent": agent,
                 "swarm": swarm,
+                "model": model,
                 "completed_tasks": len(values),
                 "mean_final_score": round(
                     statistics.fmean(value["final_score"] for value in values), 4
@@ -81,6 +96,14 @@ def aggregate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]:
     by_mode = {(row["agent"], row["swarm"]): row for row in aggregates}
+    required = {
+        ("codex", False),
+        ("codex", True),
+        ("jcode", False),
+        ("jcode", True),
+    }
+    if not required.issubset(by_mode):
+        return {}
 
     def compare(
         left: tuple[str, bool], right: tuple[str, bool]
@@ -130,21 +153,21 @@ def render_markdown(report: dict[str, Any]) -> str:
             ]
         )
     else:
-        summary_lines.append("Aggregate comparisons will be calculated after all cells complete.")
+        summary_lines.append("No four-way Codex/Jcode comparison is defined for this manifest.")
     summary_lines.append("")
 
     lines = [
-        "# Jcode Bench v1: GPT-5.6 Sol high",
+        f"# Jcode Bench v1: {report.get('model', 'mixed')} high",
         "",
-        f"Benchmark commit: `{report['benchmark_commit']}`  ",
-        f"Model: `{report['model']}` with `{report['reasoning_effort']}` reasoning  ",
+        f"Benchmark commit: `{report.get('benchmark_commit', 'unknown')}`  ",
+        f"Model: `{report.get('model', 'mixed')}` with `{report.get('reasoning_effort', 'unknown')}` reasoning  ",
         f"Completed cells: **{report['completed_count']}/{report['run_count']}**",
         "",
         *summary_lines,
         "## Per-task results",
         "",
-        "| Agent | Swarm enabled | Task | Final | Best | Agent time | Grades | Explicit helper events |",
-        "|---|---:|---|---:|---:|---:|---:|---:|",
+        "| Agent | Model | Swarm enabled | Task | Final | Best | Agent time | Grades | Explicit helper events |",
+        "|---|---|---:|---|---:|---:|---:|---:|---:|",
     ]
     for row in report["runs"]:
         final = f"{row['final_score']:.4f}" if row.get("final_score") is not None else "-"
@@ -155,7 +178,8 @@ def render_markdown(report: dict[str, Any]) -> str:
             else "-"
         )
         lines.append(
-            f"| {row['agent']} | {'yes' if row['swarm'] else 'no'} | {row['task']} | "
+            f"| {row['agent']} | {row.get('model', report.get('model', 'unknown'))} | "
+            f"{'yes' if row['swarm'] else 'no'} | {row['task']} | "
             f"{final} | {best} | {duration} | {row.get('grade_count', 0)} | "
             f"{row.get('helper_events', 0)} |"
         )
@@ -165,13 +189,14 @@ def render_markdown(report: dict[str, Any]) -> str:
             "",
             "## Aggregate results",
             "",
-            "| Agent | Swarm enabled | Tasks | Mean final | Mean best | Total agent time | Helper events |",
-            "|---|---:|---:|---:|---:|---:|---:|",
+            "| Agent | Model | Swarm enabled | Tasks | Mean final | Mean best | Total agent time | Helper events |",
+            "|---|---|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for row in report["aggregates"]:
         lines.append(
-            f"| {row['agent']} | {'yes' if row['swarm'] else 'no'} | "
+            f"| {row['agent']} | {row.get('model', report.get('model', 'unknown'))} | "
+            f"{'yes' if row['swarm'] else 'no'} | "
             f"{row['completed_tasks']} | {row['mean_final_score']:.4f} | "
             f"{row['mean_best_score']:.4f} | {row['total_agent_duration_s']:.1f}s | "
             f"{row['helper_events']} |"
@@ -193,6 +218,7 @@ def collect(manifest: dict[str, Any], volume: modal.Volume) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     for run in manifest["runs"]:
         row: dict[str, Any] = {**run, "status": "running"}
+        row.setdefault("model", manifest.get("model", "unknown"))
         call = modal.FunctionCall.from_id(run["function_call_id"])
         try:
             remote = call.get(timeout=0)
