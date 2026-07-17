@@ -146,7 +146,10 @@ def opencode_config(model: str) -> dict[str, object]:
         "share": "disabled",
         "model": f"{provider}/{model}",
         # Non-interactive benchmark containers cannot answer permission prompts.
-        "permission": {"*": "allow"},
+        "permission": {
+            "*": "allow",
+            "external_directory": "allow",
+        },
         "provider": {
             provider: {
                 "models": {
