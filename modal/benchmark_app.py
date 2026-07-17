@@ -67,7 +67,7 @@ image = (
     .run_commands(
         "pacman -Syu --noconfirm --needed base-devel valgrind git nodejs npm jq python",
         f"npm install -g @openai/codex@{CODEX_VERSION}",
-        f"npm install -g opencode-ai@{OPENCODE_VERSION}",
+        f"npm install -g --allow-scripts=opencode-ai opencode-ai@{OPENCODE_VERSION}",
     )
     .add_local_dir(
         ROOT,
