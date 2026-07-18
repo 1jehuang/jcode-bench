@@ -70,6 +70,20 @@ MODELS: dict[str, dict[str, str]] = {
 ROOT = Path(__file__).resolve().parents[1]
 JCODE_BIN = Path(os.environ.get("JCODE_BENCH_JCODE_BIN", Path.home() / ".local/bin/jcode")).resolve()
 
+
+def _verify_pinned_binary(path: Path) -> None:
+    import hashlib
+
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    if digest != JCODE_SHA256:
+        raise RuntimeError(
+            f"jcode binary at {path} has sha256 {digest}, expected pinned {JCODE_SHA256} "
+            f"({JCODE_VERSION}). Set JCODE_BENCH_JCODE_BIN to the pinned build."
+        )
+
+
+_verify_pinned_binary(JCODE_BIN)
+
 app = modal.App(APP_NAME)
 results = modal.Volume.from_name("jcode-bench-v1-results", create_if_missing=True)
 openai_secret = modal.Secret.from_local_environ(["OPENAI_API_KEY"])
