@@ -76,3 +76,40 @@ image, command metadata, logs, or result Volume.
 
 Canonical launch manifests are checked into [`runs/`](runs/). Ad-hoc launcher
 manifests remain ignored because failed infrastructure calls may be replaced.
+
+## Multi-model jcode run (20-hour budget)
+
+[`multimodel_app.py`](multimodel_app.py) is a separate Modal app
+(`jcode-bench-v1-multimodel`) that runs jcode solo across four frontier
+models, each with a 20-hour agent wall-clock budget (24-hour function
+timeout so final grading always completes):
+
+| model | provider route | reasoning effort |
+|---|---|---|
+| gpt-5.4 | openai-api | high |
+| gpt-5.5 | openai-api | high |
+| claude-sonnet-5 | anthropic-api | high |
+| claude-fable-5 | anthropic-api | high |
+
+All four model/provider routes were smoke-tested with a clean `HOME` and
+env-only API keys before this runner was committed. The pinned jcode binary
+is `v0.51.4-dev (8b39d814e)`.
+
+```bash
+set -a
+source ~/.config/jcode/openai.env
+source ~/.config/jcode/anthropic.env
+set +a
+
+modal deploy modal/multimodel_app.py
+
+# Canary first: one model, one task.
+~/.local/share/uv/tools/modal/bin/python modal/multimodel_launch.py \
+  --mode pilot --task json-unescape --models gpt-5.5
+
+# Full 12-run matrix (4 models x 3 tasks).
+~/.local/share/uv/tools/modal/bin/python modal/multimodel_launch.py --mode full
+
+# Status uses the shared status script with the multimodel manifest.
+~/.local/share/uv/tools/modal/bin/python modal/status.py modal/launches/<manifest>.json
+```
