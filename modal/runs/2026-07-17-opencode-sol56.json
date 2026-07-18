@@ -1,0 +1,46 @@
+{
+  "app": "jcode-bench-v1-gpt56",
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "launched_at": "2026-07-17T21:20:42.519933+00:00",
+  "mode": "full",
+  "model": "gpt-5.6-sol",
+  "opencode_version": "1.0.203",
+  "reasoning_effort": "high",
+  "runner_commits": [
+    "f33abc0b66adda6ca84edf4154fb3e1834bdb985",
+    "59266d1ca825c0c874494d51f14444fa09a18cac"
+  ],
+  "runs": [
+    {
+      "agent": "opencode",
+      "cell": "opencode-sol56",
+      "function_call_id": "fc-01KXRZ7YCN3DYWGABNC4KEX9TT",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260717T212042Z-opencode-sol56-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "opencode",
+      "cell": "opencode-sol56",
+      "function_call_id": "fc-01KXS0YW596ABW7G2ZHFWB07YG",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260717T215042Z-opencode-sol56-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "opencode",
+      "cell": "opencode-sol56",
+      "function_call_id": "fc-01KXS0YW8XBKK4CF3XHH2JGEQ2",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260717T215042Z-opencode-sol56-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    }
+  ],
+  "source_manifests": [
+    "modal/runs/2026-07-17-opencode-sol56-canary.json",
+    "modal/launches/20260717T215042Z-full.json"
+  ]
+}

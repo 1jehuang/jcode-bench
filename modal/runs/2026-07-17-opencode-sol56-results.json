@@ -1,0 +1,85 @@
+{
+  "app": "jcode-bench-v1-gpt56",
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "launched_at": "2026-07-17T21:20:42.519933+00:00",
+  "mode": "full",
+  "model": "gpt-5.6-sol",
+  "opencode_version": "1.0.203",
+  "reasoning_effort": "high",
+  "runner_commits": [
+    "f33abc0b66adda6ca84edf4154fb3e1834bdb985",
+    "59266d1ca825c0c874494d51f14444fa09a18cac"
+  ],
+  "source_manifests": [
+    "modal/runs/2026-07-17-opencode-sol56-canary.json",
+    "modal/launches/20260717T215042Z-full.json"
+  ],
+  "run_count": 3,
+  "completed_count": 3,
+  "runs": [
+    {
+      "agent": "opencode",
+      "cell": "opencode-sol56",
+      "function_call_id": "fc-01KXRZ7YCN3DYWGABNC4KEX9TT",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260717T212042Z-opencode-sol56-json-unescape",
+      "swarm": false,
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 1655.04,
+      "grade_count": 25,
+      "final_score": 2.1774,
+      "best_score": 2.1894,
+      "helper_events": 0
+    },
+    {
+      "agent": "opencode",
+      "cell": "opencode-sol56",
+      "function_call_id": "fc-01KXS0YW596ABW7G2ZHFWB07YG",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260717T215042Z-opencode-sol56-float-print",
+      "swarm": false,
+      "task": "float-print",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 2169.273,
+      "grade_count": 14,
+      "final_score": 7.2141,
+      "best_score": 7.2181,
+      "helper_events": 0
+    },
+    {
+      "agent": "opencode",
+      "cell": "opencode-sol56",
+      "function_call_id": "fc-01KXS0YW8XBKK4CF3XHH2JGEQ2",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260717T215042Z-opencode-sol56-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 1484.414,
+      "grade_count": 19,
+      "final_score": 1.5082,
+      "best_score": 1.5084,
+      "helper_events": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "opencode",
+      "swarm": false,
+      "model": "gpt-5.6-sol",
+      "completed_tasks": 3,
+      "mean_final_score": 3.6332,
+      "mean_best_score": 3.6386,
+      "total_agent_duration_s": 5308.727,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
+}
