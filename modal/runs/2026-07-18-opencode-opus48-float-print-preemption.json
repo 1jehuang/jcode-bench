@@ -1,0 +1,17 @@
+{
+  "task": "float-print",
+  "event": "modal_preemption",
+  "attempt_started_at": "2026-07-18T21:15:41.673031+00:00",
+  "preempted_at": "2026-07-18T22:39:56+00:00",
+  "function_call_id": "fc-01KXVHBCF76474KF1KA9NGE8F2",
+  "container_id": "ta-01KXVHBCZ2P9ZD6VPSVSR0XV0R",
+  "reason": "Container terminated due to preemption; Modal automatically restarted the Function with the same input.",
+  "last_checkpoint": "runs/20260718T211537Z-opencode-opus48-float-print/checkpoints/20260718T223630Z",
+  "preempted_scores": "modal/runs/2026-07-18-opencode-opus48-float-print-preempted-scores.jsonl",
+  "last_score": 7.2954,
+  "best_score": 7.2973,
+  "full_gate_passed": true,
+  "full_gate_score": 7.2954,
+  "full_gate_recorded_at": "2026-07-18T22:26:22Z",
+  "note": "No result.json had been written. The same FunctionCall retry began at 2026-07-18T22:40:01.622837+00:00 and overwrote the incomplete root agent.log; timestamped checkpoints remain on the Modal volume."
+}
