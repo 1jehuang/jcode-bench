@@ -1,0 +1,21 @@
+{
+  "app": "jcode-bench-v1-gpt56",
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "launched_at": "2026-07-18T20:31:40.049825+00:00",
+  "mode": "pilot",
+  "model": "claude-opus-4-8",
+  "opencode_version": "1.0.203",
+  "reasoning_effort": "high",
+  "runner_commit": "553e93746f0ca4831a06a773ab5e449df708b525",
+  "runs": [
+    {
+      "agent": "opencode",
+      "cell": "opencode-opus48",
+      "function_call_id": "fc-01KXVETVZ12MPCNK2M2VKS5AEW",
+      "model": "claude-opus-4-8",
+      "run_id": "20260718T203139Z-opencode-opus48-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    }
+  ]
+}

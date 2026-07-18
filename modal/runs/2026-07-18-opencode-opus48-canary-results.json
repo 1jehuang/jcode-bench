@@ -1,0 +1,44 @@
+{
+  "app": "jcode-bench-v1-gpt56",
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "launched_at": "2026-07-18T20:31:40.049825+00:00",
+  "mode": "pilot",
+  "model": "claude-opus-4-8",
+  "opencode_version": "1.0.203",
+  "reasoning_effort": "high",
+  "runner_commit": "553e93746f0ca4831a06a773ab5e449df708b525",
+  "run_count": 1,
+  "completed_count": 1,
+  "runs": [
+    {
+      "agent": "opencode",
+      "cell": "opencode-opus48",
+      "function_call_id": "fc-01KXVETVZ12MPCNK2M2VKS5AEW",
+      "model": "claude-opus-4-8",
+      "run_id": "20260718T203139Z-opencode-opus48-json-unescape",
+      "swarm": false,
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 2562.78,
+      "grade_count": 83,
+      "final_score": 1.9991,
+      "best_score": 1.9991,
+      "helper_events": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "opencode",
+      "swarm": false,
+      "model": "claude-opus-4-8",
+      "completed_tasks": 1,
+      "mean_final_score": 1.9991,
+      "mean_best_score": 1.9991,
+      "total_agent_duration_s": 2562.78,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
+}
