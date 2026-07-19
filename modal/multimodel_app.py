@@ -1,8 +1,9 @@
 """Modal worker for the Jcode Bench v1 multi-model jcode run.
 
 Runs the pinned local jcode build against multiple frontier models
-(OpenAI gpt-5.4 / gpt-5.5 via the OpenAI API, Anthropic claude-sonnet-5 /
-claude-fable-5 via the Anthropic API), solo mode, on all three tasks.
+(OpenAI gpt-5.4 / gpt-5.5 / gpt-5.6-sol via the OpenAI API, Anthropic
+claude-sonnet-5 / claude-fable-5 via the Anthropic API), solo mode, on all
+three tasks.
 
 Deploy with OPENAI_API_KEY and ANTHROPIC_API_KEY in the local environment:
 
@@ -48,6 +49,12 @@ MODELS: dict[str, dict[str, str]] = {
         "vendor": "openai",
     },
     "gpt-5.5": {
+        "provider": "openai-api",
+        "swarm_route": "openai-api",
+        "effort_env": "JCODE_OPENAI_REASONING_EFFORT",
+        "vendor": "openai",
+    },
+    "gpt-5.6-sol": {
         "provider": "openai-api",
         "swarm_route": "openai-api",
         "effort_env": "JCODE_OPENAI_REASONING_EFFORT",
