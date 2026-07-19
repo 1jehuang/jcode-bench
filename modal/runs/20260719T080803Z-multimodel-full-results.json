@@ -1,0 +1,73 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-multimodel",
+  "launched_at": "2026-07-19T08:08:04.512160+00:00",
+  "mode": "full",
+  "reasoning_effort": "high",
+  "runner_commit": "6e5c1bbd8fccd89046d3f56aebe8457a823b180a",
+  "run_count": 3,
+  "completed_count": 3,
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXWPP0RHSDBPBDEHYRTYNNYP",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "swarm": false,
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 1,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 0.273,
+      "grade_count": 2,
+      "final_score": 0.0,
+      "best_score": 0.0,
+      "helper_events": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXWPP0X9FX56PE06RX9B28E3",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-float-print",
+      "swarm": false,
+      "task": "float-print",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 2883.223,
+      "grade_count": 23,
+      "final_score": 7.8065,
+      "best_score": 7.8107,
+      "helper_events": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXWPP117CT2BNS6YSJF1H1M7",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 1,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 0.221,
+      "grade_count": 2,
+      "final_score": 0.0,
+      "best_score": 0.0,
+      "helper_events": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "jcode",
+      "swarm": false,
+      "model": "gpt-5.6-sol",
+      "completed_tasks": 3,
+      "mean_final_score": 2.6022,
+      "mean_best_score": 2.6036,
+      "total_agent_duration_s": 2883.717,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
+}

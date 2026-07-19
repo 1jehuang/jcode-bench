@@ -2,19 +2,18 @@
   "benchmark": "jcode bench v1",
   "benchmark_commit": "cb8ccbc29ad4f4ce4a3ada2e79e019d06729df7c",
   "campaign": {
-    "completed_cells": 11,
-    "completed_correctness_passes": 11,
+    "completed_cells": 15,
+    "completed_correctness_passes": 15,
     "planned_cells": 15,
-    "running_cells": 4
+    "running_cells": 0
   },
   "caveats": [
-    "This is a timestamped live snapshot: 11 of 15 intended cells had completed when captured.",
-    "Claude Fable 5 float-print was still running. Its latest exhaustive full correctness gate in the snapshot passed at +7.7011. Later non-full-gate samples measured higher, but sampled values are not ranked as final.",
-    "All three matched GPT-5.6 Sol cells were live. Its float-print run had sampled +7.1467 but had not yet recorded an exhaustive full gate; JSON and UTF-16 retries had entered normal agent execution without a score checkpoint yet.",
+    "All 15 intended cells completed and passed the official final correctness grade.",
+    "The ranking uses only official final scores produced after each agent stopped and the final grader passed.",
     "Intermediate sampled maxima are retained for audit but are not used in the published ranking because non-full-gate measurements are not comparable to the official final correctness grade.",
     "Each model has one run per task, so run-to-run variance is unmeasured.",
     "Provider implementations differ, so this is a model-plus-provider comparison through the same Jcode harness rather than a provider-neutral model comparison.",
-    "The 20-hour agent budget is a safety cap. Completed agents stopped on their own judgment; none of the active runs had reached the cap."
+    "The 20-hour agent budget was a safety cap. Every agent stopped on its own judgment before the cap."
   ],
   "environment": {
     "agent_budget_hours": 20,
@@ -59,23 +58,23 @@
   ],
   "models": {
     "claude-fable-5": {
-      "completed_tasks": 2,
-      "mean_final_score_completed": 2.6919,
-      "mean_sampled_best_score_completed": 2.6952,
+      "completed_tasks": 3,
+      "mean_final_score_completed": 5.7971,
+      "mean_sampled_best_score_completed": 5.7997,
       "provider": "anthropic-api",
       "provisional_mean_verified_score": null,
-      "running_tasks": 1,
+      "running_tasks": 0,
       "tasks": {
         "float-print": {
-          "active_seconds": 20257.5,
+          "active_seconds": 23396.612,
           "agent": "jcode",
-          "best_full_gate_score": 7.7011,
-          "correctness_gate": "LIVE_FULL_GATE_PASS",
-          "final_score": null,
-          "finished_at": null,
+          "best_full_gate_score": 11.2074,
+          "correctness_gate": "PASS",
+          "final_score": 12.0074,
+          "finished_at": "2026-07-19T09:14:18.415926+00:00",
           "function_call_id": "fc-01KXW3NTSGZWW8H5ZGE869DP6M",
-          "grade_count": 34,
-          "latest_checkpoint": "20260719T081332Z",
+          "grade_count": 36,
+          "latest_checkpoint": null,
           "model": "claude-fable-5",
           "provider": "anthropic-api",
           "reasoning_effort": "high",
@@ -252,15 +251,26 @@
               "full_gate": false,
               "score": 12.0086,
               "ts": "2026-07-19T08:04:33Z"
+            },
+            {
+              "full_gate": true,
+              "score": 11.2074,
+              "ts": "2026-07-19T09:03:24Z"
+            },
+            {
+              "full_gate": false,
+              "score": 12.0074,
+              "ts": "2026-07-19T09:14:18Z"
             }
           ],
           "source_hashes": {
-            "agent_log_sha256": "81f9cf5cb3a07a4f2cb6a51ad969cd6b66fb6eddf8d41fa3e4dc375a44d8b89b",
-            "checkpoint_scores_jsonl_sha256": "d37c0cd9fbc73fb7ed7458d2d2a5bc3bd8450ea755dc43020dc76ce4277c3453",
-            "metadata_json_sha256": "3f1ab01aa1424168aaa378fcb25ddfe583287281bb73e0ff1bda86f33c75631d"
+            "agent_log_sha256": "36e79fdacf5323c5f35b1da92741c3743b42af9a2941c6863ecc581b113bff59",
+            "final_grade_log_sha256": "a53aefbe125456ee89c1fe842be5ec59a07cdad484aff74e10cde0146f3d6be7",
+            "result_json_sha256": "1608acf6df89a95b963062ea9a36e5c3585f57de40d3430b14abaae90d2378ee",
+            "scores_jsonl_sha256": "35682e8ff342f124cd91a98e0e6e8485c9e25bf210a3f0ce24244f4f4f89907a"
           },
           "started_at": "2026-07-19T02:36:32.500409+00:00",
-          "status": "running",
+          "status": "completed",
           "swarm": false,
           "task": "float-print",
           "vendor": "anthropic"
@@ -2273,29 +2283,29 @@
       }
     },
     "gpt-5.6-sol": {
-      "completed_tasks": 0,
-      "mean_final_score_completed": null,
-      "mean_sampled_best_score_completed": null,
+      "completed_tasks": 3,
+      "mean_final_score_completed": 4.0691,
+      "mean_sampled_best_score_completed": 5.0581,
       "provider": "openai-api",
       "provisional_mean_verified_score": null,
-      "running_tasks": 3,
+      "running_tasks": 0,
       "tasks": {
         "float-print": {
-          "active_seconds": 361.135,
+          "active_seconds": 2883.223,
           "agent": "jcode",
-          "best_full_gate_score": null,
-          "correctness_gate": "LIVE_UNVERIFIED",
-          "final_score": null,
-          "finished_at": null,
+          "best_full_gate_score": 7.8051,
+          "correctness_gate": "PASS",
+          "final_score": 7.8065,
+          "finished_at": "2026-07-19T08:57:02.511303+00:00",
           "function_call_id": "fc-01KXWPP0X9FX56PE06RX9B28E3",
-          "grade_count": 7,
-          "latest_checkpoint": "20260719T081332Z",
+          "grade_count": 23,
+          "latest_checkpoint": null,
           "model": "gpt-5.6-sol",
           "provider": "openai-api",
           "reasoning_effort": "high",
           "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-float-print",
-          "sampled_best_efficiency_factor": 141.7004,
-          "sampled_best_score": 7.1467,
+          "sampled_best_efficiency_factor": 224.52,
+          "sampled_best_score": 7.8107,
           "score_curve": [
             {
               "full_gate": false,
@@ -2331,53 +2341,267 @@
               "full_gate": false,
               "score": 7.1467,
               "ts": "2026-07-19T08:12:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.2122,
+              "ts": "2026-07-19T08:13:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.0253,
+              "ts": "2026-07-19T08:14:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.2027,
+              "ts": "2026-07-19T08:15:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1863,
+              "ts": "2026-07-19T08:15:32Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1478,
+              "ts": "2026-07-19T08:16:03Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.5788,
+              "ts": "2026-07-19T08:17:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6263,
+              "ts": "2026-07-19T08:17:45Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6365,
+              "ts": "2026-07-19T08:18:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.685,
+              "ts": "2026-07-19T08:20:03Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7492,
+              "ts": "2026-07-19T08:21:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7442,
+              "ts": "2026-07-19T08:21:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7965,
+              "ts": "2026-07-19T08:22:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7315,
+              "ts": "2026-07-19T08:23:12Z"
+            },
+            {
+              "full_gate": true,
+              "score": 7.8051,
+              "ts": "2026-07-19T08:55:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.8107,
+              "ts": "2026-07-19T08:56:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.8065,
+              "ts": "2026-07-19T08:57:02Z"
             }
           ],
           "source_hashes": {
-            "agent_log_sha256": "08cd92cae0f37a0904d4889349a7e1d2429ea5be75f1b84db7d359f7c8790ea6",
-            "checkpoint_scores_jsonl_sha256": "5aa95a7d26a7101ab9774349019d9aa3077b4f5dd3878be74d70f037baf21592",
-            "metadata_json_sha256": "79316619d76242edf4de625114c7ce09cc5c3cc2104b34f8cc75bdca0b31356d"
+            "agent_log_sha256": "408cefd530926fe09ccc058ae89e31eff746239d59dc2c478c63aa2e9e0c09bd",
+            "final_grade_log_sha256": "4c5d1193fb8accbbb0606f6e126bf390863a6f7cbb251979cecff64cccc2300d",
+            "result_json_sha256": "d759ba747e1da8f765b2e5dbe875945e43c4f89c8728dcbdb09aee01594dd142",
+            "scores_jsonl_sha256": "9a4123f8343496a0794e293651052662afebcf3dad5b269802b79223fa09f50c"
           },
           "started_at": "2026-07-19T08:08:08.864960+00:00",
-          "status": "running",
+          "status": "completed",
           "swarm": false,
           "task": "float-print",
           "vendor": "openai"
         },
         "json-unescape": {
-          "active_seconds": 79.377,
+          "active_seconds": 1165.118,
           "agent": "jcode",
-          "best_full_gate_score": null,
-          "correctness_gate": "LIVE_UNVERIFIED",
-          "final_score": null,
-          "finished_at": null,
+          "best_full_gate_score": 2.3055,
+          "correctness_gate": "PASS",
+          "final_score": 2.29,
+          "finished_at": "2026-07-19T08:32:26.983560+00:00",
           "function_call_id": "fc-01KXWPYQZ5SKXMNQ1R1C5SBD7C",
-          "grade_count": 0,
+          "grade_count": 26,
           "latest_checkpoint": null,
           "model": "gpt-5.6-sol",
           "provider": "openai-api",
           "reasoning_effort": "high",
           "run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
-          "sampled_best_efficiency_factor": null,
-          "sampled_best_score": null,
-          "score_curve": [],
+          "sampled_best_efficiency_factor": 4.9434,
+          "sampled_best_score": 2.3055,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T08:12:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T08:13:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2496,
+              "ts": "2026-07-19T08:14:37Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.496,
+              "ts": "2026-07-19T08:15:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0154,
+              "ts": "2026-07-19T08:21:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.496,
+              "ts": "2026-07-19T08:21:49Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5814,
+              "ts": "2026-07-19T08:22:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7456,
+              "ts": "2026-07-19T08:22:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9677,
+              "ts": "2026-07-19T08:23:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0101,
+              "ts": "2026-07-19T08:23:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.076,
+              "ts": "2026-07-19T08:24:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1169,
+              "ts": "2026-07-19T08:24:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1646,
+              "ts": "2026-07-19T08:25:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1646,
+              "ts": "2026-07-19T08:25:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2437,
+              "ts": "2026-07-19T08:26:05Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2438,
+              "ts": "2026-07-19T08:26:23Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2603,
+              "ts": "2026-07-19T08:26:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2757,
+              "ts": "2026-07-19T08:27:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2265,
+              "ts": "2026-07-19T08:27:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2757,
+              "ts": "2026-07-19T08:28:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2881,
+              "ts": "2026-07-19T08:28:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9533,
+              "ts": "2026-07-19T08:30:02Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.2881,
+              "ts": "2026-07-19T08:30:56Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.3055,
+              "ts": "2026-07-19T08:31:55Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.2806,
+              "ts": "2026-07-19T08:31:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.29,
+              "ts": "2026-07-19T08:32:26Z"
+            }
+          ],
           "source_hashes": {
-            "agent_log_sha256": "807beb0725869bf3ea15e7157b216191463128a168aa4dab3ee0c9e4b83658e2",
-            "metadata_json_sha256": "9b040bf22b07b16a7ad3347d2222a8d820e5716c780a1f3ff2a19cf556989b84"
+            "agent_log_sha256": "3aeab5c2300783e7f11da1a4f684f195e46ad07829a67fbc43bd19b0401d3812",
+            "final_grade_log_sha256": "fc8f4986cb497c074280c2a01596f0ed2c141a7e2467235126d23ee03624a887",
+            "result_json_sha256": "5289e542aeeb2d8b2119d1e39e84a1ada6e9c6cec75d7c73ca8978310011902c",
+            "scores_jsonl_sha256": "f5f8bbbe944c5361f89204f0c747b0f11591e0fca2a9437b997282ce3b10d5d3"
           },
           "started_at": "2026-07-19T08:12:50.623337+00:00",
-          "status": "running",
+          "status": "completed",
           "swarm": false,
           "task": "json-unescape",
           "vendor": "openai"
         },
         "utf16-transcode": {
-          "active_seconds": 48.128,
+          "active_seconds": 750.796,
           "agent": "jcode",
           "best_full_gate_score": null,
-          "correctness_gate": "LIVE_UNVERIFIED",
-          "final_score": null,
-          "finished_at": null,
+          "correctness_gate": "PASS",
+          "final_score": 2.1109,
+          "finished_at": "2026-07-19T08:26:07.490476+00:00",
           "function_call_id": "fc-01KXWPZKDEEWCX4FXTT8Z2MVC5",
           "grade_count": 0,
           "latest_checkpoint": null,
@@ -2389,11 +2613,13 @@
           "sampled_best_score": null,
           "score_curve": [],
           "source_hashes": {
-            "agent_log_sha256": "9aa6d6f543315356f16d130361bb6bfcc4fabb362cc4080ce538a8b606e19d19",
-            "metadata_json_sha256": "b37cd5f010f5670d5e6d97a160c9607674b0e349165946d726ac67a5713b8c2e"
+            "agent_log_sha256": "da6f9e2075f5145f8eb5f765335963b8cb22c64afb35cd5bc6a953096dde3df9",
+            "final_grade_log_sha256": "3c77b7abe7884e4e9415bb073592b5492fdcb523d342d871fe6b68c35dc5f460",
+            "result_json_sha256": "4d70546c0ecd1b01651b50c2a6956c86cf8d8a156aa0cdee9a5f9d56928aad7a",
+            "scores_jsonl_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           "started_at": "2026-07-19T08:13:21.871959+00:00",
-          "status": "running",
+          "status": "completed",
           "swarm": false,
           "task": "utf16-transcode",
           "vendor": "openai"
@@ -2407,8 +2633,8 @@
     "8b9d05ebfd1965ea6df493edf01f29d15cad5d0a"
   ],
   "score_semantics": "score = log2(given_cost / optimized_cost); higher is better",
-  "snapshot_at": "2026-07-19T08:14:10Z",
-  "snapshot_status": "live",
+  "snapshot_at": "2026-07-19T09:30:19Z",
+  "snapshot_status": "final",
   "sources": {
     "launch_manifests": [
       "modal/launches/20260719T022916Z-multimodel-pilot.json",

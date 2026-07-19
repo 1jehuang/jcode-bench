@@ -1,0 +1,41 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-multimodel",
+  "launched_at": "2026-07-19T02:29:17.248705+00:00",
+  "mode": "pilot",
+  "reasoning_effort": "high",
+  "runner_commit": "3043c790b29e98ae0b157f74ef58806e5fd310dd",
+  "run_count": 1,
+  "completed_count": 1,
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXW39P8R1HVQHDZ0CBH3QD94",
+      "model": "gpt-5.5",
+      "run_id": "20260719T022916Z-jcode-solo-gpt-5.5-json-unescape",
+      "swarm": false,
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 549.905,
+      "grade_count": 33,
+      "final_score": 1.9841,
+      "best_score": 1.9841,
+      "helper_events": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "jcode",
+      "swarm": false,
+      "model": "gpt-5.5",
+      "completed_tasks": 1,
+      "mean_final_score": 1.9841,
+      "mean_best_score": 1.9841,
+      "total_agent_duration_s": 549.905,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
+}

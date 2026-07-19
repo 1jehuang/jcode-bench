@@ -1,0 +1,57 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-multimodel",
+  "launched_at": "2026-07-19T02:35:56.436713+00:00",
+  "mode": "full",
+  "reasoning_effort": "high",
+  "runner_commit": "3043c790b29e98ae0b157f74ef58806e5fd310dd",
+  "run_count": 2,
+  "completed_count": 2,
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXW3NVZF3XMX333HQZJJMAKE",
+      "model": "gpt-5.5",
+      "run_id": "20260719T023555Z-jcode-solo-gpt-5.5-float-print",
+      "swarm": false,
+      "task": "float-print",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 3126.569,
+      "grade_count": 23,
+      "final_score": 7.1957,
+      "best_score": 7.2042,
+      "helper_events": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXW3NW39HDVWV2HGKW8X7EMA",
+      "model": "gpt-5.5",
+      "run_id": "20260719T023555Z-jcode-solo-gpt-5.5-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 397.696,
+      "grade_count": 17,
+      "final_score": 1.3411,
+      "best_score": 1.3411,
+      "helper_events": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "jcode",
+      "swarm": false,
+      "model": "gpt-5.5",
+      "completed_tasks": 2,
+      "mean_final_score": 4.2684,
+      "mean_best_score": 4.2727,
+      "total_agent_duration_s": 3524.265,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
+}
