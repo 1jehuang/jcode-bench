@@ -1,0 +1,112 @@
+{
+  "comparison": "OpenCode 1.0.203: GPT-5.6 Sol high vs Claude Opus 4.8 high",
+  "score_semantics": "score = log2(given_cost / optimized_cost); higher is better",
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "sources": {
+    "sol": "modal/runs/2026-07-17-opencode-sol56-results.json",
+    "opus": "modal/runs/2026-07-18-opencode-opus48-results.json",
+    "historical_jcode": "modal/runs/2026-07-10-jcode-solo-sol56-vs-opus48.json"
+  },
+  "tasks": [
+    {
+      "task": "json-unescape",
+      "sol": {
+        "final_score": 2.1774,
+        "best_score": 2.1894,
+        "agent_duration_s": 1655.04,
+        "grades": 25
+      },
+      "opus": {
+        "final_score": 1.9991,
+        "best_score": 1.9991,
+        "agent_duration_s": 2562.78,
+        "grades": 83
+      },
+      "opus_minus_sol_final_score": -0.1783,
+      "opus_minus_sol_best_score": -0.1903,
+      "opus_final_efficiency_factor": 0.8837,
+      "opus_best_efficiency_factor": 0.8764
+    },
+    {
+      "task": "float-print",
+      "sol": {
+        "final_score": 7.2141,
+        "best_score": 7.2181,
+        "agent_duration_s": 2169.273,
+        "grades": 14
+      },
+      "opus": {
+        "final_score": 7.204,
+        "best_score": 7.2077,
+        "agent_duration_s": 5715.091,
+        "grades": 33
+      },
+      "opus_minus_sol_final_score": -0.0101,
+      "opus_minus_sol_best_score": -0.0104,
+      "opus_final_efficiency_factor": 0.993,
+      "opus_best_efficiency_factor": 0.9928,
+      "preempted_attempt": {
+        "best_score": 7.2973,
+        "full_gate_score": 7.2954,
+        "full_gate_passed": true,
+        "audit": "modal/runs/2026-07-18-opencode-opus48-float-print-preemption.json"
+      }
+    },
+    {
+      "task": "utf16-transcode",
+      "sol": {
+        "final_score": 1.5082,
+        "best_score": 1.5084,
+        "agent_duration_s": 1484.414,
+        "grades": 19
+      },
+      "opus": {
+        "final_score": 1.8526,
+        "best_score": 1.8638,
+        "agent_duration_s": 1890.82,
+        "grades": 42
+      },
+      "opus_minus_sol_final_score": 0.3444,
+      "opus_minus_sol_best_score": 0.3554,
+      "opus_final_efficiency_factor": 1.2696,
+      "opus_best_efficiency_factor": 1.2793
+    }
+  ],
+  "aggregate": {
+    "sol_mean_final_score": 3.6332,
+    "opus_mean_final_score": 3.6852,
+    "opus_minus_sol_final_score": 0.052,
+    "opus_final_efficiency_factor": 1.0367,
+    "sol_mean_best_score": 3.6386,
+    "opus_mean_best_score": 3.6902,
+    "opus_minus_sol_best_score": 0.0516,
+    "opus_best_efficiency_factor": 1.0364,
+    "opus_mean_best_including_preempted_float_attempt": 3.7201,
+    "opus_minus_sol_best_including_preempted_score": 0.0815,
+    "opus_best_including_preempted_efficiency_factor": 1.0581,
+    "sol_successful_agent_duration_s": 5308.727,
+    "opus_successful_agent_duration_s": 10168.691,
+    "opus_successful_time_ratio": 1.9155,
+    "opus_preempted_float_elapsed_s": 5054.327,
+    "opus_observed_agent_plus_preempted_elapsed_s": 15223.018,
+    "opus_observed_time_ratio_including_preemption": 2.8675
+  },
+  "historical_jcode_context": {
+    "jcode_sol_mean_best_score": 3.5129,
+    "opencode_sol_minus_jcode_sol_best_score": 0.1257,
+    "opencode_sol_efficiency_factor_vs_jcode_sol": 1.091,
+    "jcode_opus_mean_best_score": 4.869033,
+    "opencode_opus_mean_best_score": 3.6902,
+    "jcode_opus_minus_opencode_opus_best_score": 1.1788,
+    "jcode_opus_efficiency_factor_vs_opencode_opus": 2.2639,
+    "historical_jcode_opus_total_minutes": 1423.0,
+    "opencode_opus_successful_total_minutes": 169.478,
+    "opencode_opus_observed_minutes_including_preemption": 253.717
+  },
+  "caveats": [
+    "Each OpenCode model has one successful run per task, so model variance is unmeasured.",
+    "Modal preempted the first Opus float-print container after it passed a 7.2954 full gate; the same FunctionCall automatically restarted from scratch. Main Opus aggregate scores use the successful retry, while the preempted best is reported separately.",
+    "Successful agent duration excludes the preempted Opus float-print attempt. Observed time including preemption is an elapsed approximation from container timestamps.",
+    "Historical Jcode Opus runs used much longer, unmatched budgets and older harness/Jcode versions; treat that context as directional, not a controlled agent comparison."
+  ]
+}
