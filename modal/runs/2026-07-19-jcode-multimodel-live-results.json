@@ -4,16 +4,17 @@
   "campaign": {
     "completed_cells": 11,
     "completed_correctness_passes": 11,
-    "planned_cells": 12,
-    "running_cells": 1
+    "planned_cells": 15,
+    "running_cells": 4
   },
   "caveats": [
-    "This is a timestamped live snapshot: 11 of 12 cells had completed when captured.",
-    "Claude Fable 5 float-print was still running. Its latest exhaustive full correctness gate in the snapshot passed at +7.7011. A later non-full-gate sample measured +8.0297, but that sampled value is not ranked as final.",
+    "This is a timestamped live snapshot: 11 of 15 intended cells had completed when captured.",
+    "Claude Fable 5 float-print was still running. Its latest exhaustive full correctness gate in the snapshot passed at +7.7011. Later non-full-gate samples measured higher, but sampled values are not ranked as final.",
+    "All three matched GPT-5.6 Sol cells were live. Its float-print run had sampled +7.1467 but had not yet recorded an exhaustive full gate; JSON and UTF-16 retries had entered normal agent execution without a score checkpoint yet.",
     "Intermediate sampled maxima are retained for audit but are not used in the published ranking because non-full-gate measurements are not comparable to the official final correctness grade.",
     "Each model has one run per task, so run-to-run variance is unmeasured.",
     "Provider implementations differ, so this is a model-plus-provider comparison through the same Jcode harness rather than a provider-neutral model comparison.",
-    "The 20-hour agent budget is a safety cap. Completed agents stopped on their own judgment; the active Fable run had not reached the cap."
+    "The 20-hour agent budget is a safety cap. Completed agents stopped on their own judgment; none of the active runs had reached the cap."
   ],
   "environment": {
     "agent_budget_hours": 20,
@@ -36,6 +37,26 @@
     "swarm_enabled": false,
     "version": "v0.51.4-dev (8b39d814e)"
   },
+  "infrastructure_events": [
+    {
+      "agent_exit_code": 1,
+      "event": "credential_route_startup_race",
+      "excluded_from_matrix": true,
+      "model": "gpt-5.6-sol",
+      "replacement_run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "task": "json-unescape"
+    },
+    {
+      "agent_exit_code": 1,
+      "event": "credential_route_startup_race",
+      "excluded_from_matrix": true,
+      "model": "gpt-5.6-sol",
+      "replacement_run_id": "20260719T081317Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "task": "utf16-transcode"
+    }
+  ],
   "models": {
     "claude-fable-5": {
       "completed_tasks": 2,
@@ -46,21 +67,21 @@
       "running_tasks": 1,
       "tasks": {
         "float-print": {
-          "active_seconds": 16718.5,
+          "active_seconds": 20257.5,
           "agent": "jcode",
           "best_full_gate_score": 7.7011,
           "correctness_gate": "LIVE_FULL_GATE_PASS",
           "final_score": null,
           "finished_at": null,
           "function_call_id": "fc-01KXW3NTSGZWW8H5ZGE869DP6M",
-          "grade_count": 31,
-          "latest_checkpoint": "20260719T071315Z",
+          "grade_count": 34,
+          "latest_checkpoint": "20260719T081332Z",
           "model": "claude-fable-5",
           "provider": "anthropic-api",
           "reasoning_effort": "high",
           "run_id": "20260719T023554Z-jcode-solo-claude-fable-5-float-print",
-          "sampled_best_efficiency_factor": 261.3248,
-          "sampled_best_score": 8.0297,
+          "sampled_best_efficiency_factor": 4120.4894,
+          "sampled_best_score": 12.0086,
           "score_curve": [
             {
               "full_gate": false,
@@ -216,11 +237,26 @@
               "full_gate": false,
               "score": 8.0297,
               "ts": "2026-07-19T07:09:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 10.6706,
+              "ts": "2026-07-19T07:31:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 11.6692,
+              "ts": "2026-07-19T07:56:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 12.0086,
+              "ts": "2026-07-19T08:04:33Z"
             }
           ],
           "source_hashes": {
-            "agent_log_sha256": "f5ca8c8348a8dda6ac96caad582d7f57631105b684d887e9dd6a78f239824923",
-            "checkpoint_scores_jsonl_sha256": "9fd047db0a2ee2e535e4b6c2be2d4063fc8d1688532ea34bc0881bec62b06f5c",
+            "agent_log_sha256": "81f9cf5cb3a07a4f2cb6a51ad969cd6b66fb6eddf8d41fa3e4dc375a44d8b89b",
+            "checkpoint_scores_jsonl_sha256": "d37c0cd9fbc73fb7ed7458d2d2a5bc3bd8450ea755dc43020dc76ce4277c3453",
             "metadata_json_sha256": "3f1ab01aa1424168aaa378fcb25ddfe583287281bb73e0ff1bda86f33c75631d"
           },
           "started_at": "2026-07-19T02:36:32.500409+00:00",
@@ -2235,18 +2271,152 @@
           "vendor": "openai"
         }
       }
+    },
+    "gpt-5.6-sol": {
+      "completed_tasks": 0,
+      "mean_final_score_completed": null,
+      "mean_sampled_best_score_completed": null,
+      "provider": "openai-api",
+      "provisional_mean_verified_score": null,
+      "running_tasks": 3,
+      "tasks": {
+        "float-print": {
+          "active_seconds": 361.135,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "LIVE_UNVERIFIED",
+          "final_score": null,
+          "finished_at": null,
+          "function_call_id": "fc-01KXWPP0X9FX56PE06RX9B28E3",
+          "grade_count": 7,
+          "latest_checkpoint": "20260719T081332Z",
+          "model": "gpt-5.6-sol",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-float-print",
+          "sampled_best_efficiency_factor": 141.7004,
+          "sampled_best_score": 7.1467,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T08:08:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.7456,
+              "ts": "2026-07-19T08:09:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.8537,
+              "ts": "2026-07-19T08:10:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.8067,
+              "ts": "2026-07-19T08:10:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.0835,
+              "ts": "2026-07-19T08:12:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1419,
+              "ts": "2026-07-19T08:12:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1467,
+              "ts": "2026-07-19T08:12:56Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "08cd92cae0f37a0904d4889349a7e1d2429ea5be75f1b84db7d359f7c8790ea6",
+            "checkpoint_scores_jsonl_sha256": "5aa95a7d26a7101ab9774349019d9aa3077b4f5dd3878be74d70f037baf21592",
+            "metadata_json_sha256": "79316619d76242edf4de625114c7ce09cc5c3cc2104b34f8cc75bdca0b31356d"
+          },
+          "started_at": "2026-07-19T08:08:08.864960+00:00",
+          "status": "running",
+          "swarm": false,
+          "task": "float-print",
+          "vendor": "openai"
+        },
+        "json-unescape": {
+          "active_seconds": 79.377,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "LIVE_UNVERIFIED",
+          "final_score": null,
+          "finished_at": null,
+          "function_call_id": "fc-01KXWPYQZ5SKXMNQ1R1C5SBD7C",
+          "grade_count": 0,
+          "latest_checkpoint": null,
+          "model": "gpt-5.6-sol",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
+          "sampled_best_efficiency_factor": null,
+          "sampled_best_score": null,
+          "score_curve": [],
+          "source_hashes": {
+            "agent_log_sha256": "807beb0725869bf3ea15e7157b216191463128a168aa4dab3ee0c9e4b83658e2",
+            "metadata_json_sha256": "9b040bf22b07b16a7ad3347d2222a8d820e5716c780a1f3ff2a19cf556989b84"
+          },
+          "started_at": "2026-07-19T08:12:50.623337+00:00",
+          "status": "running",
+          "swarm": false,
+          "task": "json-unescape",
+          "vendor": "openai"
+        },
+        "utf16-transcode": {
+          "active_seconds": 48.128,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "LIVE_UNVERIFIED",
+          "final_score": null,
+          "finished_at": null,
+          "function_call_id": "fc-01KXWPZKDEEWCX4FXTT8Z2MVC5",
+          "grade_count": 0,
+          "latest_checkpoint": null,
+          "model": "gpt-5.6-sol",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T081317Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+          "sampled_best_efficiency_factor": null,
+          "sampled_best_score": null,
+          "score_curve": [],
+          "source_hashes": {
+            "agent_log_sha256": "9aa6d6f543315356f16d130361bb6bfcc4fabb362cc4080ce538a8b606e19d19",
+            "metadata_json_sha256": "b37cd5f010f5670d5e6d97a160c9607674b0e349165946d726ac67a5713b8c2e"
+          },
+          "started_at": "2026-07-19T08:13:21.871959+00:00",
+          "status": "running",
+          "swarm": false,
+          "task": "utf16-transcode",
+          "vendor": "openai"
+        }
+      }
     }
   },
   "published_at": "2026-07-19",
-  "runner_commit": "3043c790b29e98ae0b157f74ef58806e5fd310dd",
+  "runner_commits": [
+    "3043c790b29e98ae0b157f74ef58806e5fd310dd",
+    "8b9d05ebfd1965ea6df493edf01f29d15cad5d0a"
+  ],
   "score_semantics": "score = log2(given_cost / optimized_cost); higher is better",
-  "snapshot_at": "2026-07-19T07:15:11Z",
+  "snapshot_at": "2026-07-19T08:14:10Z",
   "snapshot_status": "live",
   "sources": {
     "launch_manifests": [
       "modal/launches/20260719T022916Z-multimodel-pilot.json",
       "modal/launches/20260719T023554Z-multimodel-full.json",
-      "modal/launches/20260719T023555Z-multimodel-full.json"
+      "modal/launches/20260719T023555Z-multimodel-full.json",
+      "modal/launches/20260719T080803Z-multimodel-full.json",
+      "modal/launches/20260719T081249Z-multimodel-pilot.json",
+      "modal/launches/20260719T081317Z-multimodel-pilot.json"
     ],
     "modal_volume": "jcode-bench-v1-results",
     "repository": "https://github.com/1jehuang/jcode-bench"
