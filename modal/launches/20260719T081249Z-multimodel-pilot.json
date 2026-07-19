@@ -1,0 +1,18 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-multimodel",
+  "launched_at": "2026-07-19T08:12:50.117792+00:00",
+  "mode": "pilot",
+  "reasoning_effort": "high",
+  "runner_commit": "8b9d05ebfd1965ea6df493edf01f29d15cad5d0a",
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXWPYQZ5SKXMNQ1R1C5SBD7C",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    }
+  ]
+}
