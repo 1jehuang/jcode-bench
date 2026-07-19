@@ -77,6 +77,34 @@ image, command metadata, logs, or result Volume.
 Canonical launch manifests are checked into [`runs/`](runs/). Ad-hoc launcher
 manifests remain ignored because failed infrastructure calls may be replaced.
 
+## Codex Ultra rerun
+
+[`codex_ultra_app.py`](codex_ultra_app.py) is an isolated rerun app that keeps
+the historical benchmark commit, prompt, Codex version, model, CPU, memory, and
+container policy fixed while changing `model_reasoning_effort` from `high` to
+`ultra`. It also enables `multi_agent` with eight threads. The result collector
+still counts explicit helper events, so an enabled run is not described as a
+multi-agent gain unless the captured Codex log contains delegation events.
+
+```bash
+set -a
+source ~/.config/jcode/openai.env
+set +a
+
+modal deploy modal/codex_ultra_app.py
+~/.local/share/uv/tools/modal/bin/python modal/codex_ultra_launch.py
+
+# Check the three independent cells without blocking.
+~/.local/share/uv/tools/modal/bin/python modal/status.py \
+  modal/launches/<timestamp>-codex-ultra-full.json
+
+# Generate the audited result report after all cells stop.
+~/.local/share/uv/tools/modal/bin/python modal/collect_results.py \
+  modal/launches/<timestamp>-codex-ultra-full.json \
+  --json-output modal/runs/<timestamp>-codex-ultra-results.json \
+  --markdown-output modal/runs/<timestamp>-codex-ultra-results.md
+```
+
 ## Multi-model jcode run (20-hour budget)
 
 [`multimodel_app.py`](multimodel_app.py) is a separate Modal app
