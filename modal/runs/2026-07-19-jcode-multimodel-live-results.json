@@ -1,2747 +1,2841 @@
 {
- "benchmark": "jcode bench v1",
- "benchmark_commit": "cb8ccbc29ad4f4ce4a3ada2e79e019d06729df7c",
- "campaign": {
-  "completed_cells": 15,
-  "completed_correctness_passes": 15,
-  "planned_cells": 15,
-  "running_cells": 0
- },
- "caveats": [
-  "All 15 intended cells completed and passed the official final correctness grade.",
-  "The ranking uses only official final scores produced after each agent stopped and the final grader passed.",
-  "Intermediate sampled maxima are retained for audit but are not used in the published ranking because non-full-gate measurements are not comparable to the official final correctness grade.",
-  "Each model has one run per task, so run-to-run variance is unmeasured.",
-  "Provider implementations differ, so this is a model-plus-provider comparison through the same Jcode harness rather than a provider-neutral model comparison.",
-  "The 20-hour agent budget was a safety cap. Every agent stopped on its own judgment before the cap."
- ],
- "environment": {
-  "agent_budget_hours": 20,
-  "app": "jcode-bench-v1-multimodel",
-  "app_id": "ap-kBW1DyfnKGqojoNwid9UP8",
-  "cpus": 4,
-  "function_timeout_hours": 24,
-  "memory_mib": 8192,
-  "prompt": "identical published optimization prompt for every model and task",
-  "reasoning_effort": "high",
-  "region": "us-west",
-  "runtime": "Modal",
-  "single_use_containers": true
- },
- "harness": {
-  "binary_sha256": "1b94e8b4e6510d1f585dd7a54bf2d3c9c5adcb407e2323091a7d0fea0224923a",
-  "execution": "solo",
-  "memory_enabled": false,
-  "name": "jcode",
-  "swarm_enabled": false,
-  "version": "v0.51.4-dev (8b39d814e)"
- },
- "infrastructure_events": [
-  {
-   "agent_exit_code": 1,
-   "event": "credential_route_startup_race",
-   "excluded_from_matrix": true,
-   "model": "gpt-5.6-sol",
-   "replacement_run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
-   "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-json-unescape",
-   "task": "json-unescape"
+  "benchmark": "jcode bench v1",
+  "benchmark_commit": "cb8ccbc29ad4f4ce4a3ada2e79e019d06729df7c",
+  "campaign": {
+    "completed_cells": 15,
+    "completed_correctness_passes": 15,
+    "planned_cells": 18,
+    "running_cells": 3
   },
-  {
-   "agent_exit_code": 1,
-   "event": "credential_route_startup_race",
-   "excluded_from_matrix": true,
-   "model": "gpt-5.6-sol",
-   "replacement_run_id": "20260719T081317Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
-   "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
-   "task": "utf16-transcode"
-  }
- ],
- "models": {
-  "claude-fable-5": {
-   "completed_tasks": 3,
-   "mean_final_score_completed": 5.7971,
-   "mean_sampled_best_score_completed": 5.7997,
-   "provider": "anthropic-api",
-   "provisional_mean_verified_score": null,
-   "running_tasks": 0,
-   "tasks": {
-    "float-print": {
-     "active_seconds": 23396.612,
-     "agent": "jcode",
-     "best_full_gate_score": 11.2074,
-     "correctness_gate": "PASS",
-     "final_score": 12.0074,
-     "finished_at": "2026-07-19T09:14:18.415926+00:00",
-     "function_call_id": "fc-01KXW3NTSGZWW8H5ZGE869DP6M",
-     "grade_count": 36,
-     "latest_checkpoint": null,
-     "model": "claude-fable-5",
-     "provider": "anthropic-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-claude-fable-5-float-print",
-     "sampled_best_efficiency_factor": 4120.4894,
-     "sampled_best_score": 12.0086,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:37:00Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0863,
-       "ts": "2026-07-19T02:45:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.6681,
-       "ts": "2026-07-19T02:58:36Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.2014,
-       "ts": "2026-07-19T03:28:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.4307,
-       "ts": "2026-07-19T03:38:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.4039,
-       "ts": "2026-07-19T04:09:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.4002,
-       "ts": "2026-07-19T04:09:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.4002,
-       "ts": "2026-07-19T04:09:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.4448,
-       "ts": "2026-07-19T04:15:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.5021,
-       "ts": "2026-07-19T04:28:07Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.3767,
-       "ts": "2026-07-19T04:40:20Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.5094,
-       "ts": "2026-07-19T04:46:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.5299,
-       "ts": "2026-07-19T04:50:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.5636,
-       "ts": "2026-07-19T05:04:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.6481,
-       "ts": "2026-07-19T05:16:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.6556,
-       "ts": "2026-07-19T05:32:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.6555,
-       "ts": "2026-07-19T05:33:07Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.6675,
-       "ts": "2026-07-19T05:36:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.7024,
-       "ts": "2026-07-19T05:46:50Z"
-      },
-      {
-       "full_gate": true,
-       "score": 7.7011,
-       "ts": "2026-07-19T06:20:52Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.7563,
-       "ts": "2026-07-19T06:24:17Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.7812,
-       "ts": "2026-07-19T06:25:58Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.8176,
-       "ts": "2026-07-19T06:32:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.8337,
-       "ts": "2026-07-19T06:34:57Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.879,
-       "ts": "2026-07-19T06:38:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.9277,
-       "ts": "2026-07-19T06:46:35Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.9338,
-       "ts": "2026-07-19T06:48:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.9574,
-       "ts": "2026-07-19T06:52:34Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.9997,
-       "ts": "2026-07-19T06:54:55Z"
-      },
-      {
-       "full_gate": false,
-       "score": 8.0271,
-       "ts": "2026-07-19T06:56:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 8.0297,
-       "ts": "2026-07-19T07:09:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": 10.6706,
-       "ts": "2026-07-19T07:31:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 11.6692,
-       "ts": "2026-07-19T07:56:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 12.0086,
-       "ts": "2026-07-19T08:04:33Z"
-      },
-      {
-       "full_gate": true,
-       "score": 11.2074,
-       "ts": "2026-07-19T09:03:24Z"
-      },
-      {
-       "full_gate": false,
-       "score": 12.0074,
-       "ts": "2026-07-19T09:14:18Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "36e79fdacf5323c5f35b1da92741c3743b42af9a2941c6863ecc581b113bff59",
-      "final_grade_log_sha256": "a53aefbe125456ee89c1fe842be5ec59a07cdad484aff74e10cde0146f3d6be7",
-      "result_json_sha256": "1608acf6df89a95b963062ea9a36e5c3585f57de40d3430b14abaae90d2378ee",
-      "scores_jsonl_sha256": "35682e8ff342f124cd91a98e0e6e8485c9e25bf210a3f0ce24244f4f4f89907a"
-     },
-     "started_at": "2026-07-19T02:36:32.500409+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "float-print",
-     "vendor": "anthropic"
-    },
-    "json-unescape": {
-     "active_seconds": 8110.265,
-     "agent": "jcode",
-     "best_full_gate_score": 2.8211,
-     "correctness_gate": "PASS",
-     "final_score": 2.8324,
-     "finished_at": "2026-07-19T04:51:34.094972+00:00",
-     "function_call_id": "fc-01KXW3NTD039E5VP0NXDY2QNQB",
-     "grade_count": 78,
-     "latest_checkpoint": null,
-     "model": "claude-fable-5",
-     "provider": "anthropic-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-claude-fable-5-json-unescape",
-     "sampled_best_efficiency_factor": 7.1552,
-     "sampled_best_score": 2.839,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:15Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:37:09Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5686,
-       "ts": "2026-07-19T02:40:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.863,
-       "ts": "2026-07-19T02:43:48Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1449,
-       "ts": "2026-07-19T02:52:48Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.213,
-       "ts": "2026-07-19T02:59:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2692,
-       "ts": "2026-07-19T03:03:04Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.0891,
-       "ts": "2026-07-19T03:08:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.3093,
-       "ts": "2026-07-19T03:09:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.4183,
-       "ts": "2026-07-19T03:28:15Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.506,
-       "ts": "2026-07-19T03:31:00Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.3639,
-       "ts": "2026-07-19T03:33:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5059,
-       "ts": "2026-07-19T03:34:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5292,
-       "ts": "2026-07-19T03:37:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5991,
-       "ts": "2026-07-19T03:42:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.621,
-       "ts": "2026-07-19T03:45:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.4726,
-       "ts": "2026-07-19T03:48:29Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.621,
-       "ts": "2026-07-19T03:48:41Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.509,
-       "ts": "2026-07-19T03:51:42Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6186,
-       "ts": "2026-07-19T03:51:55Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.621,
-       "ts": "2026-07-19T03:52:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6418,
-       "ts": "2026-07-19T03:54:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6383,
-       "ts": "2026-07-19T03:57:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6418,
-       "ts": "2026-07-19T03:58:11Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5797,
-       "ts": "2026-07-19T04:01:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6418,
-       "ts": "2026-07-19T04:01:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5234,
-       "ts": "2026-07-19T04:08:52Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6418,
-       "ts": "2026-07-19T04:09:02Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6845,
-       "ts": "2026-07-19T04:10:29Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6468,
-       "ts": "2026-07-19T04:10:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6667,
-       "ts": "2026-07-19T04:12:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6798,
-       "ts": "2026-07-19T04:13:18Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6788,
-       "ts": "2026-07-19T04:15:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6515,
-       "ts": "2026-07-19T04:15:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6798,
-       "ts": "2026-07-19T04:15:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6798,
-       "ts": "2026-07-19T04:17:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7147,
-       "ts": "2026-07-19T04:18:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7107,
-       "ts": "2026-07-19T04:18:41Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7147,
-       "ts": "2026-07-19T04:18:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7181,
-       "ts": "2026-07-19T04:21:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7234,
-       "ts": "2026-07-19T04:22:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7408,
-       "ts": "2026-07-19T04:23:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7073,
-       "ts": "2026-07-19T04:24:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7408,
-       "ts": "2026-07-19T04:24:27Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7408,
-       "ts": "2026-07-19T04:27:49Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.6206,
-       "ts": "2026-07-19T04:28:05Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7408,
-       "ts": "2026-07-19T04:28:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7842,
-       "ts": "2026-07-19T04:28:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7704,
-       "ts": "2026-07-19T04:29:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7842,
-       "ts": "2026-07-19T04:29:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8155,
-       "ts": "2026-07-19T04:30:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7902,
-       "ts": "2026-07-19T04:30:18Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7969,
-       "ts": "2026-07-19T04:30:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8155,
-       "ts": "2026-07-19T04:30:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8174,
-       "ts": "2026-07-19T04:32:36Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7756,
-       "ts": "2026-07-19T04:33:29Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8174,
-       "ts": "2026-07-19T04:33:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8197,
-       "ts": "2026-07-19T04:37:03Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8157,
-       "ts": "2026-07-19T04:37:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7701,
-       "ts": "2026-07-19T04:38:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8197,
-       "ts": "2026-07-19T04:38:17Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8376,
-       "ts": "2026-07-19T04:40:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.839,
-       "ts": "2026-07-19T04:40:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8281,
-       "ts": "2026-07-19T04:40:31Z"
-      },
-      {
-       "full_gate": true,
-       "score": 2.8197,
-       "ts": "2026-07-19T04:43:48Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7707,
-       "ts": "2026-07-19T04:45:29Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.7887,
-       "ts": "2026-07-19T04:45:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8129,
-       "ts": "2026-07-19T04:45:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8197,
-       "ts": "2026-07-19T04:46:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.76,
-       "ts": "2026-07-19T04:46:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5632,
-       "ts": "2026-07-19T04:47:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8197,
-       "ts": "2026-07-19T04:47:11Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8211,
-       "ts": "2026-07-19T04:48:34Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8211,
-       "ts": "2026-07-19T04:50:48Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8214,
-       "ts": "2026-07-19T04:50:53Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8293,
-       "ts": "2026-07-19T04:50:58Z"
-      },
-      {
-       "full_gate": true,
-       "score": 2.8211,
-       "ts": "2026-07-19T04:51:02Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.8324,
-       "ts": "2026-07-19T04:51:34Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "3c9ae354cd84c6b7775c829aa829b84197a3b6015736b6c9a9547d2527be8c54",
-      "final_grade_log_sha256": "a2fd573aa4e239adae61f5f415278527d3437ecf6ab31281a08c3b15544512fb",
-      "result_json_sha256": "5db281660062430113db6c23395061a52efc81ad3fcdd2b95641d7fdf981e953",
-      "scores_jsonl_sha256": "bb3f266b78391d3751f2d59091a53dc670856e9b33331dfe77f94d9b710a42cf"
-     },
-     "started_at": "2026-07-19T02:36:11.146922+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "json-unescape",
-     "vendor": "anthropic"
-    },
-    "utf16-transcode": {
-     "active_seconds": 5623.923,
-     "agent": "jcode",
-     "best_full_gate_score": null,
-     "correctness_gate": "PASS",
-     "final_score": 2.5514,
-     "finished_at": "2026-07-19T04:10:34.242004+00:00",
-     "function_call_id": "fc-01KXW3NV5YSXGPCET1Z47VP5AJ",
-     "grade_count": 7,
-     "latest_checkpoint": null,
-     "model": "claude-fable-5",
-     "provider": "anthropic-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-claude-fable-5-utf16-transcode",
-     "sampled_best_efficiency_factor": 5.8624,
-     "sampled_best_score": 2.5515,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:42Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.7097,
-       "ts": "2026-07-19T03:26:34Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2643,
-       "ts": "2026-07-19T03:48:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2718,
-       "ts": "2026-07-19T03:52:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2721,
-       "ts": "2026-07-19T03:58:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5515,
-       "ts": "2026-07-19T03:59:04Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.5514,
-       "ts": "2026-07-19T04:10:34Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "62d445a9bc426cd02f3429623645cd406971625b4bad1988d8815b1bae1bd0ce",
-      "final_grade_log_sha256": "03cf46a3ee405cae2994c7612a1ba248ababa7f753157283f6a33a3ab36762a8",
-      "result_json_sha256": "bd237e1f046af3f21f80a0d0eeb4dc8390c3914d0f961996190cf0594ea6fd3a",
-      "scores_jsonl_sha256": "3aab94fd6941b135fb01be893479060332d34384b052d4826b4292a0ba345dfb"
-     },
-     "started_at": "2026-07-19T02:36:37.405584+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "utf16-transcode",
-     "vendor": "anthropic"
-    }
-   }
-  },
-  "claude-sonnet-5": {
-   "completed_tasks": 3,
-   "mean_final_score_completed": 3.0916,
-   "mean_sampled_best_score_completed": 7.4592,
-   "provider": "anthropic-api",
-   "provisional_mean_verified_score": null,
-   "running_tasks": 0,
-   "tasks": {
-    "float-print": {
-     "active_seconds": 8517.485,
-     "agent": "jcode",
-     "best_full_gate_score": 6.019,
-     "correctness_gate": "PASS",
-     "final_score": 6.8199,
-     "finished_at": "2026-07-19T04:59:01.181017+00:00",
-     "function_call_id": "fc-01KXW3NTN3T9CRCSSWGACJTPG9",
-     "grade_count": 38,
-     "latest_checkpoint": null,
-     "model": "claude-sonnet-5",
-     "provider": "anthropic-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-claude-sonnet-5-float-print",
-     "sampled_best_efficiency_factor": 112.9782,
-     "sampled_best_score": 6.8199,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.938,
-       "ts": "2026-07-19T02:46:40Z"
-      },
-      {
-       "full_gate": true,
-       "score": 5.9396,
-       "ts": "2026-07-19T03:41:29Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9323,
-       "ts": "2026-07-19T03:43:34Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9404,
-       "ts": "2026-07-19T03:43:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9457,
-       "ts": "2026-07-19T03:44:56Z"
-      },
-      {
-       "full_gate": true,
-       "score": 5.9462,
-       "ts": "2026-07-19T04:13:35Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9481,
-       "ts": "2026-07-19T04:16:11Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9457,
-       "ts": "2026-07-19T04:17:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9465,
-       "ts": "2026-07-19T04:18:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9456,
-       "ts": "2026-07-19T04:18:15Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9748,
-       "ts": "2026-07-19T04:19:11Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9755,
-       "ts": "2026-07-19T04:19:33Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9748,
-       "ts": "2026-07-19T04:19:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.9752,
-       "ts": "2026-07-19T04:20:02Z"
-      },
-      {
-       "full_gate": false,
-       "score": 5.968,
-       "ts": "2026-07-19T04:21:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0147,
-       "ts": "2026-07-19T04:22:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0124,
-       "ts": "2026-07-19T04:22:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0141,
-       "ts": "2026-07-19T04:23:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0226,
-       "ts": "2026-07-19T04:23:41Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0055,
-       "ts": "2026-07-19T04:24:08Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0173,
-       "ts": "2026-07-19T04:24:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0192,
-       "ts": "2026-07-19T04:24:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0185,
-       "ts": "2026-07-19T04:24:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0028,
-       "ts": "2026-07-19T04:25:29Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0042,
-       "ts": "2026-07-19T04:25:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0179,
-       "ts": "2026-07-19T04:26:04Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0179,
-       "ts": "2026-07-19T04:26:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0196,
-       "ts": "2026-07-19T04:26:58Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0172,
-       "ts": "2026-07-19T04:27:18Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0202,
-       "ts": "2026-07-19T04:27:33Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0183,
-       "ts": "2026-07-19T04:27:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0188,
-       "ts": "2026-07-19T04:28:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.02,
-       "ts": "2026-07-19T04:28:28Z"
-      },
-      {
-       "full_gate": true,
-       "score": 6.019,
-       "ts": "2026-07-19T04:57:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0185,
-       "ts": "2026-07-19T04:58:17Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0157,
-       "ts": "2026-07-19T04:58:39Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.8199,
-       "ts": "2026-07-19T04:59:01Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "24bf7b45451ab4593ee329724d9901a21460d947a4b00c08848a2dd6a05d26bf",
-      "final_grade_log_sha256": "4bee1efc05e35dbd089527000cba15ce7543d61cc2028d709cb9abdeee58d59c",
-      "result_json_sha256": "7d6ee0a521aed0049dc604c639d250846a8e5346558a11ca32361166e0b426d5",
-      "scores_jsonl_sha256": "c2b0d90231df34c2c9c8cfc99b206523a5c90fd76bd505204f6bbe16d0494181"
-     },
-     "started_at": "2026-07-19T02:36:20.949717+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "float-print",
-     "vendor": "anthropic"
-    },
-    "json-unescape": {
-     "active_seconds": 2918.501,
-     "agent": "jcode",
-     "best_full_gate_score": 1.2009,
-     "correctness_gate": "PASS",
-     "final_score": 1.2166,
-     "finished_at": "2026-07-19T03:24:56.201487+00:00",
-     "function_call_id": "fc-01KXW3NT8WCS67GT0P0DNKSRQW",
-     "grade_count": 45,
-     "latest_checkpoint": null,
-     "model": "claude-sonnet-5",
-     "provider": "anthropic-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-claude-sonnet-5-json-unescape",
-     "sampled_best_efficiency_factor": 20192.0533,
-     "sampled_best_score": 14.3015,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:36Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.2422,
-       "ts": "2026-07-19T02:41:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.8288,
-       "ts": "2026-07-19T02:47:23Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9288,
-       "ts": "2026-07-19T02:58:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 14.3015,
-       "ts": "2026-07-19T03:02:50Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9305,
-       "ts": "2026-07-19T03:04:50Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9242,
-       "ts": "2026-07-19T03:04:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9007,
-       "ts": "2026-07-19T03:04:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9385,
-       "ts": "2026-07-19T03:05:03Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9225,
-       "ts": "2026-07-19T03:05:09Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0462,
-       "ts": "2026-07-19T03:07:16Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0596,
-       "ts": "2026-07-19T03:07:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.036,
-       "ts": "2026-07-19T03:07:24Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0721,
-       "ts": "2026-07-19T03:07:27Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0573,
-       "ts": "2026-07-19T03:07:32Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0932,
-       "ts": "2026-07-19T03:11:19Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0946,
-       "ts": "2026-07-19T03:11:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0707,
-       "ts": "2026-07-19T03:11:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1068,
-       "ts": "2026-07-19T03:11:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1876,
-       "ts": "2026-07-19T03:11:52Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2059,
-       "ts": "2026-07-19T03:11:57Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1825,
-       "ts": "2026-07-19T03:11:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2179,
-       "ts": "2026-07-19T03:12:02Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1979,
-       "ts": "2026-07-19T03:12:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2022,
-       "ts": "2026-07-19T03:12:12Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.1725,
-       "ts": "2026-07-19T03:16:07Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0576,
-       "ts": "2026-07-19T03:17:27Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.227,
-       "ts": "2026-07-19T03:17:48Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2059,
-       "ts": "2026-07-19T03:17:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1825,
-       "ts": "2026-07-19T03:17:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2179,
-       "ts": "2026-07-19T03:17:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1979,
-       "ts": "2026-07-19T03:18:02Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2095,
-       "ts": "2026-07-19T03:18:05Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.1974,
-       "ts": "2026-07-19T03:18:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2022,
-       "ts": "2026-07-19T03:19:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2122,
-       "ts": "2026-07-19T03:22:20Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.194,
-       "ts": "2026-07-19T03:22:24Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2183,
-       "ts": "2026-07-19T03:22:27Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1991,
-       "ts": "2026-07-19T03:22:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2224,
-       "ts": "2026-07-19T03:22:34Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.2009,
-       "ts": "2026-07-19T03:23:36Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.2009,
-       "ts": "2026-07-19T03:23:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1943,
-       "ts": "2026-07-19T03:24:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2166,
-       "ts": "2026-07-19T03:24:56Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "8d09ccb899345077818841b531576014b35b75b9b7fe088aa085f29c9f95a499",
-      "final_grade_log_sha256": "25ec369af10e8dea21cca7a9ea717b9aea94f22fc05aa39a083288c6999a898f",
-      "result_json_sha256": "ac599775ef0db407970b80a2f0986c9f865f0b28d535dce5ee73c21faa3cc7fa",
-      "scores_jsonl_sha256": "fd5a08d2fd624c0c12256af5ad2497aa918f94af3ca4e53d0ea03ad4fec0a6e8"
-     },
-     "started_at": "2026-07-19T02:36:06.281241+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "json-unescape",
-     "vendor": "anthropic"
-    },
-    "utf16-transcode": {
-     "active_seconds": 5387.23,
-     "agent": "jcode",
-     "best_full_gate_score": 1.2449,
-     "correctness_gate": "PASS",
-     "final_score": 1.2383,
-     "finished_at": "2026-07-19T04:06:35.709152+00:00",
-     "function_call_id": "fc-01KXW3NV1VWZWFQ51QMJ5683ER",
-     "grade_count": 37,
-     "latest_checkpoint": null,
-     "model": "claude-sonnet-5",
-     "provider": "anthropic-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-claude-sonnet-5-utf16-transcode",
-     "sampled_best_efficiency_factor": 2.3885,
-     "sampled_best_score": 1.2561,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:41Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:42:23Z"
-      },
-      {
-       "full_gate": false,
-       "score": -0.0373,
-       "ts": "2026-07-19T03:07:00Z"
-      },
-      {
-       "full_gate": false,
-       "score": -0.0887,
-       "ts": "2026-07-19T03:12:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": -0.084,
-       "ts": "2026-07-19T03:14:44Z"
-      },
-      {
-       "full_gate": false,
-       "score": -0.0373,
-       "ts": "2026-07-19T03:16:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.1282,
-       "ts": "2026-07-19T03:17:08Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.1525,
-       "ts": "2026-07-19T03:20:50Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.218,
-       "ts": "2026-07-19T03:27:42Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.2783,
-       "ts": "2026-07-19T03:30:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.5946,
-       "ts": "2026-07-19T03:35:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.8507,
-       "ts": "2026-07-19T03:38:36Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0013,
-       "ts": "2026-07-19T03:39:42Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1412,
-       "ts": "2026-07-19T03:42:08Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.1412,
-       "ts": "2026-07-19T03:42:16Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1881,
-       "ts": "2026-07-19T03:44:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7881,
-       "ts": "2026-07-19T03:48:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1881,
-       "ts": "2026-07-19T03:50:37Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1881,
-       "ts": "2026-07-19T03:52:19Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2399,
-       "ts": "2026-07-19T03:54:17Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2386,
-       "ts": "2026-07-19T03:56:15Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.2386,
-       "ts": "2026-07-19T03:56:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2355,
-       "ts": "2026-07-19T03:56:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2406,
-       "ts": "2026-07-19T03:56:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2386,
-       "ts": "2026-07-19T03:58:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2409,
-       "ts": "2026-07-19T04:01:34Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.2409,
-       "ts": "2026-07-19T04:01:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2409,
-       "ts": "2026-07-19T04:02:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2473,
-       "ts": "2026-07-19T04:02:32Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2561,
-       "ts": "2026-07-19T04:02:36Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2383,
-       "ts": "2026-07-19T04:02:39Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2463,
-       "ts": "2026-07-19T04:02:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2429,
-       "ts": "2026-07-19T04:02:46Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.2423,
-       "ts": "2026-07-19T04:04:22Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.2422,
-       "ts": "2026-07-19T04:06:00Z"
-      },
-      {
-       "full_gate": true,
-       "score": 1.2449,
-       "ts": "2026-07-19T04:06:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2383,
-       "ts": "2026-07-19T04:06:35Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "60e26a2ed7493db80e53ad8f8a532bd7dd55e655bb336aacd72b3a6c6c716329",
-      "final_grade_log_sha256": "7b1e3e289c5c5df8048f9f978e3c1770c3cc0d2d857bed02d55e11377da19841",
-      "result_json_sha256": "dd1220ded0ced9bf8353c2ff7ca83e9cf4c569281d12bca159e34973bc4c22fa",
-      "scores_jsonl_sha256": "6ed3fcc004619ab4d7184108fe5142324d3b98a0d27969fdbe4fd662dc0eb2a5"
-     },
-     "started_at": "2026-07-19T02:36:36.689105+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "utf16-transcode",
-     "vendor": "anthropic"
-    }
-   }
-  },
-  "gpt-5.4": {
-   "completed_tasks": 3,
-   "mean_final_score_completed": 3.2119,
-   "mean_sampled_best_score_completed": 3.2562,
-   "provider": "openai-api",
-   "provisional_mean_verified_score": null,
-   "running_tasks": 0,
-   "tasks": {
-    "float-print": {
-     "active_seconds": 2895.494,
-     "agent": "jcode",
-     "best_full_gate_score": 6.2326,
-     "correctness_gate": "PASS",
-     "final_score": 7.0336,
-     "finished_at": "2026-07-19T03:25:22.867605+00:00",
-     "function_call_id": "fc-01KXW3NTGMBTB05084JFR6W5NS",
-     "grade_count": 9,
-     "latest_checkpoint": null,
-     "model": "gpt-5.4",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-gpt-5.4-float-print",
-     "sampled_best_efficiency_factor": 131.0161,
-     "sampled_best_score": 7.0336,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:49Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:37:38Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.0372,
-       "ts": "2026-07-19T02:38:42Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.2317,
-       "ts": "2026-07-19T02:40:07Z"
-      },
-      {
-       "full_gate": true,
-       "score": 6.2326,
-       "ts": "2026-07-19T03:23:20Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.2319,
-       "ts": "2026-07-19T03:24:24Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.2337,
-       "ts": "2026-07-19T03:24:39Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.2333,
-       "ts": "2026-07-19T03:24:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.0336,
-       "ts": "2026-07-19T03:25:22Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "dbf42cc43773db369b662f7359985230fc49aaa61ceb54b220aa45ded06d53e0",
-      "final_grade_log_sha256": "4e06311ffc766be4a9810c30143c218fd12610ce6419cd24cf57bd41fa922317",
-      "result_json_sha256": "946655447a10e95e5aab28dfc95788330096750c375235b0b1602fe098642c0b",
-      "scores_jsonl_sha256": "327a11f814520c4b62ddf47c9c49e3d4e777f129a2018523ba5ce1eea97b4e24"
-     },
-     "started_at": "2026-07-19T02:36:19.890697+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "float-print",
-     "vendor": "openai"
-    },
-    "json-unescape": {
-     "active_seconds": 345.67,
-     "agent": "jcode",
-     "best_full_gate_score": null,
-     "correctness_gate": "PASS",
-     "final_score": 1.571,
-     "finished_at": "2026-07-19T02:41:55.832778+00:00",
-     "function_call_id": "fc-01KXW3NT42E7PEMC2SYXA1SB5P",
-     "grade_count": 20,
-     "latest_checkpoint": null,
-     "model": "gpt-5.4",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-gpt-5.4-json-unescape",
-     "sampled_best_efficiency_factor": 3.2533,
-     "sampled_best_score": 1.7019,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:04Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0023,
-       "ts": "2026-07-19T02:36:29Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.5583,
-       "ts": "2026-07-19T02:37:42Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.6858,
-       "ts": "2026-07-19T02:38:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7377,
-       "ts": "2026-07-19T02:38:57Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.345,
-       "ts": "2026-07-19T02:39:08Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5122,
-       "ts": "2026-07-19T02:39:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.4934,
-       "ts": "2026-07-19T02:39:38Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5048,
-       "ts": "2026-07-19T02:39:50Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.6375,
-       "ts": "2026-07-19T02:40:11Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.7019,
-       "ts": "2026-07-19T02:40:20Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5675,
-       "ts": "2026-07-19T02:40:26Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.6107,
-       "ts": "2026-07-19T02:40:53Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.7019,
-       "ts": "2026-07-19T02:41:04Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5697,
-       "ts": "2026-07-19T02:41:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5735,
-       "ts": "2026-07-19T02:41:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.7019,
-       "ts": "2026-07-19T02:41:33Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5727,
-       "ts": "2026-07-19T02:41:37Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5695,
-       "ts": "2026-07-19T02:41:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.571,
-       "ts": "2026-07-19T02:41:55Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "ae82a689a8c5b21df58b0fcbb0f9b41ea380bcb1e313699972cf2caa88fbb15f",
-      "final_grade_log_sha256": "e36348d18ee807643019a8b4afdd21d8e63d0efbac6cb943e3fca83a29cb0d87",
-      "result_json_sha256": "8d89c2751f086eeb14918192226122eb4570cf8991187404fa1cc11b7fa5491f",
-      "scores_jsonl_sha256": "9f960f851ac3ad3d9b947afa78aca786fc84694be1f1edf879b953d7c404c8fc"
-     },
-     "started_at": "2026-07-19T02:35:59.992674+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "json-unescape",
-     "vendor": "openai"
-    },
-    "utf16-transcode": {
-     "active_seconds": 474.259,
-     "agent": "jcode",
-     "best_full_gate_score": null,
-     "correctness_gate": "PASS",
-     "final_score": 1.031,
-     "finished_at": "2026-07-19T02:44:44.540308+00:00",
-     "function_call_id": "fc-01KXW3NTXP1AERJYMM3YN1VBS7",
-     "grade_count": 22,
-     "latest_checkpoint": null,
-     "model": "gpt-5.4",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023554Z-jcode-solo-gpt-5.4-utf16-transcode",
-     "sampled_best_efficiency_factor": 2.0464,
-     "sampled_best_score": 1.0331,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:41Z"
-      },
-      {
-       "full_gate": false,
-       "score": -0.0213,
-       "ts": "2026-07-19T02:37:04Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.2111,
-       "ts": "2026-07-19T02:39:02Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.2132,
-       "ts": "2026-07-19T02:39:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.4026,
-       "ts": "2026-07-19T02:40:05Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7214,
-       "ts": "2026-07-19T02:40:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.6837,
-       "ts": "2026-07-19T02:41:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7163,
-       "ts": "2026-07-19T02:41:52Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7208,
-       "ts": "2026-07-19T02:42:00Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.858,
-       "ts": "2026-07-19T02:42:17Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.8582,
-       "ts": "2026-07-19T02:42:18Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9645,
-       "ts": "2026-07-19T02:42:42Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9617,
-       "ts": "2026-07-19T02:42:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9645,
-       "ts": "2026-07-19T02:42:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9648,
-       "ts": "2026-07-19T02:42:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0317,
-       "ts": "2026-07-19T02:43:38Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0286,
-       "ts": "2026-07-19T02:43:39Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0317,
-       "ts": "2026-07-19T02:44:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0331,
-       "ts": "2026-07-19T02:44:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0304,
-       "ts": "2026-07-19T02:44:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0321,
-       "ts": "2026-07-19T02:44:31Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.031,
-       "ts": "2026-07-19T02:44:44Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "d78725e46ac8d5873974b12c0b211513cc1e579a5a9b3a660cc63181d9247489",
-      "final_grade_log_sha256": "c92b85898073b8c4eb6fb800764ff369e9c6db06c258cd4b39095acbe839a9c3",
-      "result_json_sha256": "df13503801d810fa0f0df71ee4b6fc1820dd770d90f3ae202da984fa2ae24e72",
-      "scores_jsonl_sha256": "a77abfb7cf6a0b89677772ef145ed3f46103c006b60d37089f00cb0391386af4"
-     },
-     "started_at": "2026-07-19T02:36:35.664098+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "utf16-transcode",
-     "vendor": "openai"
-    }
-   }
-  },
-  "gpt-5.5": {
-   "completed_tasks": 3,
-   "mean_final_score_completed": 3.507,
-   "mean_sampled_best_score_completed": 3.5098,
-   "provider": "openai-api",
-   "provisional_mean_verified_score": null,
-   "running_tasks": 0,
-   "tasks": {
-    "float-print": {
-     "active_seconds": 3126.569,
-     "agent": "jcode",
-     "best_full_gate_score": null,
-     "correctness_gate": "PASS",
-     "final_score": 7.1957,
-     "finished_at": "2026-07-19T03:29:37.769709+00:00",
-     "function_call_id": "fc-01KXW3NVZF3XMX333HQZJJMAKE",
-     "grade_count": 23,
-     "latest_checkpoint": null,
-     "model": "gpt-5.5",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023555Z-jcode-solo-gpt-5.5-float-print",
-     "sampled_best_efficiency_factor": 147.4621,
-     "sampled_best_score": 7.2042,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:37:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:38:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.844,
-       "ts": "2026-07-19T02:39:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1081,
-       "ts": "2026-07-19T02:40:34Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.0843,
-       "ts": "2026-07-19T02:41:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.0589,
-       "ts": "2026-07-19T02:41:48Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1646,
-       "ts": "2026-07-19T02:42:18Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1646,
-       "ts": "2026-07-19T02:42:45Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1607,
-       "ts": "2026-07-19T02:43:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1361,
-       "ts": "2026-07-19T02:43:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.168,
-       "ts": "2026-07-19T02:44:11Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.168,
-       "ts": "2026-07-19T02:44:27Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1958,
-       "ts": "2026-07-19T02:44:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1957,
-       "ts": "2026-07-19T02:45:00Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.2042,
-       "ts": "2026-07-19T02:45:15Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.2038,
-       "ts": "2026-07-19T02:45:37Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1989,
-       "ts": "2026-07-19T02:46:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1915,
-       "ts": "2026-07-19T03:26:58Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.192,
-       "ts": "2026-07-19T03:27:20Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1955,
-       "ts": "2026-07-19T03:28:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1884,
-       "ts": "2026-07-19T03:28:20Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1938,
-       "ts": "2026-07-19T03:28:35Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1957,
-       "ts": "2026-07-19T03:29:37Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "44699a246edef74930bb219287f918ec89759d0f48fcd41f16a1b9395c3c98c8",
-      "final_grade_log_sha256": "4812ca0017469fef979cc878561426ec25f88d605a95519e0ca4b3285b303eaf",
-      "result_json_sha256": "0fb6d534c10bcaa1b358607a858ffd998d0c0fbfad2cd4d91ab7c1ea178091e1",
-      "scores_jsonl_sha256": "ab97367e75fec21d60495aca42d2f23278b44c07b7f562ea0f3bde2be37839b8"
-     },
-     "started_at": "2026-07-19T02:36:45.022847+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "float-print",
-     "vendor": "openai"
-    },
-    "json-unescape": {
-     "active_seconds": 549.905,
-     "agent": "jcode",
-     "best_full_gate_score": null,
-     "correctness_gate": "PASS",
-     "final_score": 1.9841,
-     "finished_at": "2026-07-19T02:38:47.372878+00:00",
-     "function_call_id": "fc-01KXW39P8R1HVQHDZ0CBH3QD94",
-     "grade_count": 33,
-     "latest_checkpoint": null,
-     "model": "gpt-5.5",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T022916Z-jcode-solo-gpt-5.5-json-unescape",
-     "sampled_best_efficiency_factor": 3.9562,
-     "sampled_best_score": 1.9841,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:29:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:29:49Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7179,
-       "ts": "2026-07-19T02:30:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1852,
-       "ts": "2026-07-19T02:31:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.4221,
-       "ts": "2026-07-19T02:31:36Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.4195,
-       "ts": "2026-07-19T02:32:07Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.4457,
-       "ts": "2026-07-19T02:32:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5299,
-       "ts": "2026-07-19T02:32:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.562,
-       "ts": "2026-07-19T02:33:05Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.8006,
-       "ts": "2026-07-19T02:33:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.8006,
-       "ts": "2026-07-19T02:34:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.6247,
-       "ts": "2026-07-19T02:34:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.8533,
-       "ts": "2026-07-19T02:35:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.8674,
-       "ts": "2026-07-19T02:35:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9126,
-       "ts": "2026-07-19T02:35:35Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9705,
-       "ts": "2026-07-19T02:36:11Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9587,
-       "ts": "2026-07-19T02:36:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.967,
-       "ts": "2026-07-19T02:36:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9072,
-       "ts": "2026-07-19T02:37:08Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9705,
-       "ts": "2026-07-19T02:37:19Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9502,
-       "ts": "2026-07-19T02:37:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.969,
-       "ts": "2026-07-19T02:37:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9781,
-       "ts": "2026-07-19T02:37:50Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9614,
-       "ts": "2026-07-19T02:37:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9641,
-       "ts": "2026-07-19T02:37:57Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9655,
-       "ts": "2026-07-19T02:38:00Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9633,
-       "ts": "2026-07-19T02:38:18Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9654,
-       "ts": "2026-07-19T02:38:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9725,
-       "ts": "2026-07-19T02:38:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9747,
-       "ts": "2026-07-19T02:38:28Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9738,
-       "ts": "2026-07-19T02:38:32Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.972,
-       "ts": "2026-07-19T02:38:35Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9841,
-       "ts": "2026-07-19T02:38:47Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "e624239c0fd84bb15738a370e64a36514aaab602c438afb7b892bff0fa23c305",
-      "final_grade_log_sha256": "31ec14cb9e16d09e8e6ccb9202fad7a7fb2df310a71d498507854ec5ada13f4e",
-      "result_json_sha256": "8fadffde3b81192bdcaea677e5f47b4c67159bd96f13507ff07d04aa744c4c61",
-      "scores_jsonl_sha256": "a19ae7a4d2778ca767e9646541ea0a459dcd033fe2459bcb4b54b0ff9790512e"
-     },
-     "started_at": "2026-07-19T02:29:27.018420+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "json-unescape",
-     "vendor": "openai"
-    },
-    "utf16-transcode": {
-     "active_seconds": 397.696,
-     "agent": "jcode",
-     "best_full_gate_score": null,
-     "correctness_gate": "PASS",
-     "final_score": 1.3411,
-     "finished_at": "2026-07-19T02:43:39.085890+00:00",
-     "function_call_id": "fc-01KXW3NW39HDVWV2HGKW8X7EMA",
-     "grade_count": 17,
-     "latest_checkpoint": null,
-     "model": "gpt-5.5",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T023555Z-jcode-solo-gpt-5.5-utf16-transcode",
-     "sampled_best_efficiency_factor": 2.5334,
-     "sampled_best_score": 1.3411,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:36:53Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T02:37:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7767,
-       "ts": "2026-07-19T02:39:09Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.7767,
-       "ts": "2026-07-19T02:39:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.9825,
-       "ts": "2026-07-19T02:40:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.8797,
-       "ts": "2026-07-19T02:40:35Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0087,
-       "ts": "2026-07-19T02:40:58Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0398,
-       "ts": "2026-07-19T02:41:23Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.1205,
-       "ts": "2026-07-19T02:41:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2992,
-       "ts": "2026-07-19T02:42:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.3333,
-       "ts": "2026-07-19T02:42:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2253,
-       "ts": "2026-07-19T02:42:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.3203,
-       "ts": "2026-07-19T02:42:55Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.3333,
-       "ts": "2026-07-19T02:43:09Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.3357,
-       "ts": "2026-07-19T02:43:16Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.334,
-       "ts": "2026-07-19T02:43:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.3411,
-       "ts": "2026-07-19T02:43:39Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "d7abdb0a99d32dcff87aefd890e873fbf91f81ffd4c749bc13acdbab3bfe9da5",
-      "final_grade_log_sha256": "31e65a3346372b9c316151a78b48296d44016faee14506925796b89edc3036c3",
-      "result_json_sha256": "0fe19360be7755da9520ebd8304223b483c5b1e7a11c05e0183c8b6bfd2436a6",
-      "scores_jsonl_sha256": "abcc170a811c5c62358fd781f554e1c358913d060a078fff6faa08a97c3ab370"
-     },
-     "started_at": "2026-07-19T02:36:48.309119+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "utf16-transcode",
-     "vendor": "openai"
-    }
-   }
-  },
-  "gpt-5.6-sol": {
-   "completed_tasks": 3,
-   "mean_final_score_completed": 4.0691,
-   "mean_sampled_best_score_completed": 4.0768,
-   "provider": "openai-api",
-   "provisional_mean_verified_score": null,
-   "running_tasks": 0,
-   "tasks": {
-    "float-print": {
-     "active_seconds": 2883.223,
-     "agent": "jcode",
-     "best_full_gate_score": 7.8051,
-     "correctness_gate": "PASS",
-     "final_score": 7.8065,
-     "finished_at": "2026-07-19T08:57:02.511303+00:00",
-     "function_call_id": "fc-01KXWPP0X9FX56PE06RX9B28E3",
-     "grade_count": 23,
-     "latest_checkpoint": null,
-     "model": "gpt-5.6-sol",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-float-print",
-     "sampled_best_efficiency_factor": 224.52,
-     "sampled_best_score": 7.8107,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T08:08:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.7456,
-       "ts": "2026-07-19T08:09:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.8537,
-       "ts": "2026-07-19T08:10:35Z"
-      },
-      {
-       "full_gate": false,
-       "score": 6.8067,
-       "ts": "2026-07-19T08:10:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.0835,
-       "ts": "2026-07-19T08:12:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1419,
-       "ts": "2026-07-19T08:12:38Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1467,
-       "ts": "2026-07-19T08:12:56Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.2122,
-       "ts": "2026-07-19T08:13:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.0253,
-       "ts": "2026-07-19T08:14:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.2027,
-       "ts": "2026-07-19T08:15:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1863,
-       "ts": "2026-07-19T08:15:32Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.1478,
-       "ts": "2026-07-19T08:16:03Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.5788,
-       "ts": "2026-07-19T08:17:01Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.6263,
-       "ts": "2026-07-19T08:17:45Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.6365,
-       "ts": "2026-07-19T08:18:33Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.685,
-       "ts": "2026-07-19T08:20:03Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.7492,
-       "ts": "2026-07-19T08:21:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.7442,
-       "ts": "2026-07-19T08:21:57Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.7965,
-       "ts": "2026-07-19T08:22:33Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.7315,
-       "ts": "2026-07-19T08:23:12Z"
-      },
-      {
-       "full_gate": true,
-       "score": 7.8051,
-       "ts": "2026-07-19T08:55:25Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.8107,
-       "ts": "2026-07-19T08:56:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": 7.8065,
-       "ts": "2026-07-19T08:57:02Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "408cefd530926fe09ccc058ae89e31eff746239d59dc2c478c63aa2e9e0c09bd",
-      "final_grade_log_sha256": "4c5d1193fb8accbbb0606f6e126bf390863a6f7cbb251979cecff64cccc2300d",
-      "result_json_sha256": "d759ba747e1da8f765b2e5dbe875945e43c4f89c8728dcbdb09aee01594dd142",
-      "scores_jsonl_sha256": "9a4123f8343496a0794e293651052662afebcf3dad5b269802b79223fa09f50c"
-     },
-     "started_at": "2026-07-19T08:08:08.864960+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "float-print",
-     "vendor": "openai"
-    },
-    "json-unescape": {
-     "active_seconds": 1165.118,
-     "agent": "jcode",
-     "best_full_gate_score": 2.3055,
-     "correctness_gate": "PASS",
-     "final_score": 2.29,
-     "finished_at": "2026-07-19T08:32:26.983560+00:00",
-     "function_call_id": "fc-01KXWPYQZ5SKXMNQ1R1C5SBD7C",
-     "grade_count": 26,
-     "latest_checkpoint": null,
-     "model": "gpt-5.6-sol",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
-     "sampled_best_efficiency_factor": 4.9434,
-     "sampled_best_score": 2.3055,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T08:12:54Z"
-      },
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T08:13:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.2496,
-       "ts": "2026-07-19T08:14:37Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.496,
-       "ts": "2026-07-19T08:15:13Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.0154,
-       "ts": "2026-07-19T08:21:38Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.496,
-       "ts": "2026-07-19T08:21:49Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.5814,
-       "ts": "2026-07-19T08:22:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.7456,
-       "ts": "2026-07-19T08:22:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9677,
-       "ts": "2026-07-19T08:23:12Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.0101,
-       "ts": "2026-07-19T08:23:40Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.076,
-       "ts": "2026-07-19T08:24:36Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1169,
-       "ts": "2026-07-19T08:24:53Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1646,
-       "ts": "2026-07-19T08:25:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1646,
-       "ts": "2026-07-19T08:25:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2437,
-       "ts": "2026-07-19T08:26:05Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2438,
-       "ts": "2026-07-19T08:26:23Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2603,
-       "ts": "2026-07-19T08:26:53Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2757,
-       "ts": "2026-07-19T08:27:30Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2265,
-       "ts": "2026-07-19T08:27:43Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2757,
-       "ts": "2026-07-19T08:28:10Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.2881,
-       "ts": "2026-07-19T08:28:57Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9533,
-       "ts": "2026-07-19T08:30:02Z"
-      },
-      {
-       "full_gate": true,
-       "score": 2.2881,
-       "ts": "2026-07-19T08:30:56Z"
-      },
-      {
-       "full_gate": true,
-       "score": 2.3055,
-       "ts": "2026-07-19T08:31:55Z"
-      },
-      {
-       "full_gate": true,
-       "score": 2.2806,
-       "ts": "2026-07-19T08:31:59Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.29,
-       "ts": "2026-07-19T08:32:26Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "3aeab5c2300783e7f11da1a4f684f195e46ad07829a67fbc43bd19b0401d3812",
-      "final_grade_log_sha256": "fc8f4986cb497c074280c2a01596f0ed2c141a7e2467235126d23ee03624a887",
-      "result_json_sha256": "5289e542aeeb2d8b2119d1e39e84a1ada6e9c6cec75d7c73ca8978310011902c",
-      "scores_jsonl_sha256": "f5f8bbbe944c5361f89204f0c747b0f11591e0fca2a9437b997282ce3b10d5d3"
-     },
-     "started_at": "2026-07-19T08:12:50.623337+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "json-unescape",
-     "vendor": "openai"
-    },
-    "utf16-transcode": {
-     "active_seconds": 750.796,
-     "agent": "jcode",
-     "best_full_gate_score": null,
-     "correctness_gate": "PASS",
-     "final_score": 2.1109,
-     "finished_at": "2026-07-19T08:26:07.490476+00:00",
-     "function_call_id": "fc-01KXWPZKDEEWCX4FXTT8Z2MVC5",
-     "grade_count": 18,
-     "latest_checkpoint": null,
-     "model": "gpt-5.6-sol",
-     "provider": "openai-api",
-     "reasoning_effort": "high",
-     "run_id": "20260719T081317Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
-     "sampled_best_efficiency_factor": 4.3295,
-     "sampled_best_score": 2.1142,
-     "score_curve": [
-      {
-       "full_gate": false,
-       "score": 0.0,
-       "ts": "2026-07-19T08:13:27Z"
-      },
-      {
-       "full_gate": false,
-       "score": -0.0131,
-       "ts": "2026-07-19T08:13:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.3017,
-       "ts": "2026-07-19T08:15:39Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.7588,
-       "ts": "2026-07-19T08:16:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.7614,
-       "ts": "2026-07-19T08:19:06Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.4668,
-       "ts": "2026-07-19T08:19:47Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.8437,
-       "ts": "2026-07-19T08:21:22Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9361,
-       "ts": "2026-07-19T08:21:50Z"
-      },
-      {
-       "full_gate": false,
-       "score": 1.9829,
-       "ts": "2026-07-19T08:22:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.0384,
-       "ts": "2026-07-19T08:22:39Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.0974,
-       "ts": "2026-07-19T08:23:19Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.0952,
-       "ts": "2026-07-19T08:23:51Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.0789,
-       "ts": "2026-07-19T08:24:21Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1142,
-       "ts": "2026-07-19T08:25:00Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1136,
-       "ts": "2026-07-19T08:25:14Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1078,
-       "ts": "2026-07-19T08:25:15Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1142,
-       "ts": "2026-07-19T08:25:46Z"
-      },
-      {
-       "full_gate": false,
-       "score": 2.1109,
-       "ts": "2026-07-19T08:26:07Z"
-      }
-     ],
-     "source_hashes": {
-      "agent_log_sha256": "da6f9e2075f5145f8eb5f765335963b8cb22c64afb35cd5bc6a953096dde3df9",
-      "final_grade_log_sha256": "3c77b7abe7884e4e9415bb073592b5492fdcb523d342d871fe6b68c35dc5f460",
-      "result_json_sha256": "4d70546c0ecd1b01651b50c2a6956c86cf8d8a156aa0cdee9a5f9d56928aad7a",
-      "scores_jsonl_sha256": "470a11912caca7554414b67b078f08ac2bf1b5aa18e5209d70deb4a63d2849a1"
-     },
-     "started_at": "2026-07-19T08:13:21.871959+00:00",
-     "status": "completed",
-     "swarm": false,
-     "task": "utf16-transcode",
-     "vendor": "openai"
-    }
-   }
-  }
- },
- "published_at": "2026-07-19",
- "revisions": [
-  {
-   "note": "The 09:30 UTC snapshot read the Sol utf16-transcode scores.jsonl before Modal volume sync completed, recording an empty curve. This revision restores the synced 18-grade curve and its hash; final_score and the ranking are unchanged.",
-   "revised_at": "2026-07-19T10:08:00Z"
-  }
- ],
- "runner_commits": [
-  "3043c790b29e98ae0b157f74ef58806e5fd310dd",
-  "8b9d05ebfd1965ea6df493edf01f29d15cad5d0a"
- ],
- "score_semantics": "score = log2(given_cost / optimized_cost); higher is better",
- "snapshot_at": "2026-07-19T09:30:19Z",
- "snapshot_status": "final",
- "sources": {
-  "launch_manifests": [
-   "modal/launches/20260719T022916Z-multimodel-pilot.json",
-   "modal/launches/20260719T023554Z-multimodel-full.json",
-   "modal/launches/20260719T023555Z-multimodel-full.json",
-   "modal/launches/20260719T080803Z-multimodel-full.json",
-   "modal/launches/20260719T081249Z-multimodel-pilot.json",
-   "modal/launches/20260719T081317Z-multimodel-pilot.json"
+  "caveats": [
+    "This is a timestamped live snapshot: 15 of 18 intended cells had completed when captured.",
+    "All three matched Claude Opus 4.8 cells were running normally and did not yet have official final scores.",
+    "The completed-model ranking uses only official final scores produced after each agent stopped and the final grader passed.",
+    "Intermediate sampled maxima are retained for audit but are not used in the published ranking because non-full-gate measurements are not comparable to the official final correctness grade.",
+    "Each model has one run per task, so run-to-run variance is unmeasured.",
+    "Provider implementations differ, so this is a model-plus-provider comparison through the same Jcode harness rather than a provider-neutral model comparison.",
+    "The 20-hour agent budget is a safety cap; the completed agents stopped on their own judgment before the cap."
   ],
-  "modal_volume": "jcode-bench-v1-results",
-  "repository": "https://github.com/1jehuang/jcode-bench"
- }
+  "environment": {
+    "agent_budget_hours": 20,
+    "app": "jcode-bench-v1-multimodel",
+    "app_id": "ap-kBW1DyfnKGqojoNwid9UP8",
+    "cpus": 4,
+    "function_timeout_hours": 24,
+    "memory_mib": 8192,
+    "prompt": "identical published optimization prompt for every model and task",
+    "reasoning_effort": "high",
+    "region": "us-west",
+    "runtime": "Modal",
+    "single_use_containers": true
+  },
+  "harness": {
+    "binary_sha256": "1b94e8b4e6510d1f585dd7a54bf2d3c9c5adcb407e2323091a7d0fea0224923a",
+    "execution": "solo",
+    "memory_enabled": false,
+    "name": "jcode",
+    "swarm_enabled": false,
+    "version": "v0.51.4-dev (8b39d814e)"
+  },
+  "infrastructure_events": [
+    {
+      "agent_exit_code": 1,
+      "event": "credential_route_startup_race",
+      "excluded_from_matrix": true,
+      "model": "gpt-5.6-sol",
+      "replacement_run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "task": "json-unescape"
+    },
+    {
+      "agent_exit_code": 1,
+      "event": "credential_route_startup_race",
+      "excluded_from_matrix": true,
+      "model": "gpt-5.6-sol",
+      "replacement_run_id": "20260719T081317Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "task": "utf16-transcode"
+    }
+  ],
+  "models": {
+    "claude-fable-5": {
+      "completed_tasks": 3,
+      "mean_final_score_completed": 5.7971,
+      "mean_sampled_best_score_completed": 5.7997,
+      "provider": "anthropic-api",
+      "provisional_mean_verified_score": null,
+      "running_tasks": 0,
+      "tasks": {
+        "float-print": {
+          "active_seconds": 23396.612,
+          "agent": "jcode",
+          "best_full_gate_score": 11.2074,
+          "correctness_gate": "PASS",
+          "final_score": 12.0074,
+          "finished_at": "2026-07-19T09:14:18.415926+00:00",
+          "function_call_id": "fc-01KXW3NTSGZWW8H5ZGE869DP6M",
+          "grade_count": 36,
+          "latest_checkpoint": null,
+          "model": "claude-fable-5",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-claude-fable-5-float-print",
+          "sampled_best_efficiency_factor": 4120.4894,
+          "sampled_best_score": 12.0086,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:37:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0863,
+              "ts": "2026-07-19T02:45:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.6681,
+              "ts": "2026-07-19T02:58:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.2014,
+              "ts": "2026-07-19T03:28:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.4307,
+              "ts": "2026-07-19T03:38:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.4039,
+              "ts": "2026-07-19T04:09:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.4002,
+              "ts": "2026-07-19T04:09:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.4002,
+              "ts": "2026-07-19T04:09:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.4448,
+              "ts": "2026-07-19T04:15:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.5021,
+              "ts": "2026-07-19T04:28:07Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.3767,
+              "ts": "2026-07-19T04:40:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.5094,
+              "ts": "2026-07-19T04:46:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.5299,
+              "ts": "2026-07-19T04:50:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.5636,
+              "ts": "2026-07-19T05:04:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6481,
+              "ts": "2026-07-19T05:16:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6556,
+              "ts": "2026-07-19T05:32:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6555,
+              "ts": "2026-07-19T05:33:07Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6675,
+              "ts": "2026-07-19T05:36:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7024,
+              "ts": "2026-07-19T05:46:50Z"
+            },
+            {
+              "full_gate": true,
+              "score": 7.7011,
+              "ts": "2026-07-19T06:20:52Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7563,
+              "ts": "2026-07-19T06:24:17Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7812,
+              "ts": "2026-07-19T06:25:58Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.8176,
+              "ts": "2026-07-19T06:32:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.8337,
+              "ts": "2026-07-19T06:34:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.879,
+              "ts": "2026-07-19T06:38:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.9277,
+              "ts": "2026-07-19T06:46:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.9338,
+              "ts": "2026-07-19T06:48:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.9574,
+              "ts": "2026-07-19T06:52:34Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.9997,
+              "ts": "2026-07-19T06:54:55Z"
+            },
+            {
+              "full_gate": false,
+              "score": 8.0271,
+              "ts": "2026-07-19T06:56:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 8.0297,
+              "ts": "2026-07-19T07:09:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 10.6706,
+              "ts": "2026-07-19T07:31:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 11.6692,
+              "ts": "2026-07-19T07:56:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 12.0086,
+              "ts": "2026-07-19T08:04:33Z"
+            },
+            {
+              "full_gate": true,
+              "score": 11.2074,
+              "ts": "2026-07-19T09:03:24Z"
+            },
+            {
+              "full_gate": false,
+              "score": 12.0074,
+              "ts": "2026-07-19T09:14:18Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "36e79fdacf5323c5f35b1da92741c3743b42af9a2941c6863ecc581b113bff59",
+            "final_grade_log_sha256": "a53aefbe125456ee89c1fe842be5ec59a07cdad484aff74e10cde0146f3d6be7",
+            "result_json_sha256": "1608acf6df89a95b963062ea9a36e5c3585f57de40d3430b14abaae90d2378ee",
+            "scores_jsonl_sha256": "35682e8ff342f124cd91a98e0e6e8485c9e25bf210a3f0ce24244f4f4f89907a"
+          },
+          "started_at": "2026-07-19T02:36:32.500409+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "float-print",
+          "vendor": "anthropic"
+        },
+        "json-unescape": {
+          "active_seconds": 8110.265,
+          "agent": "jcode",
+          "best_full_gate_score": 2.8211,
+          "correctness_gate": "PASS",
+          "final_score": 2.8324,
+          "finished_at": "2026-07-19T04:51:34.094972+00:00",
+          "function_call_id": "fc-01KXW3NTD039E5VP0NXDY2QNQB",
+          "grade_count": 78,
+          "latest_checkpoint": null,
+          "model": "claude-fable-5",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-claude-fable-5-json-unescape",
+          "sampled_best_efficiency_factor": 7.1552,
+          "sampled_best_score": 2.839,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:15Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:37:09Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5686,
+              "ts": "2026-07-19T02:40:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.863,
+              "ts": "2026-07-19T02:43:48Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1449,
+              "ts": "2026-07-19T02:52:48Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.213,
+              "ts": "2026-07-19T02:59:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2692,
+              "ts": "2026-07-19T03:03:04Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0891,
+              "ts": "2026-07-19T03:08:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.3093,
+              "ts": "2026-07-19T03:09:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.4183,
+              "ts": "2026-07-19T03:28:15Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.506,
+              "ts": "2026-07-19T03:31:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.3639,
+              "ts": "2026-07-19T03:33:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5059,
+              "ts": "2026-07-19T03:34:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5292,
+              "ts": "2026-07-19T03:37:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5991,
+              "ts": "2026-07-19T03:42:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.621,
+              "ts": "2026-07-19T03:45:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.4726,
+              "ts": "2026-07-19T03:48:29Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.621,
+              "ts": "2026-07-19T03:48:41Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.509,
+              "ts": "2026-07-19T03:51:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6186,
+              "ts": "2026-07-19T03:51:55Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.621,
+              "ts": "2026-07-19T03:52:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6418,
+              "ts": "2026-07-19T03:54:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6383,
+              "ts": "2026-07-19T03:57:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6418,
+              "ts": "2026-07-19T03:58:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5797,
+              "ts": "2026-07-19T04:01:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6418,
+              "ts": "2026-07-19T04:01:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5234,
+              "ts": "2026-07-19T04:08:52Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6418,
+              "ts": "2026-07-19T04:09:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6845,
+              "ts": "2026-07-19T04:10:29Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6468,
+              "ts": "2026-07-19T04:10:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6667,
+              "ts": "2026-07-19T04:12:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6798,
+              "ts": "2026-07-19T04:13:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6788,
+              "ts": "2026-07-19T04:15:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6515,
+              "ts": "2026-07-19T04:15:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6798,
+              "ts": "2026-07-19T04:15:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6798,
+              "ts": "2026-07-19T04:17:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7147,
+              "ts": "2026-07-19T04:18:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7107,
+              "ts": "2026-07-19T04:18:41Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7147,
+              "ts": "2026-07-19T04:18:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7181,
+              "ts": "2026-07-19T04:21:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7234,
+              "ts": "2026-07-19T04:22:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7408,
+              "ts": "2026-07-19T04:23:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7073,
+              "ts": "2026-07-19T04:24:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7408,
+              "ts": "2026-07-19T04:24:27Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7408,
+              "ts": "2026-07-19T04:27:49Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.6206,
+              "ts": "2026-07-19T04:28:05Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7408,
+              "ts": "2026-07-19T04:28:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7842,
+              "ts": "2026-07-19T04:28:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7704,
+              "ts": "2026-07-19T04:29:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7842,
+              "ts": "2026-07-19T04:29:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8155,
+              "ts": "2026-07-19T04:30:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7902,
+              "ts": "2026-07-19T04:30:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7969,
+              "ts": "2026-07-19T04:30:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8155,
+              "ts": "2026-07-19T04:30:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8174,
+              "ts": "2026-07-19T04:32:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7756,
+              "ts": "2026-07-19T04:33:29Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8174,
+              "ts": "2026-07-19T04:33:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8197,
+              "ts": "2026-07-19T04:37:03Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8157,
+              "ts": "2026-07-19T04:37:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7701,
+              "ts": "2026-07-19T04:38:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8197,
+              "ts": "2026-07-19T04:38:17Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8376,
+              "ts": "2026-07-19T04:40:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.839,
+              "ts": "2026-07-19T04:40:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8281,
+              "ts": "2026-07-19T04:40:31Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.8197,
+              "ts": "2026-07-19T04:43:48Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7707,
+              "ts": "2026-07-19T04:45:29Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.7887,
+              "ts": "2026-07-19T04:45:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8129,
+              "ts": "2026-07-19T04:45:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8197,
+              "ts": "2026-07-19T04:46:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.76,
+              "ts": "2026-07-19T04:46:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5632,
+              "ts": "2026-07-19T04:47:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8197,
+              "ts": "2026-07-19T04:47:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8211,
+              "ts": "2026-07-19T04:48:34Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8211,
+              "ts": "2026-07-19T04:50:48Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8214,
+              "ts": "2026-07-19T04:50:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8293,
+              "ts": "2026-07-19T04:50:58Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.8211,
+              "ts": "2026-07-19T04:51:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.8324,
+              "ts": "2026-07-19T04:51:34Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "3c9ae354cd84c6b7775c829aa829b84197a3b6015736b6c9a9547d2527be8c54",
+            "final_grade_log_sha256": "a2fd573aa4e239adae61f5f415278527d3437ecf6ab31281a08c3b15544512fb",
+            "result_json_sha256": "5db281660062430113db6c23395061a52efc81ad3fcdd2b95641d7fdf981e953",
+            "scores_jsonl_sha256": "bb3f266b78391d3751f2d59091a53dc670856e9b33331dfe77f94d9b710a42cf"
+          },
+          "started_at": "2026-07-19T02:36:11.146922+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "json-unescape",
+          "vendor": "anthropic"
+        },
+        "utf16-transcode": {
+          "active_seconds": 5623.923,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "PASS",
+          "final_score": 2.5514,
+          "finished_at": "2026-07-19T04:10:34.242004+00:00",
+          "function_call_id": "fc-01KXW3NV5YSXGPCET1Z47VP5AJ",
+          "grade_count": 7,
+          "latest_checkpoint": null,
+          "model": "claude-fable-5",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-claude-fable-5-utf16-transcode",
+          "sampled_best_efficiency_factor": 5.8624,
+          "sampled_best_score": 2.5515,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7097,
+              "ts": "2026-07-19T03:26:34Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2643,
+              "ts": "2026-07-19T03:48:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2718,
+              "ts": "2026-07-19T03:52:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2721,
+              "ts": "2026-07-19T03:58:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5515,
+              "ts": "2026-07-19T03:59:04Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.5514,
+              "ts": "2026-07-19T04:10:34Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "62d445a9bc426cd02f3429623645cd406971625b4bad1988d8815b1bae1bd0ce",
+            "final_grade_log_sha256": "03cf46a3ee405cae2994c7612a1ba248ababa7f753157283f6a33a3ab36762a8",
+            "result_json_sha256": "bd237e1f046af3f21f80a0d0eeb4dc8390c3914d0f961996190cf0594ea6fd3a",
+            "scores_jsonl_sha256": "3aab94fd6941b135fb01be893479060332d34384b052d4826b4292a0ba345dfb"
+          },
+          "started_at": "2026-07-19T02:36:37.405584+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "utf16-transcode",
+          "vendor": "anthropic"
+        }
+      }
+    },
+    "claude-opus-4-8": {
+      "completed_tasks": 0,
+      "mean_final_score_completed": null,
+      "mean_sampled_best_score_completed": null,
+      "provider": "anthropic-api",
+      "provisional_mean_verified_score": null,
+      "running_tasks": 3,
+      "tasks": {
+        "float-print": {
+          "active_seconds": 597.08,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "LIVE_UNVERIFIED",
+          "final_score": null,
+          "finished_at": null,
+          "function_call_id": "fc-01KXWYPR09SX1V24F4N5GVAPR8",
+          "grade_count": 0,
+          "latest_checkpoint": null,
+          "model": "claude-opus-4-8",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T102808Z-jcode-solo-claude-opus-4-8-float-print",
+          "sampled_best_efficiency_factor": null,
+          "sampled_best_score": null,
+          "score_curve": [],
+          "source_hashes": {
+            "agent_log_sha256": "41544dcd5cc5d85e05209caeb933f0d60139b183d0fca5852223617c5562055a",
+            "metadata_json_sha256": "6a2c80962e05592dcef1ef0312bf2a80db93c760359fa676610899051f3b86a7"
+          },
+          "started_at": "2026-07-19T10:28:20.919865+00:00",
+          "status": "running",
+          "swarm": false,
+          "task": "float-print",
+          "vendor": "anthropic"
+        },
+        "json-unescape": {
+          "active_seconds": 597.974,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "LIVE_UNVERIFIED",
+          "final_score": null,
+          "finished_at": null,
+          "function_call_id": "fc-01KXWYPQ5ZDCPXMWQTAR711RFS",
+          "grade_count": 0,
+          "latest_checkpoint": null,
+          "model": "claude-opus-4-8",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T102808Z-jcode-solo-claude-opus-4-8-json-unescape",
+          "sampled_best_efficiency_factor": null,
+          "sampled_best_score": null,
+          "score_curve": [],
+          "source_hashes": {
+            "agent_log_sha256": "94f2174c5ede1532d050978a240ca3d58805319ed715e3e40d40c2d66599c491",
+            "metadata_json_sha256": "b38b57fdeb2b438fecf3a939bd31fac1b861085f1aff0d44bd96ffb3db0eedab"
+          },
+          "started_at": "2026-07-19T10:28:20.026497+00:00",
+          "status": "running",
+          "swarm": false,
+          "task": "json-unescape",
+          "vendor": "anthropic"
+        },
+        "utf16-transcode": {
+          "active_seconds": 596.826,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "LIVE_UNVERIFIED",
+          "final_score": null,
+          "finished_at": null,
+          "function_call_id": "fc-01KXWYPR6SV4D694NHS1RNYM2V",
+          "grade_count": 0,
+          "latest_checkpoint": null,
+          "model": "claude-opus-4-8",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T102808Z-jcode-solo-claude-opus-4-8-utf16-transcode",
+          "sampled_best_efficiency_factor": null,
+          "sampled_best_score": null,
+          "score_curve": [],
+          "source_hashes": {
+            "agent_log_sha256": "d0ad601187afea6f3fd1840225e53857edbe7c81799b70aa53aa734c47320043",
+            "metadata_json_sha256": "325955738c16b4d69389fa17d0532c067b13953cae42071fd9429fb8bf203eda"
+          },
+          "started_at": "2026-07-19T10:28:21.173647+00:00",
+          "status": "running",
+          "swarm": false,
+          "task": "utf16-transcode",
+          "vendor": "anthropic"
+        }
+      }
+    },
+    "claude-sonnet-5": {
+      "completed_tasks": 3,
+      "mean_final_score_completed": 3.0916,
+      "mean_sampled_best_score_completed": 7.4592,
+      "provider": "anthropic-api",
+      "provisional_mean_verified_score": null,
+      "running_tasks": 0,
+      "tasks": {
+        "float-print": {
+          "active_seconds": 8517.485,
+          "agent": "jcode",
+          "best_full_gate_score": 6.019,
+          "correctness_gate": "PASS",
+          "final_score": 6.8199,
+          "finished_at": "2026-07-19T04:59:01.181017+00:00",
+          "function_call_id": "fc-01KXW3NTN3T9CRCSSWGACJTPG9",
+          "grade_count": 38,
+          "latest_checkpoint": null,
+          "model": "claude-sonnet-5",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-claude-sonnet-5-float-print",
+          "sampled_best_efficiency_factor": 112.9782,
+          "sampled_best_score": 6.8199,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.938,
+              "ts": "2026-07-19T02:46:40Z"
+            },
+            {
+              "full_gate": true,
+              "score": 5.9396,
+              "ts": "2026-07-19T03:41:29Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9323,
+              "ts": "2026-07-19T03:43:34Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9404,
+              "ts": "2026-07-19T03:43:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9457,
+              "ts": "2026-07-19T03:44:56Z"
+            },
+            {
+              "full_gate": true,
+              "score": 5.9462,
+              "ts": "2026-07-19T04:13:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9481,
+              "ts": "2026-07-19T04:16:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9457,
+              "ts": "2026-07-19T04:17:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9465,
+              "ts": "2026-07-19T04:18:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9456,
+              "ts": "2026-07-19T04:18:15Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9748,
+              "ts": "2026-07-19T04:19:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9755,
+              "ts": "2026-07-19T04:19:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9748,
+              "ts": "2026-07-19T04:19:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.9752,
+              "ts": "2026-07-19T04:20:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 5.968,
+              "ts": "2026-07-19T04:21:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0147,
+              "ts": "2026-07-19T04:22:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0124,
+              "ts": "2026-07-19T04:22:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0141,
+              "ts": "2026-07-19T04:23:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0226,
+              "ts": "2026-07-19T04:23:41Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0055,
+              "ts": "2026-07-19T04:24:08Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0173,
+              "ts": "2026-07-19T04:24:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0192,
+              "ts": "2026-07-19T04:24:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0185,
+              "ts": "2026-07-19T04:24:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0028,
+              "ts": "2026-07-19T04:25:29Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0042,
+              "ts": "2026-07-19T04:25:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0179,
+              "ts": "2026-07-19T04:26:04Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0179,
+              "ts": "2026-07-19T04:26:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0196,
+              "ts": "2026-07-19T04:26:58Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0172,
+              "ts": "2026-07-19T04:27:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0202,
+              "ts": "2026-07-19T04:27:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0183,
+              "ts": "2026-07-19T04:27:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0188,
+              "ts": "2026-07-19T04:28:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.02,
+              "ts": "2026-07-19T04:28:28Z"
+            },
+            {
+              "full_gate": true,
+              "score": 6.019,
+              "ts": "2026-07-19T04:57:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0185,
+              "ts": "2026-07-19T04:58:17Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0157,
+              "ts": "2026-07-19T04:58:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.8199,
+              "ts": "2026-07-19T04:59:01Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "24bf7b45451ab4593ee329724d9901a21460d947a4b00c08848a2dd6a05d26bf",
+            "final_grade_log_sha256": "4bee1efc05e35dbd089527000cba15ce7543d61cc2028d709cb9abdeee58d59c",
+            "result_json_sha256": "7d6ee0a521aed0049dc604c639d250846a8e5346558a11ca32361166e0b426d5",
+            "scores_jsonl_sha256": "c2b0d90231df34c2c9c8cfc99b206523a5c90fd76bd505204f6bbe16d0494181"
+          },
+          "started_at": "2026-07-19T02:36:20.949717+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "float-print",
+          "vendor": "anthropic"
+        },
+        "json-unescape": {
+          "active_seconds": 2918.501,
+          "agent": "jcode",
+          "best_full_gate_score": 1.2009,
+          "correctness_gate": "PASS",
+          "final_score": 1.2166,
+          "finished_at": "2026-07-19T03:24:56.201487+00:00",
+          "function_call_id": "fc-01KXW3NT8WCS67GT0P0DNKSRQW",
+          "grade_count": 45,
+          "latest_checkpoint": null,
+          "model": "claude-sonnet-5",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-claude-sonnet-5-json-unescape",
+          "sampled_best_efficiency_factor": 20192.0533,
+          "sampled_best_score": 14.3015,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.2422,
+              "ts": "2026-07-19T02:41:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8288,
+              "ts": "2026-07-19T02:47:23Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9288,
+              "ts": "2026-07-19T02:58:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 14.3015,
+              "ts": "2026-07-19T03:02:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9305,
+              "ts": "2026-07-19T03:04:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9242,
+              "ts": "2026-07-19T03:04:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9007,
+              "ts": "2026-07-19T03:04:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9385,
+              "ts": "2026-07-19T03:05:03Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9225,
+              "ts": "2026-07-19T03:05:09Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0462,
+              "ts": "2026-07-19T03:07:16Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0596,
+              "ts": "2026-07-19T03:07:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.036,
+              "ts": "2026-07-19T03:07:24Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0721,
+              "ts": "2026-07-19T03:07:27Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0573,
+              "ts": "2026-07-19T03:07:32Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0932,
+              "ts": "2026-07-19T03:11:19Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0946,
+              "ts": "2026-07-19T03:11:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0707,
+              "ts": "2026-07-19T03:11:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1068,
+              "ts": "2026-07-19T03:11:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1876,
+              "ts": "2026-07-19T03:11:52Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2059,
+              "ts": "2026-07-19T03:11:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1825,
+              "ts": "2026-07-19T03:11:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2179,
+              "ts": "2026-07-19T03:12:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1979,
+              "ts": "2026-07-19T03:12:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2022,
+              "ts": "2026-07-19T03:12:12Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.1725,
+              "ts": "2026-07-19T03:16:07Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0576,
+              "ts": "2026-07-19T03:17:27Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.227,
+              "ts": "2026-07-19T03:17:48Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2059,
+              "ts": "2026-07-19T03:17:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1825,
+              "ts": "2026-07-19T03:17:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2179,
+              "ts": "2026-07-19T03:17:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1979,
+              "ts": "2026-07-19T03:18:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2095,
+              "ts": "2026-07-19T03:18:05Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.1974,
+              "ts": "2026-07-19T03:18:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2022,
+              "ts": "2026-07-19T03:19:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2122,
+              "ts": "2026-07-19T03:22:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.194,
+              "ts": "2026-07-19T03:22:24Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2183,
+              "ts": "2026-07-19T03:22:27Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1991,
+              "ts": "2026-07-19T03:22:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2224,
+              "ts": "2026-07-19T03:22:34Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.2009,
+              "ts": "2026-07-19T03:23:36Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.2009,
+              "ts": "2026-07-19T03:23:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1943,
+              "ts": "2026-07-19T03:24:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2166,
+              "ts": "2026-07-19T03:24:56Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "8d09ccb899345077818841b531576014b35b75b9b7fe088aa085f29c9f95a499",
+            "final_grade_log_sha256": "25ec369af10e8dea21cca7a9ea717b9aea94f22fc05aa39a083288c6999a898f",
+            "result_json_sha256": "ac599775ef0db407970b80a2f0986c9f865f0b28d535dce5ee73c21faa3cc7fa",
+            "scores_jsonl_sha256": "fd5a08d2fd624c0c12256af5ad2497aa918f94af3ca4e53d0ea03ad4fec0a6e8"
+          },
+          "started_at": "2026-07-19T02:36:06.281241+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "json-unescape",
+          "vendor": "anthropic"
+        },
+        "utf16-transcode": {
+          "active_seconds": 5387.23,
+          "agent": "jcode",
+          "best_full_gate_score": 1.2449,
+          "correctness_gate": "PASS",
+          "final_score": 1.2383,
+          "finished_at": "2026-07-19T04:06:35.709152+00:00",
+          "function_call_id": "fc-01KXW3NV1VWZWFQ51QMJ5683ER",
+          "grade_count": 37,
+          "latest_checkpoint": null,
+          "model": "claude-sonnet-5",
+          "provider": "anthropic-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-claude-sonnet-5-utf16-transcode",
+          "sampled_best_efficiency_factor": 2.3885,
+          "sampled_best_score": 1.2561,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:41Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:42:23Z"
+            },
+            {
+              "full_gate": false,
+              "score": -0.0373,
+              "ts": "2026-07-19T03:07:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": -0.0887,
+              "ts": "2026-07-19T03:12:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": -0.084,
+              "ts": "2026-07-19T03:14:44Z"
+            },
+            {
+              "full_gate": false,
+              "score": -0.0373,
+              "ts": "2026-07-19T03:16:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.1282,
+              "ts": "2026-07-19T03:17:08Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.1525,
+              "ts": "2026-07-19T03:20:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.218,
+              "ts": "2026-07-19T03:27:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.2783,
+              "ts": "2026-07-19T03:30:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.5946,
+              "ts": "2026-07-19T03:35:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8507,
+              "ts": "2026-07-19T03:38:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0013,
+              "ts": "2026-07-19T03:39:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1412,
+              "ts": "2026-07-19T03:42:08Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.1412,
+              "ts": "2026-07-19T03:42:16Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1881,
+              "ts": "2026-07-19T03:44:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7881,
+              "ts": "2026-07-19T03:48:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1881,
+              "ts": "2026-07-19T03:50:37Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1881,
+              "ts": "2026-07-19T03:52:19Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2399,
+              "ts": "2026-07-19T03:54:17Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2386,
+              "ts": "2026-07-19T03:56:15Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.2386,
+              "ts": "2026-07-19T03:56:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2355,
+              "ts": "2026-07-19T03:56:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2406,
+              "ts": "2026-07-19T03:56:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2386,
+              "ts": "2026-07-19T03:58:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2409,
+              "ts": "2026-07-19T04:01:34Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.2409,
+              "ts": "2026-07-19T04:01:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2409,
+              "ts": "2026-07-19T04:02:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2473,
+              "ts": "2026-07-19T04:02:32Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2561,
+              "ts": "2026-07-19T04:02:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2383,
+              "ts": "2026-07-19T04:02:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2463,
+              "ts": "2026-07-19T04:02:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2429,
+              "ts": "2026-07-19T04:02:46Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.2423,
+              "ts": "2026-07-19T04:04:22Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.2422,
+              "ts": "2026-07-19T04:06:00Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.2449,
+              "ts": "2026-07-19T04:06:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2383,
+              "ts": "2026-07-19T04:06:35Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "60e26a2ed7493db80e53ad8f8a532bd7dd55e655bb336aacd72b3a6c6c716329",
+            "final_grade_log_sha256": "7b1e3e289c5c5df8048f9f978e3c1770c3cc0d2d857bed02d55e11377da19841",
+            "result_json_sha256": "dd1220ded0ced9bf8353c2ff7ca83e9cf4c569281d12bca159e34973bc4c22fa",
+            "scores_jsonl_sha256": "6ed3fcc004619ab4d7184108fe5142324d3b98a0d27969fdbe4fd662dc0eb2a5"
+          },
+          "started_at": "2026-07-19T02:36:36.689105+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "utf16-transcode",
+          "vendor": "anthropic"
+        }
+      }
+    },
+    "gpt-5.4": {
+      "completed_tasks": 3,
+      "mean_final_score_completed": 3.2119,
+      "mean_sampled_best_score_completed": 3.2562,
+      "provider": "openai-api",
+      "provisional_mean_verified_score": null,
+      "running_tasks": 0,
+      "tasks": {
+        "float-print": {
+          "active_seconds": 2895.494,
+          "agent": "jcode",
+          "best_full_gate_score": 6.2326,
+          "correctness_gate": "PASS",
+          "final_score": 7.0336,
+          "finished_at": "2026-07-19T03:25:22.867605+00:00",
+          "function_call_id": "fc-01KXW3NTGMBTB05084JFR6W5NS",
+          "grade_count": 9,
+          "latest_checkpoint": null,
+          "model": "gpt-5.4",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-gpt-5.4-float-print",
+          "sampled_best_efficiency_factor": 131.0161,
+          "sampled_best_score": 7.0336,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:49Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:37:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0372,
+              "ts": "2026-07-19T02:38:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.2317,
+              "ts": "2026-07-19T02:40:07Z"
+            },
+            {
+              "full_gate": true,
+              "score": 6.2326,
+              "ts": "2026-07-19T03:23:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.2319,
+              "ts": "2026-07-19T03:24:24Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.2337,
+              "ts": "2026-07-19T03:24:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.2333,
+              "ts": "2026-07-19T03:24:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.0336,
+              "ts": "2026-07-19T03:25:22Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "dbf42cc43773db369b662f7359985230fc49aaa61ceb54b220aa45ded06d53e0",
+            "final_grade_log_sha256": "4e06311ffc766be4a9810c30143c218fd12610ce6419cd24cf57bd41fa922317",
+            "result_json_sha256": "946655447a10e95e5aab28dfc95788330096750c375235b0b1602fe098642c0b",
+            "scores_jsonl_sha256": "327a11f814520c4b62ddf47c9c49e3d4e777f129a2018523ba5ce1eea97b4e24"
+          },
+          "started_at": "2026-07-19T02:36:19.890697+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "float-print",
+          "vendor": "openai"
+        },
+        "json-unescape": {
+          "active_seconds": 345.67,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "PASS",
+          "final_score": 1.571,
+          "finished_at": "2026-07-19T02:41:55.832778+00:00",
+          "function_call_id": "fc-01KXW3NT42E7PEMC2SYXA1SB5P",
+          "grade_count": 20,
+          "latest_checkpoint": null,
+          "model": "gpt-5.4",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-gpt-5.4-json-unescape",
+          "sampled_best_efficiency_factor": 3.2533,
+          "sampled_best_score": 1.7019,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:04Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0023,
+              "ts": "2026-07-19T02:36:29Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.5583,
+              "ts": "2026-07-19T02:37:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.6858,
+              "ts": "2026-07-19T02:38:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7377,
+              "ts": "2026-07-19T02:38:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.345,
+              "ts": "2026-07-19T02:39:08Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5122,
+              "ts": "2026-07-19T02:39:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.4934,
+              "ts": "2026-07-19T02:39:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5048,
+              "ts": "2026-07-19T02:39:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.6375,
+              "ts": "2026-07-19T02:40:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7019,
+              "ts": "2026-07-19T02:40:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5675,
+              "ts": "2026-07-19T02:40:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.6107,
+              "ts": "2026-07-19T02:40:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7019,
+              "ts": "2026-07-19T02:41:04Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5697,
+              "ts": "2026-07-19T02:41:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5735,
+              "ts": "2026-07-19T02:41:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7019,
+              "ts": "2026-07-19T02:41:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5727,
+              "ts": "2026-07-19T02:41:37Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5695,
+              "ts": "2026-07-19T02:41:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.571,
+              "ts": "2026-07-19T02:41:55Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "ae82a689a8c5b21df58b0fcbb0f9b41ea380bcb1e313699972cf2caa88fbb15f",
+            "final_grade_log_sha256": "e36348d18ee807643019a8b4afdd21d8e63d0efbac6cb943e3fca83a29cb0d87",
+            "result_json_sha256": "8d89c2751f086eeb14918192226122eb4570cf8991187404fa1cc11b7fa5491f",
+            "scores_jsonl_sha256": "9f960f851ac3ad3d9b947afa78aca786fc84694be1f1edf879b953d7c404c8fc"
+          },
+          "started_at": "2026-07-19T02:35:59.992674+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "json-unescape",
+          "vendor": "openai"
+        },
+        "utf16-transcode": {
+          "active_seconds": 474.259,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "PASS",
+          "final_score": 1.031,
+          "finished_at": "2026-07-19T02:44:44.540308+00:00",
+          "function_call_id": "fc-01KXW3NTXP1AERJYMM3YN1VBS7",
+          "grade_count": 22,
+          "latest_checkpoint": null,
+          "model": "gpt-5.4",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023554Z-jcode-solo-gpt-5.4-utf16-transcode",
+          "sampled_best_efficiency_factor": 2.0464,
+          "sampled_best_score": 1.0331,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:41Z"
+            },
+            {
+              "full_gate": false,
+              "score": -0.0213,
+              "ts": "2026-07-19T02:37:04Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.2111,
+              "ts": "2026-07-19T02:39:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.2132,
+              "ts": "2026-07-19T02:39:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.4026,
+              "ts": "2026-07-19T02:40:05Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7214,
+              "ts": "2026-07-19T02:40:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.6837,
+              "ts": "2026-07-19T02:41:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7163,
+              "ts": "2026-07-19T02:41:52Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7208,
+              "ts": "2026-07-19T02:42:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.858,
+              "ts": "2026-07-19T02:42:17Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8582,
+              "ts": "2026-07-19T02:42:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9645,
+              "ts": "2026-07-19T02:42:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9617,
+              "ts": "2026-07-19T02:42:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9645,
+              "ts": "2026-07-19T02:42:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9648,
+              "ts": "2026-07-19T02:42:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0317,
+              "ts": "2026-07-19T02:43:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0286,
+              "ts": "2026-07-19T02:43:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0317,
+              "ts": "2026-07-19T02:44:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0331,
+              "ts": "2026-07-19T02:44:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0304,
+              "ts": "2026-07-19T02:44:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0321,
+              "ts": "2026-07-19T02:44:31Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.031,
+              "ts": "2026-07-19T02:44:44Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "d78725e46ac8d5873974b12c0b211513cc1e579a5a9b3a660cc63181d9247489",
+            "final_grade_log_sha256": "c92b85898073b8c4eb6fb800764ff369e9c6db06c258cd4b39095acbe839a9c3",
+            "result_json_sha256": "df13503801d810fa0f0df71ee4b6fc1820dd770d90f3ae202da984fa2ae24e72",
+            "scores_jsonl_sha256": "a77abfb7cf6a0b89677772ef145ed3f46103c006b60d37089f00cb0391386af4"
+          },
+          "started_at": "2026-07-19T02:36:35.664098+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "utf16-transcode",
+          "vendor": "openai"
+        }
+      }
+    },
+    "gpt-5.5": {
+      "completed_tasks": 3,
+      "mean_final_score_completed": 3.507,
+      "mean_sampled_best_score_completed": 3.5098,
+      "provider": "openai-api",
+      "provisional_mean_verified_score": null,
+      "running_tasks": 0,
+      "tasks": {
+        "float-print": {
+          "active_seconds": 3126.569,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "PASS",
+          "final_score": 7.1957,
+          "finished_at": "2026-07-19T03:29:37.769709+00:00",
+          "function_call_id": "fc-01KXW3NVZF3XMX333HQZJJMAKE",
+          "grade_count": 23,
+          "latest_checkpoint": null,
+          "model": "gpt-5.5",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023555Z-jcode-solo-gpt-5.5-float-print",
+          "sampled_best_efficiency_factor": 147.4621,
+          "sampled_best_score": 7.2042,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:37:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:38:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.844,
+              "ts": "2026-07-19T02:39:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1081,
+              "ts": "2026-07-19T02:40:34Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.0843,
+              "ts": "2026-07-19T02:41:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.0589,
+              "ts": "2026-07-19T02:41:48Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1646,
+              "ts": "2026-07-19T02:42:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1646,
+              "ts": "2026-07-19T02:42:45Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1607,
+              "ts": "2026-07-19T02:43:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1361,
+              "ts": "2026-07-19T02:43:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.168,
+              "ts": "2026-07-19T02:44:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.168,
+              "ts": "2026-07-19T02:44:27Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1958,
+              "ts": "2026-07-19T02:44:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1957,
+              "ts": "2026-07-19T02:45:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.2042,
+              "ts": "2026-07-19T02:45:15Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.2038,
+              "ts": "2026-07-19T02:45:37Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1989,
+              "ts": "2026-07-19T02:46:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1915,
+              "ts": "2026-07-19T03:26:58Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.192,
+              "ts": "2026-07-19T03:27:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1955,
+              "ts": "2026-07-19T03:28:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1884,
+              "ts": "2026-07-19T03:28:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1938,
+              "ts": "2026-07-19T03:28:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1957,
+              "ts": "2026-07-19T03:29:37Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "44699a246edef74930bb219287f918ec89759d0f48fcd41f16a1b9395c3c98c8",
+            "final_grade_log_sha256": "4812ca0017469fef979cc878561426ec25f88d605a95519e0ca4b3285b303eaf",
+            "result_json_sha256": "0fb6d534c10bcaa1b358607a858ffd998d0c0fbfad2cd4d91ab7c1ea178091e1",
+            "scores_jsonl_sha256": "ab97367e75fec21d60495aca42d2f23278b44c07b7f562ea0f3bde2be37839b8"
+          },
+          "started_at": "2026-07-19T02:36:45.022847+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "float-print",
+          "vendor": "openai"
+        },
+        "json-unescape": {
+          "active_seconds": 549.905,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "PASS",
+          "final_score": 1.9841,
+          "finished_at": "2026-07-19T02:38:47.372878+00:00",
+          "function_call_id": "fc-01KXW39P8R1HVQHDZ0CBH3QD94",
+          "grade_count": 33,
+          "latest_checkpoint": null,
+          "model": "gpt-5.5",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T022916Z-jcode-solo-gpt-5.5-json-unescape",
+          "sampled_best_efficiency_factor": 3.9562,
+          "sampled_best_score": 1.9841,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:29:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:29:49Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7179,
+              "ts": "2026-07-19T02:30:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1852,
+              "ts": "2026-07-19T02:31:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.4221,
+              "ts": "2026-07-19T02:31:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.4195,
+              "ts": "2026-07-19T02:32:07Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.4457,
+              "ts": "2026-07-19T02:32:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5299,
+              "ts": "2026-07-19T02:32:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.562,
+              "ts": "2026-07-19T02:33:05Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8006,
+              "ts": "2026-07-19T02:33:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8006,
+              "ts": "2026-07-19T02:34:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.6247,
+              "ts": "2026-07-19T02:34:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8533,
+              "ts": "2026-07-19T02:35:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8674,
+              "ts": "2026-07-19T02:35:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9126,
+              "ts": "2026-07-19T02:35:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9705,
+              "ts": "2026-07-19T02:36:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9587,
+              "ts": "2026-07-19T02:36:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.967,
+              "ts": "2026-07-19T02:36:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9072,
+              "ts": "2026-07-19T02:37:08Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9705,
+              "ts": "2026-07-19T02:37:19Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9502,
+              "ts": "2026-07-19T02:37:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.969,
+              "ts": "2026-07-19T02:37:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9781,
+              "ts": "2026-07-19T02:37:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9614,
+              "ts": "2026-07-19T02:37:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9641,
+              "ts": "2026-07-19T02:37:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9655,
+              "ts": "2026-07-19T02:38:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9633,
+              "ts": "2026-07-19T02:38:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9654,
+              "ts": "2026-07-19T02:38:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9725,
+              "ts": "2026-07-19T02:38:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9747,
+              "ts": "2026-07-19T02:38:28Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9738,
+              "ts": "2026-07-19T02:38:32Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.972,
+              "ts": "2026-07-19T02:38:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9841,
+              "ts": "2026-07-19T02:38:47Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "e624239c0fd84bb15738a370e64a36514aaab602c438afb7b892bff0fa23c305",
+            "final_grade_log_sha256": "31ec14cb9e16d09e8e6ccb9202fad7a7fb2df310a71d498507854ec5ada13f4e",
+            "result_json_sha256": "8fadffde3b81192bdcaea677e5f47b4c67159bd96f13507ff07d04aa744c4c61",
+            "scores_jsonl_sha256": "a19ae7a4d2778ca767e9646541ea0a459dcd033fe2459bcb4b54b0ff9790512e"
+          },
+          "started_at": "2026-07-19T02:29:27.018420+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "json-unescape",
+          "vendor": "openai"
+        },
+        "utf16-transcode": {
+          "active_seconds": 397.696,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "PASS",
+          "final_score": 1.3411,
+          "finished_at": "2026-07-19T02:43:39.085890+00:00",
+          "function_call_id": "fc-01KXW3NW39HDVWV2HGKW8X7EMA",
+          "grade_count": 17,
+          "latest_checkpoint": null,
+          "model": "gpt-5.5",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T023555Z-jcode-solo-gpt-5.5-utf16-transcode",
+          "sampled_best_efficiency_factor": 2.5334,
+          "sampled_best_score": 1.3411,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:36:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T02:37:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7767,
+              "ts": "2026-07-19T02:39:09Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.7767,
+              "ts": "2026-07-19T02:39:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9825,
+              "ts": "2026-07-19T02:40:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8797,
+              "ts": "2026-07-19T02:40:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0087,
+              "ts": "2026-07-19T02:40:58Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0398,
+              "ts": "2026-07-19T02:41:23Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1205,
+              "ts": "2026-07-19T02:41:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2992,
+              "ts": "2026-07-19T02:42:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.3333,
+              "ts": "2026-07-19T02:42:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2253,
+              "ts": "2026-07-19T02:42:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.3203,
+              "ts": "2026-07-19T02:42:55Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.3333,
+              "ts": "2026-07-19T02:43:09Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.3357,
+              "ts": "2026-07-19T02:43:16Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.334,
+              "ts": "2026-07-19T02:43:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.3411,
+              "ts": "2026-07-19T02:43:39Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "d7abdb0a99d32dcff87aefd890e873fbf91f81ffd4c749bc13acdbab3bfe9da5",
+            "final_grade_log_sha256": "31e65a3346372b9c316151a78b48296d44016faee14506925796b89edc3036c3",
+            "result_json_sha256": "0fe19360be7755da9520ebd8304223b483c5b1e7a11c05e0183c8b6bfd2436a6",
+            "scores_jsonl_sha256": "abcc170a811c5c62358fd781f554e1c358913d060a078fff6faa08a97c3ab370"
+          },
+          "started_at": "2026-07-19T02:36:48.309119+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "utf16-transcode",
+          "vendor": "openai"
+        }
+      }
+    },
+    "gpt-5.6-sol": {
+      "completed_tasks": 3,
+      "mean_final_score_completed": 4.0691,
+      "mean_sampled_best_score_completed": 4.0768,
+      "provider": "openai-api",
+      "provisional_mean_verified_score": null,
+      "running_tasks": 0,
+      "tasks": {
+        "float-print": {
+          "active_seconds": 2883.223,
+          "agent": "jcode",
+          "best_full_gate_score": 7.8051,
+          "correctness_gate": "PASS",
+          "final_score": 7.8065,
+          "finished_at": "2026-07-19T08:57:02.511303+00:00",
+          "function_call_id": "fc-01KXWPP0X9FX56PE06RX9B28E3",
+          "grade_count": 23,
+          "latest_checkpoint": null,
+          "model": "gpt-5.6-sol",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-float-print",
+          "sampled_best_efficiency_factor": 224.52,
+          "sampled_best_score": 7.8107,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T08:08:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.7456,
+              "ts": "2026-07-19T08:09:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.8537,
+              "ts": "2026-07-19T08:10:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.8067,
+              "ts": "2026-07-19T08:10:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.0835,
+              "ts": "2026-07-19T08:12:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1419,
+              "ts": "2026-07-19T08:12:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1467,
+              "ts": "2026-07-19T08:12:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.2122,
+              "ts": "2026-07-19T08:13:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.0253,
+              "ts": "2026-07-19T08:14:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.2027,
+              "ts": "2026-07-19T08:15:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1863,
+              "ts": "2026-07-19T08:15:32Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1478,
+              "ts": "2026-07-19T08:16:03Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.5788,
+              "ts": "2026-07-19T08:17:01Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6263,
+              "ts": "2026-07-19T08:17:45Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.6365,
+              "ts": "2026-07-19T08:18:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.685,
+              "ts": "2026-07-19T08:20:03Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7492,
+              "ts": "2026-07-19T08:21:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7442,
+              "ts": "2026-07-19T08:21:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7965,
+              "ts": "2026-07-19T08:22:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.7315,
+              "ts": "2026-07-19T08:23:12Z"
+            },
+            {
+              "full_gate": true,
+              "score": 7.8051,
+              "ts": "2026-07-19T08:55:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.8107,
+              "ts": "2026-07-19T08:56:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.8065,
+              "ts": "2026-07-19T08:57:02Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "408cefd530926fe09ccc058ae89e31eff746239d59dc2c478c63aa2e9e0c09bd",
+            "final_grade_log_sha256": "4c5d1193fb8accbbb0606f6e126bf390863a6f7cbb251979cecff64cccc2300d",
+            "result_json_sha256": "d759ba747e1da8f765b2e5dbe875945e43c4f89c8728dcbdb09aee01594dd142",
+            "scores_jsonl_sha256": "9a4123f8343496a0794e293651052662afebcf3dad5b269802b79223fa09f50c"
+          },
+          "started_at": "2026-07-19T08:08:08.864960+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "float-print",
+          "vendor": "openai"
+        },
+        "json-unescape": {
+          "active_seconds": 1165.118,
+          "agent": "jcode",
+          "best_full_gate_score": 2.3055,
+          "correctness_gate": "PASS",
+          "final_score": 2.29,
+          "finished_at": "2026-07-19T08:32:26.983560+00:00",
+          "function_call_id": "fc-01KXWPYQZ5SKXMNQ1R1C5SBD7C",
+          "grade_count": 26,
+          "latest_checkpoint": null,
+          "model": "gpt-5.6-sol",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T081249Z-jcode-solo-gpt-5.6-sol-json-unescape",
+          "sampled_best_efficiency_factor": 4.9434,
+          "sampled_best_score": 2.3055,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T08:12:54Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T08:13:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2496,
+              "ts": "2026-07-19T08:14:37Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.496,
+              "ts": "2026-07-19T08:15:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0154,
+              "ts": "2026-07-19T08:21:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.496,
+              "ts": "2026-07-19T08:21:49Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.5814,
+              "ts": "2026-07-19T08:22:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7456,
+              "ts": "2026-07-19T08:22:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9677,
+              "ts": "2026-07-19T08:23:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0101,
+              "ts": "2026-07-19T08:23:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.076,
+              "ts": "2026-07-19T08:24:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1169,
+              "ts": "2026-07-19T08:24:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1646,
+              "ts": "2026-07-19T08:25:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1646,
+              "ts": "2026-07-19T08:25:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2437,
+              "ts": "2026-07-19T08:26:05Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2438,
+              "ts": "2026-07-19T08:26:23Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2603,
+              "ts": "2026-07-19T08:26:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2757,
+              "ts": "2026-07-19T08:27:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2265,
+              "ts": "2026-07-19T08:27:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2757,
+              "ts": "2026-07-19T08:28:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.2881,
+              "ts": "2026-07-19T08:28:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9533,
+              "ts": "2026-07-19T08:30:02Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.2881,
+              "ts": "2026-07-19T08:30:56Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.3055,
+              "ts": "2026-07-19T08:31:55Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.2806,
+              "ts": "2026-07-19T08:31:59Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.29,
+              "ts": "2026-07-19T08:32:26Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "3aeab5c2300783e7f11da1a4f684f195e46ad07829a67fbc43bd19b0401d3812",
+            "final_grade_log_sha256": "fc8f4986cb497c074280c2a01596f0ed2c141a7e2467235126d23ee03624a887",
+            "result_json_sha256": "5289e542aeeb2d8b2119d1e39e84a1ada6e9c6cec75d7c73ca8978310011902c",
+            "scores_jsonl_sha256": "f5f8bbbe944c5361f89204f0c747b0f11591e0fca2a9437b997282ce3b10d5d3"
+          },
+          "started_at": "2026-07-19T08:12:50.623337+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "json-unescape",
+          "vendor": "openai"
+        },
+        "utf16-transcode": {
+          "active_seconds": 750.796,
+          "agent": "jcode",
+          "best_full_gate_score": null,
+          "correctness_gate": "PASS",
+          "final_score": 2.1109,
+          "finished_at": "2026-07-19T08:26:07.490476+00:00",
+          "function_call_id": "fc-01KXWPZKDEEWCX4FXTT8Z2MVC5",
+          "grade_count": 18,
+          "latest_checkpoint": null,
+          "model": "gpt-5.6-sol",
+          "provider": "openai-api",
+          "reasoning_effort": "high",
+          "run_id": "20260719T081317Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+          "sampled_best_efficiency_factor": 4.3295,
+          "sampled_best_score": 2.1142,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T08:13:27Z"
+            },
+            {
+              "full_gate": false,
+              "score": -0.0131,
+              "ts": "2026-07-19T08:13:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.3017,
+              "ts": "2026-07-19T08:15:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7588,
+              "ts": "2026-07-19T08:16:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7614,
+              "ts": "2026-07-19T08:19:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.4668,
+              "ts": "2026-07-19T08:19:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8437,
+              "ts": "2026-07-19T08:21:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9361,
+              "ts": "2026-07-19T08:21:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9829,
+              "ts": "2026-07-19T08:22:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0384,
+              "ts": "2026-07-19T08:22:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0974,
+              "ts": "2026-07-19T08:23:19Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0952,
+              "ts": "2026-07-19T08:23:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0789,
+              "ts": "2026-07-19T08:24:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1142,
+              "ts": "2026-07-19T08:25:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1136,
+              "ts": "2026-07-19T08:25:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1078,
+              "ts": "2026-07-19T08:25:15Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1142,
+              "ts": "2026-07-19T08:25:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1109,
+              "ts": "2026-07-19T08:26:07Z"
+            }
+          ],
+          "source_hashes": {
+            "agent_log_sha256": "da6f9e2075f5145f8eb5f765335963b8cb22c64afb35cd5bc6a953096dde3df9",
+            "final_grade_log_sha256": "3c77b7abe7884e4e9415bb073592b5492fdcb523d342d871fe6b68c35dc5f460",
+            "result_json_sha256": "4d70546c0ecd1b01651b50c2a6956c86cf8d8a156aa0cdee9a5f9d56928aad7a",
+            "scores_jsonl_sha256": "470a11912caca7554414b67b078f08ac2bf1b5aa18e5209d70deb4a63d2849a1"
+          },
+          "started_at": "2026-07-19T08:13:21.871959+00:00",
+          "status": "completed",
+          "swarm": false,
+          "task": "utf16-transcode",
+          "vendor": "openai"
+        }
+      }
+    }
+  },
+  "published_at": "2026-07-19",
+  "revisions": [
+    {
+      "note": "The 09:30 UTC snapshot read the Sol utf16-transcode scores.jsonl before Modal volume sync completed, recording an empty curve. This revision restores the synced 18-grade curve and its hash; final_score and the ranking are unchanged.",
+      "revised_at": "2026-07-19T10:08:00Z"
+    }
+  ],
+  "runner_commits": [
+    "3043c790b29e98ae0b157f74ef58806e5fd310dd",
+    "8b9d05ebfd1965ea6df493edf01f29d15cad5d0a",
+    "2b17e26e514f38b93a7c16d5f14323cd845ba0a5"
+  ],
+  "score_semantics": "score = log2(given_cost / optimized_cost); higher is better",
+  "snapshot_at": "2026-07-19T10:38:18Z",
+  "snapshot_status": "live",
+  "sources": {
+    "launch_manifests": [
+      "modal/launches/20260719T022916Z-multimodel-pilot.json",
+      "modal/launches/20260719T023554Z-multimodel-full.json",
+      "modal/launches/20260719T023555Z-multimodel-full.json",
+      "modal/launches/20260719T080803Z-multimodel-full.json",
+      "modal/launches/20260719T081249Z-multimodel-pilot.json",
+      "modal/launches/20260719T081317Z-multimodel-pilot.json",
+      "modal/launches/20260719T102808Z-multimodel-full.json"
+    ],
+    "modal_volume": "jcode-bench-v1-results",
+    "repository": "https://github.com/1jehuang/jcode-bench"
+  }
 }
