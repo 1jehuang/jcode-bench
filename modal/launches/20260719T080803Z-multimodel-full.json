@@ -1,0 +1,34 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-multimodel",
+  "launched_at": "2026-07-19T08:08:04.512160+00:00",
+  "mode": "full",
+  "reasoning_effort": "high",
+  "runner_commit": "6e5c1bbd8fccd89046d3f56aebe8457a823b180a",
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXWPP0RHSDBPBDEHYRTYNNYP",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXWPP0X9FX56PE06RX9B28E3",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXWPP117CT2BNS6YSJF1H1M7",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260719T080803Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    }
+  ]
+}
