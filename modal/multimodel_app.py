@@ -82,7 +82,8 @@ def _verify_pinned_binary(path: Path) -> None:
         )
 
 
-_verify_pinned_binary(JCODE_BIN)
+if modal.is_local():
+    _verify_pinned_binary(JCODE_BIN)
 
 app = modal.App(APP_NAME)
 results = modal.Volume.from_name("jcode-bench-v1-results", create_if_missing=True)
@@ -258,6 +259,7 @@ def run_case(
         raise ValueError(f"model must be one of {tuple(MODELS)}")
     if task not in TASKS:
         raise ValueError(f"task must be one of {TASKS}")
+    _verify_pinned_binary(Path("/usr/local/bin/jcode"))
 
     result_dir = Path("/results/runs") / run_id
     result_path = result_dir / "result.json"
