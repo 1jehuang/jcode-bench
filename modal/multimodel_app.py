@@ -56,6 +56,7 @@ MODELS: dict[str, dict[str, str]] = {
     },
     "gpt-5.6-sol": {
         "provider": "openai-api",
+        "cli_provider": "openai",
         "swarm_route": "openai-api",
         "effort_env": "JCODE_OPENAI_REASONING_EFFORT",
         "vendor": "openai",
@@ -164,11 +165,12 @@ def command_for(
     if profile is None:
         raise ValueError(f"Unsupported model: {model}")
 
+    cli_provider = profile.get("cli_provider", profile["provider"])
     env = os.environ.copy()
     env.update({"HOME": str(home), "CI": "1", "TERM": "dumb", "NO_COLOR": "1"})
     env.update(
         {
-            "JCODE_PROVIDER": profile["provider"],
+            "JCODE_PROVIDER": cli_provider,
             "JCODE_MODEL": model,
             profile["effort_env"]: REASONING_EFFORT,
             "JCODE_SWARM_ENABLED": "true" if swarm else "false",
@@ -183,7 +185,7 @@ def command_for(
         "--no-update",
         "--no-selfdev",
         "-p",
-        profile["provider"],
+        cli_provider,
         "-m",
         model,
         "-C",
