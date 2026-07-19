@@ -1,0 +1,49 @@
+{
+  "agent": "codex",
+  "agent_depth": 4,
+  "agent_threads": 8,
+  "app": "jcode-bench-v1-codex-ultra",
+  "benchmark_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+  "codex_version": "0.144.1",
+  "launched_at": "2026-07-19T12:13:37.497593+00:00",
+  "mode": "full",
+  "model": "gpt-5.6-sol",
+  "multi_agent_enabled": true,
+  "reasoning_effort": "ultra",
+  "runner_commit": "f6cbc2d5ab1926c376a670fe888795d13e5d7975",
+  "runs": [
+    {
+      "agent": "codex",
+      "cell": "codex-ultra",
+      "function_call_id": "fc-01KXX4QMBTM0D715V0ASWN7JZ1",
+      "model": "gpt-5.6-sol",
+      "multi_agent_enabled": true,
+      "reasoning_effort": "ultra",
+      "run_id": "20260719T121336Z-codex-ultra-json-unescape",
+      "swarm": true,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "codex",
+      "cell": "codex-ultra",
+      "function_call_id": "fc-01KXX4QMKAQYY0CPCP26X6EV16",
+      "model": "gpt-5.6-sol",
+      "multi_agent_enabled": true,
+      "reasoning_effort": "ultra",
+      "run_id": "20260719T121336Z-codex-ultra-float-print",
+      "swarm": true,
+      "task": "float-print"
+    },
+    {
+      "agent": "codex",
+      "cell": "codex-ultra",
+      "function_call_id": "fc-01KXX4QMTEX90ZVV9GWNP2VKBZ",
+      "model": "gpt-5.6-sol",
+      "multi_agent_enabled": true,
+      "reasoning_effort": "ultra",
+      "run_id": "20260719T121336Z-codex-ultra-utf16-transcode",
+      "swarm": true,
+      "task": "utf16-transcode"
+    }
+  ]
+}
