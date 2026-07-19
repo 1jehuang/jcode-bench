@@ -22,7 +22,14 @@ import modal
 
 APP_NAME = "jcode-bench-v1-multimodel"
 TASKS = ("json-unescape", "float-print", "utf16-transcode")
-MODELS = ("gpt-5.4", "gpt-5.5", "gpt-5.6-sol", "claude-sonnet-5", "claude-fable-5")
+MODELS = (
+    "gpt-5.4",
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "claude-sonnet-5",
+    "claude-fable-5",
+    "claude-opus-4-8",
+)
 
 
 def main() -> None:

@@ -2,8 +2,8 @@
 
 Runs the pinned local jcode build against multiple frontier models
 (OpenAI gpt-5.4 / gpt-5.5 / gpt-5.6-sol via the OpenAI API, Anthropic
-claude-sonnet-5 / claude-fable-5 via the Anthropic API), solo mode, on all
-three tasks.
+claude-sonnet-5 / claude-fable-5 / claude-opus-4-8 via the Anthropic API),
+solo mode, on all three tasks.
 
 Deploy with OPENAI_API_KEY and ANTHROPIC_API_KEY in the local environment:
 
@@ -68,6 +68,12 @@ MODELS: dict[str, dict[str, str]] = {
         "vendor": "anthropic",
     },
     "claude-fable-5": {
+        "provider": "anthropic-api",
+        "swarm_route": "claude-api",
+        "effort_env": "JCODE_ANTHROPIC_REASONING_EFFORT",
+        "vendor": "anthropic",
+    },
+    "claude-opus-4-8": {
         "provider": "anthropic-api",
         "swarm_route": "claude-api",
         "effort_env": "JCODE_ANTHROPIC_REASONING_EFFORT",
