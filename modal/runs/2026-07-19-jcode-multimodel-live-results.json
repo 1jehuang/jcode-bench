@@ -2,19 +2,18 @@
   "benchmark": "jcode bench v1",
   "benchmark_commit": "cb8ccbc29ad4f4ce4a3ada2e79e019d06729df7c",
   "campaign": {
-    "completed_cells": 15,
-    "completed_correctness_passes": 15,
+    "completed_cells": 18,
+    "completed_correctness_passes": 18,
     "planned_cells": 18,
-    "running_cells": 3
+    "running_cells": 0
   },
   "caveats": [
-    "This is a timestamped live snapshot: 15 of 18 intended cells had completed when captured.",
-    "All three matched Claude Opus 4.8 cells were running normally and did not yet have official final scores.",
-    "The completed-model ranking uses only official final scores produced after each agent stopped and the final grader passed.",
+    "All 18 intended cells completed and passed the official final correctness grade.",
+    "The ranking uses only official final scores produced after each agent stopped and the final grader passed.",
     "Intermediate sampled maxima are retained for audit but are not used in the published ranking because non-full-gate measurements are not comparable to the official final correctness grade.",
     "Each model has one run per task, so run-to-run variance is unmeasured.",
     "Provider implementations differ, so this is a model-plus-provider comparison through the same Jcode harness rather than a provider-neutral model comparison.",
-    "The 20-hour agent budget is a safety cap; the completed agents stopped on their own judgment before the cap."
+    "The 20-hour agent budget was a safety cap. Every agent stopped on its own judgment before the cap."
   ],
   "environment": {
     "agent_budget_hours": 20,
@@ -764,90 +763,514 @@
       }
     },
     "claude-opus-4-8": {
-      "completed_tasks": 0,
-      "mean_final_score_completed": null,
-      "mean_sampled_best_score_completed": null,
+      "completed_tasks": 3,
+      "mean_final_score_completed": 3.7643,
+      "mean_sampled_best_score_completed": 3.7661,
       "provider": "anthropic-api",
       "provisional_mean_verified_score": null,
-      "running_tasks": 3,
+      "running_tasks": 0,
       "tasks": {
         "float-print": {
-          "active_seconds": 597.08,
+          "active_seconds": 3891.087,
           "agent": "jcode",
-          "best_full_gate_score": null,
-          "correctness_gate": "LIVE_UNVERIFIED",
-          "final_score": null,
-          "finished_at": null,
+          "best_full_gate_score": 6.3779,
+          "correctness_gate": "PASS",
+          "final_score": 7.1795,
+          "finished_at": "2026-07-19T11:33:49.528824+00:00",
           "function_call_id": "fc-01KXWYPR09SX1V24F4N5GVAPR8",
-          "grade_count": 0,
+          "grade_count": 23,
           "latest_checkpoint": null,
           "model": "claude-opus-4-8",
           "provider": "anthropic-api",
           "reasoning_effort": "high",
           "run_id": "20260719T102808Z-jcode-solo-claude-opus-4-8-float-print",
-          "sampled_best_efficiency_factor": null,
-          "sampled_best_score": null,
-          "score_curve": [],
+          "sampled_best_efficiency_factor": 144.9589,
+          "sampled_best_score": 7.1795,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T10:28:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0173,
+              "ts": "2026-07-19T10:34:42Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0016,
+              "ts": "2026-07-19T10:36:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0046,
+              "ts": "2026-07-19T10:38:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.005,
+              "ts": "2026-07-19T10:38:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0181,
+              "ts": "2026-07-19T10:43:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0181,
+              "ts": "2026-07-19T10:44:10Z"
+            },
+            {
+              "full_gate": true,
+              "score": 6.0214,
+              "ts": "2026-07-19T11:02:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0218,
+              "ts": "2026-07-19T11:02:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0221,
+              "ts": "2026-07-19T11:04:11Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0566,
+              "ts": "2026-07-19T11:05:15Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.03,
+              "ts": "2026-07-19T11:06:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.0566,
+              "ts": "2026-07-19T11:06:33Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3781,
+              "ts": "2026-07-19T11:08:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3457,
+              "ts": "2026-07-19T11:10:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3506,
+              "ts": "2026-07-19T11:11:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3682,
+              "ts": "2026-07-19T11:12:41Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3781,
+              "ts": "2026-07-19T11:13:07Z"
+            },
+            {
+              "full_gate": true,
+              "score": 6.3779,
+              "ts": "2026-07-19T11:32:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3776,
+              "ts": "2026-07-19T11:33:02Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3785,
+              "ts": "2026-07-19T11:33:14Z"
+            },
+            {
+              "full_gate": false,
+              "score": 6.3802,
+              "ts": "2026-07-19T11:33:27Z"
+            },
+            {
+              "full_gate": false,
+              "score": 7.1795,
+              "ts": "2026-07-19T11:33:49Z"
+            }
+          ],
           "source_hashes": {
-            "agent_log_sha256": "41544dcd5cc5d85e05209caeb933f0d60139b183d0fca5852223617c5562055a",
-            "metadata_json_sha256": "6a2c80962e05592dcef1ef0312bf2a80db93c760359fa676610899051f3b86a7"
+            "agent_log_sha256": "999c6668922aa396c1bf101020574b59c9e321ee13da02f56b3eee5b9ce46856",
+            "final_grade_log_sha256": "766e78b952ad2a35bd1327614cb7288ce58968e5771a170f871cce9d57137bcf",
+            "result_json_sha256": "8d74aa6d1ab9f5f6f5d748db2e79a72aea2cf2ca98bb41f4333da93915d64daf",
+            "scores_jsonl_sha256": "7dd687c530a015a6fde947c8163416025f14a472b5432762baf7b9c3646facc9"
           },
           "started_at": "2026-07-19T10:28:20.919865+00:00",
-          "status": "running",
+          "status": "completed",
           "swarm": false,
           "task": "float-print",
           "vendor": "anthropic"
         },
         "json-unescape": {
-          "active_seconds": 597.974,
+          "active_seconds": 2258.847,
           "agent": "jcode",
-          "best_full_gate_score": null,
-          "correctness_gate": "LIVE_UNVERIFIED",
-          "final_score": null,
-          "finished_at": null,
+          "best_full_gate_score": 2.0033,
+          "correctness_gate": "PASS",
+          "final_score": 2.0016,
+          "finished_at": "2026-07-19T11:06:10.157943+00:00",
           "function_call_id": "fc-01KXWYPQ5ZDCPXMWQTAR711RFS",
-          "grade_count": 0,
+          "grade_count": 41,
           "latest_checkpoint": null,
           "model": "claude-opus-4-8",
           "provider": "anthropic-api",
           "reasoning_effort": "high",
           "run_id": "20260719T102808Z-jcode-solo-claude-opus-4-8-json-unescape",
-          "sampled_best_efficiency_factor": null,
-          "sampled_best_score": null,
-          "score_curve": [],
+          "sampled_best_efficiency_factor": 4.0092,
+          "sampled_best_score": 2.0033,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T10:28:24Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.6362,
+              "ts": "2026-07-19T10:31:40Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8881,
+              "ts": "2026-07-19T10:32:24Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8181,
+              "ts": "2026-07-19T10:33:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8309,
+              "ts": "2026-07-19T10:33:17Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.0658,
+              "ts": "2026-07-19T10:34:49Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1307,
+              "ts": "2026-07-19T10:35:48Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.9841,
+              "ts": "2026-07-19T10:37:58Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1024,
+              "ts": "2026-07-19T10:40:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1307,
+              "ts": "2026-07-19T10:41:10Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.2796,
+              "ts": "2026-07-19T10:44:23Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.3427,
+              "ts": "2026-07-19T10:45:21Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.6609,
+              "ts": "2026-07-19T10:49:35Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.6904,
+              "ts": "2026-07-19T10:51:13Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7869,
+              "ts": "2026-07-19T10:52:16Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7226,
+              "ts": "2026-07-19T10:54:23Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7869,
+              "ts": "2026-07-19T10:54:51Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8622,
+              "ts": "2026-07-19T10:55:55Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8598,
+              "ts": "2026-07-19T10:57:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8622,
+              "ts": "2026-07-19T10:57:36Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8731,
+              "ts": "2026-07-19T10:57:50Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8736,
+              "ts": "2026-07-19T10:57:55Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8732,
+              "ts": "2026-07-19T10:58:00Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8777,
+              "ts": "2026-07-19T10:58:04Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.8622,
+              "ts": "2026-07-19T10:58:12Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9549,
+              "ts": "2026-07-19T11:00:10Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.9549,
+              "ts": "2026-07-19T11:00:22Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9549,
+              "ts": "2026-07-19T11:01:38Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9548,
+              "ts": "2026-07-19T11:02:05Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.9549,
+              "ts": "2026-07-19T11:02:48Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.959,
+              "ts": "2026-07-19T11:02:52Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.967,
+              "ts": "2026-07-19T11:02:57Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9855,
+              "ts": "2026-07-19T11:03:58Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.8837,
+              "ts": "2026-07-19T11:05:03Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9855,
+              "ts": "2026-07-19T11:05:19Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.9855,
+              "ts": "2026-07-19T11:05:27Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.9985,
+              "ts": "2026-07-19T11:05:31Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.0033,
+              "ts": "2026-07-19T11:05:35Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.9855,
+              "ts": "2026-07-19T11:05:39Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9998,
+              "ts": "2026-07-19T11:05:53Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.0016,
+              "ts": "2026-07-19T11:06:10Z"
+            }
+          ],
           "source_hashes": {
-            "agent_log_sha256": "94f2174c5ede1532d050978a240ca3d58805319ed715e3e40d40c2d66599c491",
-            "metadata_json_sha256": "b38b57fdeb2b438fecf3a939bd31fac1b861085f1aff0d44bd96ffb3db0eedab"
+            "agent_log_sha256": "4098152fc18aa8347f9c146b002b437f8a6b00dffa4940fe61a5b26fcad167e3",
+            "final_grade_log_sha256": "b2c8b9db179ac4f95a11302d3d780d83cbc4ee6e65b2d784a44e4320a3bbcb1a",
+            "result_json_sha256": "55e26fa4902f8cb7fea2578c6b40b53e2aa117376456d7143e370ecdc094d724",
+            "scores_jsonl_sha256": "4c18f00d01359850ec688b6db816b376476b5d083b84ea3cd82c963373805df1"
           },
           "started_at": "2026-07-19T10:28:20.026497+00:00",
-          "status": "running",
+          "status": "completed",
           "swarm": false,
           "task": "json-unescape",
           "vendor": "anthropic"
         },
         "utf16-transcode": {
-          "active_seconds": 596.826,
+          "active_seconds": 2049.6,
           "agent": "jcode",
-          "best_full_gate_score": null,
-          "correctness_gate": "LIVE_UNVERIFIED",
-          "final_score": null,
-          "finished_at": null,
+          "best_full_gate_score": 2.1112,
+          "correctness_gate": "PASS",
+          "final_score": 2.1117,
+          "finished_at": "2026-07-19T11:02:45.606245+00:00",
           "function_call_id": "fc-01KXWYPR6SV4D694NHS1RNYM2V",
-          "grade_count": 0,
+          "grade_count": 19,
           "latest_checkpoint": null,
           "model": "claude-opus-4-8",
           "provider": "anthropic-api",
           "reasoning_effort": "high",
           "run_id": "20260719T102808Z-jcode-solo-claude-opus-4-8-utf16-transcode",
-          "sampled_best_efficiency_factor": null,
-          "sampled_best_score": null,
-          "score_curve": [],
+          "sampled_best_efficiency_factor": 4.3331,
+          "sampled_best_score": 2.1154,
+          "score_curve": [
+            {
+              "full_gate": false,
+              "score": 0.0,
+              "ts": "2026-07-19T10:28:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 0.0232,
+              "ts": "2026-07-19T10:37:05Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.1664,
+              "ts": "2026-07-19T10:39:47Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.4501,
+              "ts": "2026-07-19T10:40:43Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.6353,
+              "ts": "2026-07-19T10:43:46Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7505,
+              "ts": "2026-07-19T10:46:26Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.7882,
+              "ts": "2026-07-19T10:47:56Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8304,
+              "ts": "2026-07-19T10:50:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.8794,
+              "ts": "2026-07-19T10:51:18Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9056,
+              "ts": "2026-07-19T10:53:06Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9072,
+              "ts": "2026-07-19T10:53:48Z"
+            },
+            {
+              "full_gate": true,
+              "score": 1.9032,
+              "ts": "2026-07-19T10:55:30Z"
+            },
+            {
+              "full_gate": false,
+              "score": 1.9086,
+              "ts": "2026-07-19T10:57:20Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.075,
+              "ts": "2026-07-19T10:59:52Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.0813,
+              "ts": "2026-07-19T11:00:05Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1154,
+              "ts": "2026-07-19T11:01:18Z"
+            },
+            {
+              "full_gate": true,
+              "score": 2.1112,
+              "ts": "2026-07-19T11:02:07Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1087,
+              "ts": "2026-07-19T11:02:25Z"
+            },
+            {
+              "full_gate": false,
+              "score": 2.1117,
+              "ts": "2026-07-19T11:02:45Z"
+            }
+          ],
           "source_hashes": {
-            "agent_log_sha256": "d0ad601187afea6f3fd1840225e53857edbe7c81799b70aa53aa734c47320043",
-            "metadata_json_sha256": "325955738c16b4d69389fa17d0532c067b13953cae42071fd9429fb8bf203eda"
+            "agent_log_sha256": "5f6c35356639c15cd0dba452178622d1a38bb0a9360234b4853c0407eb1122ac",
+            "final_grade_log_sha256": "8c2dcec29cbfc9518e0b8fd42a1a216af1e9e84f8b9275a95be66c5b44a85b0c",
+            "result_json_sha256": "c317d716f3d11ea944eb7d2207e7d845ff35b8966d1b03e4f3f51c5a639222fa",
+            "scores_jsonl_sha256": "8b2bfb547fd682c095af39ac6dd4df81a24aa782c3a30a537975975b95755fd3"
           },
           "started_at": "2026-07-19T10:28:21.173647+00:00",
-          "status": "running",
+          "status": "completed",
           "swarm": false,
           "task": "utf16-transcode",
           "vendor": "anthropic"
@@ -2815,6 +3238,10 @@
     {
       "note": "The 09:30 UTC snapshot read the Sol utf16-transcode scores.jsonl before Modal volume sync completed, recording an empty curve. This revision restores the synced 18-grade curve and its hash; final_score and the ranking are unchanged.",
       "revised_at": "2026-07-19T10:08:00Z"
+    },
+    {
+      "note": "Finalized the three matched Claude Opus 4.8 cells after all agents stopped and all official final correctness grades passed.",
+      "revised_at": "2026-07-19T11:45:24Z"
     }
   ],
   "runner_commits": [
@@ -2823,8 +3250,8 @@
     "2b17e26e514f38b93a7c16d5f14323cd845ba0a5"
   ],
   "score_semantics": "score = log2(given_cost / optimized_cost); higher is better",
-  "snapshot_at": "2026-07-19T10:38:18Z",
-  "snapshot_status": "live",
+  "snapshot_at": "2026-07-19T11:45:24Z",
+  "snapshot_status": "final",
   "sources": {
     "launch_manifests": [
       "modal/launches/20260719T022916Z-multimodel-pilot.json",
