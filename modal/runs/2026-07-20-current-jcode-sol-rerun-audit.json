@@ -1,0 +1,241 @@
+{
+  "aggregate": {
+    "geometric_mean_final_efficiency_factor": 14.049368049329226,
+    "geometric_mean_sampled_best_efficiency_factor": 14.081866511407577,
+    "mean_final_score": 3.8124333333333333,
+    "mean_sampled_best_score": 3.8157666666666668,
+    "total_agent_duration_s": 4063.312
+  },
+  "comparison_to_july_19": {
+    "relative_geometric_mean_efficiency_factor": 0.8344900001196407,
+    "sampled_best_mean_score_delta": -0.2610333333333328,
+    "summary": "The current-Jcode rerun was lower on all three task sampled-best scores; its geometric-mean efficiency was 83.45% of the July 19 run.",
+    "tasks": {
+      "float-print": {
+        "july_19_sampled_best_score": 7.8107,
+        "july_20_sampled_best_score": 7.1428,
+        "relative_efficiency_factor": 0.6294222134636894,
+        "score_delta": -0.6678999999999995
+      },
+      "json-unescape": {
+        "july_19_sampled_best_score": 2.3055,
+        "july_20_sampled_best_score": 2.2062,
+        "relative_efficiency_factor": 0.9334858118140255,
+        "score_delta": -0.09929999999999994
+      },
+      "utf16-transcode": {
+        "july_19_sampled_best_score": 2.1142,
+        "july_20_sampled_best_score": 2.0983,
+        "relative_efficiency_factor": 0.9890394689969914,
+        "score_delta": -0.015899999999999803
+      }
+    }
+  },
+  "generated_at": "2026-07-20T05:40:57.236349+00:00",
+  "interpretation": {
+    "caution": "Each date has one run per task and the Jcode version changed, so this is not sufficient by itself to establish a Jcode regression rather than model sampling variance.",
+    "primary_difference": "float-print accounted for most of the difference, with 62.94% of the July 19 per-task efficiency.",
+    "result": "This rerun did not reproduce the July 19 aggregate. Sampled-best geometric-mean efficiency was 14.08x versus 16.87x."
+  },
+  "jcode": {
+    "binary_sha256": "825c60f739650f66b3c8fd6c674bb2c830bab57c1f54c5c40c92943c90954fc5",
+    "build": "clean detached worktree build from the recorded commit",
+    "source_commit": "414da9a4a67d093d60f7b0b50165135645ea42ff",
+    "version": "v0.53.34-dev (414da9a4a)"
+  },
+  "july_19_baseline": {
+    "artifact": "modal/runs/2026-07-19-jcode-multimodel-live-results.json",
+    "artifact_sha256": "ce4f6adc2bbfd187d14683debc1ecfc1d4b3ae36777ce81f11a6d1482cfef999",
+    "geometric_mean_final_efficiency_factor": 16.785380468068936,
+    "geometric_mean_sampled_best_efficiency_factor": 16.87481756448689,
+    "jcode_binary_sha256": "1b94e8b4e6510d1f585dd7a54bf2d3c9c5adcb407e2323091a7d0fea0224923a",
+    "jcode_version": "v0.51.4-dev (8b39d814e)",
+    "mean_final_score": 4.069133333333333,
+    "mean_sampled_best_score": 4.0767999999999995
+  },
+  "methodology": {
+    "agent_budget_hours": 20,
+    "benchmark_commit": "cb8ccbc29ad4f4ce4a3ada2e79e019d06729df7c",
+    "execution": "jcode solo",
+    "harness_tree": "84568c2763dc42024400f61ad11be1baec2ec9cd",
+    "model": "gpt-5.6-sol",
+    "provider": "openai-api",
+    "reasoning_effort": "high",
+    "task_and_grader_identity_vs_july_19": "byte-identical",
+    "tasks_tree": "8eeb5e30f8987cc909f6b7324cb6a58263ff127c"
+  },
+  "runs": [
+    {
+      "accepted_attempt": {
+        "agent_duration_s": 2056.372,
+        "agent_exit_code": 0,
+        "agent_timed_out": false,
+        "artifact_sha256": {
+          "agent.log": "f3bdec81d7a2afcdcb400f0a15e45dfa3dcf1b6a8f56f23bcce5c9a87db678ed",
+          "final-grade.log": "596fafb417adb8f345dc11ce5d29e375336b7d6b5fff13dfa6639f38687d1852",
+          "metadata.json": "fb4d562d649cf107734b83ed5be7baa2cce9e70fc3ea3f508c31a304bbd149f2",
+          "result.json": "fdb93e75ea6dadfe4b0ab838a930ae6498b637a843c215aa6abfebe362d2aa5f",
+          "scores.jsonl": "e73452dafed9759a50ceff45725dc09964fa5d9db78e8c6de9b87816e26202d5"
+        },
+        "final_efficiency_factor": 140.95589453602184,
+        "final_grade_exit_code": 0,
+        "final_score": 7.1391,
+        "finished_at": "2026-07-20T05:35:22.450844+00:00",
+        "full_gate": {
+          "background_task_id": "3489366x0r",
+          "cases": "all 2^32 float bit patterns",
+          "command": "./grade --full",
+          "completed_at": "2026-07-20T05:34:08.535458194+00:00",
+          "duration_s": 1299.6,
+          "efficiency_factor": 141.047,
+          "evidence_artifact": "agent.log",
+          "exit_code": 0,
+          "score": 7.14,
+          "started_at": "2026-07-20T05:12:28.936837440+00:00",
+          "status": "PASS",
+          "verify_duration_s": 1292.5
+        },
+        "grade_count": 19,
+        "sampled_best_efficiency_factor": 141.3178602636004,
+        "sampled_best_score": 7.1428,
+        "started_at": "2026-07-20T05:00:27.900961+00:00"
+      },
+      "function_call_id": "fc-01KXYYAX1Y2GDT5HXERBESAKJK",
+      "run_id": "20260720T050016Z-jcode-solo-gpt-5.6-sol-float-print",
+      "status": "completed",
+      "task": "float-print"
+    },
+    {
+      "accepted_attempt": {
+        "agent_duration_s": 966.032,
+        "agent_exit_code": 0,
+        "agent_timed_out": false,
+        "artifact_sha256": {
+          "agent.log": "d6f21f363a86e1ce33fd0ca00060312c0ef98dd094f25c2a7b8bf930ddb1af66",
+          "final-grade.log": "1318e5ca9e6622f99213d6af09f1debfb0090a0e1a37e28c8742632f54d46639",
+          "metadata.json": "cb6ba13331f11cdc3fb90c70b18874b916de0444aa110b0e41282ffb25e0963d",
+          "result.json": "2b014fa2331af38502a652a012200ac801e5b1df586a35e8ac69361198bb3253",
+          "scores.jsonl": "3125b1d8dae0629ce08cff53cbed54473a257b5712f8d5901101fe28b893ab4d"
+        },
+        "final_efficiency_factor": 4.614582092813761,
+        "final_grade_exit_code": 0,
+        "final_score": 2.2062,
+        "finished_at": "2026-07-20T05:29:30.081439+00:00",
+        "grade_count": 25,
+        "sampled_best_efficiency_factor": 4.614582092813761,
+        "sampled_best_score": 2.2062,
+        "started_at": "2026-07-20T05:13:12.621613+00:00"
+      },
+      "function_call_id": "fc-01KXYY9HW0J97HPFHBPC7T18EH",
+      "infrastructure_event": {
+        "accepted_policy": "Discard the interrupted physical attempt and score only the automatically restarted physical attempt.",
+        "checkpoints": [
+          {
+            "attempt": "preempted",
+            "best_score": 1.7469,
+            "grade_count": 6,
+            "label": "20260720T050444Z",
+            "latest_score": 1.7469,
+            "sha256": "53ce61857b4b3ff796df2cafce5808475d87c2131f6dcde701f5d7e096eed896"
+          },
+          {
+            "attempt": "preempted",
+            "best_score": 2.0747,
+            "grade_count": 14,
+            "label": "20260720T050946Z",
+            "latest_score": 2.0343,
+            "sha256": "571ef40609fb9bbab303effb70493ddcee6e9b273bd1614148cbd5cf4b6b1230"
+          },
+          {
+            "attempt": "accepted-retry",
+            "best_score": 1.592,
+            "grade_count": 6,
+            "label": "20260720T051819Z",
+            "latest_score": 1.592,
+            "sha256": "174859696dfd8ee2dc0a4a2317774f5b0d101d161415aa5a666f3cbd49799df4"
+          },
+          {
+            "attempt": "accepted-retry",
+            "best_score": 1.8463,
+            "grade_count": 14,
+            "label": "20260720T052320Z",
+            "latest_score": 1.8463,
+            "sha256": "10477af30b0f3865930438dc285e330120fde0263fc75b4f66fe40155c7eac2e"
+          },
+          {
+            "attempt": "accepted-retry",
+            "best_score": 2.1646,
+            "grade_count": 21,
+            "label": "20260720T052822Z",
+            "latest_score": 2.1646,
+            "sha256": "c5aec06c17ac89779a849c5b4fe329c54652db38e2841c08b07f71950c7652ff"
+          },
+          {
+            "attempt": "accepted-retry",
+            "best_score": 2.1842,
+            "grade_count": 24,
+            "label": "agent-final",
+            "latest_score": 2.1842,
+            "sha256": "f7081110d76cd35012ac83792233c53d0f8cdfac5ba54b6b0d1ec8b5eb7bb1b9"
+          }
+        ],
+        "modal_log": "Container terminated due to preemption. Your Function will be restarted with the same input.",
+        "occurred_at": "2026-07-20T05:13:07Z",
+        "preempted_attempt": {
+          "accepted": false,
+          "best_preserved_checkpoint_score": 2.0747,
+          "started_at": "2026-07-20T04:59:37.939683+00:00",
+          "terminal_status": "preempted"
+        },
+        "type": "modal-container-preemption"
+      },
+      "run_id": "20260720T045932Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "status": "completed",
+      "task": "json-unescape"
+    },
+    {
+      "accepted_attempt": {
+        "agent_duration_s": 1040.908,
+        "agent_exit_code": 0,
+        "agent_timed_out": false,
+        "artifact_sha256": {
+          "agent.log": "6183e608a15980c886362fd08abe9e675a7a93aa34723365a0118781a2df2bbb",
+          "final-grade.log": "e6b4de4fb06cae1c44e7e8f3ba3687b5e83df071baaa18ee1af4088e724dea92",
+          "metadata.json": "3f36af81ec371ff64f1c05f647b109fde394a14659baa7c67e916d814710d465",
+          "result.json": "0c0c0faee76ab45a22e961347d8d98cbe053a44b54021e22fde5fde43bd7fdbe",
+          "scores.jsonl": "5e144075bb7cba9849bacda1da034fab233fdc7a13691a471c90e37f964f4329"
+        },
+        "final_efficiency_factor": 4.26338694427177,
+        "final_grade_exit_code": 0,
+        "final_score": 2.092,
+        "finished_at": "2026-07-20T05:18:00.480142+00:00",
+        "grade_count": 32,
+        "sampled_best_efficiency_factor": 4.28204512738557,
+        "sampled_best_score": 2.0983,
+        "started_at": "2026-07-20T05:00:26.721190+00:00"
+      },
+      "function_call_id": "fc-01KXYYAX5W0SDVBQPVTXFP06B5",
+      "run_id": "20260720T050016Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "status": "completed",
+      "task": "utf16-transcode"
+    }
+  ],
+  "schema_version": 1,
+  "source_artifacts": {
+    "collected_results": "modal/runs/2026-07-20-current-jcode-sol-rerun-results.json",
+    "collected_results_sha256": "d58a8fefdf7382bd79b4dfc334931c18ec9c7d662e00234769536561b2d267d0",
+    "manifest": "modal/runs/2026-07-20-current-jcode-sol-rerun.json",
+    "manifest_sha256": "9979b0241d9b16553a23e684f0af567ed7f2b0c78d1b0969db75b1d2ac1ed810",
+    "modal_volume": "jcode-bench-v1-results"
+  },
+  "status": "complete",
+  "title": "Jcode Bench v1 current-Jcode GPT-5.6 Sol high rerun",
+  "validation": {
+    "accepted_final_grades_passed": 3,
+    "agent_exit_code_zero": 3,
+    "agent_timeouts": 0,
+    "float_full_2pow32_gate": "PASS",
+    "logical_runs_completed": 3,
+    "preempted_physical_attempts_excluded": 1
+  }
+}

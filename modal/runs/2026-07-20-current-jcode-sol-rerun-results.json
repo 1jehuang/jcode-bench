@@ -11,6 +11,9 @@
   "model": "gpt-5.6-sol",
   "reasoning_effort": "high",
   "runner_commit": "a266d9c4f5052c78da373778f85b4b9efc58e5bb",
+  "tasks_tree": "8eeb5e30f8987cc909f6b7324cb6a58263ff127c",
+  "run_count": 3,
+  "completed_count": 3,
   "runs": [
     {
       "agent": "jcode",
@@ -18,7 +21,15 @@
       "model": "gpt-5.6-sol",
       "run_id": "20260720T045932Z-jcode-solo-gpt-5.6-sol-json-unescape",
       "swarm": false,
-      "task": "json-unescape"
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 966.032,
+      "grade_count": 25,
+      "final_score": 2.2062,
+      "best_score": 2.2062,
+      "helper_events": 0
     },
     {
       "agent": "jcode",
@@ -26,7 +37,15 @@
       "model": "gpt-5.6-sol",
       "run_id": "20260720T050016Z-jcode-solo-gpt-5.6-sol-float-print",
       "swarm": false,
-      "task": "float-print"
+      "task": "float-print",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 2056.372,
+      "grade_count": 19,
+      "final_score": 7.1391,
+      "best_score": 7.1428,
+      "helper_events": 0
     },
     {
       "agent": "jcode",
@@ -34,8 +53,28 @@
       "model": "gpt-5.6-sol",
       "run_id": "20260720T050016Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
       "swarm": false,
-      "task": "utf16-transcode"
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 1040.908,
+      "grade_count": 32,
+      "final_score": 2.092,
+      "best_score": 2.0983,
+      "helper_events": 0
     }
   ],
-  "tasks_tree": "8eeb5e30f8987cc909f6b7324cb6a58263ff127c"
+  "aggregates": [
+    {
+      "agent": "jcode",
+      "swarm": false,
+      "model": "gpt-5.6-sol",
+      "completed_tasks": 3,
+      "mean_final_score": 3.8124,
+      "mean_best_score": 3.8158,
+      "total_agent_duration_s": 4063.312,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
 }
