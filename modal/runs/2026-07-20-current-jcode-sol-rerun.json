@@ -1,0 +1,40 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-jcode-sol-414da9a4a",
+  "benchmark_commit": "cb8ccbc29ad4f4ce4a3ada2e79e019d06729df7c",
+  "harness_tree": "84568c2763dc42024400f61ad11be1baec2ec9cd",
+  "jcode_sha256": "825c60f739650f66b3c8fd6c674bb2c830bab57c1f54c5c40c92943c90954fc5",
+  "jcode_source_commit": "414da9a4a67d093d60f7b0b50165135645ea42ff",
+  "jcode_version": "v0.53.34-dev (414da9a4a)",
+  "launched_at": "2026-07-20T05:00:17.543629+00:00",
+  "mode": "full",
+  "reasoning_effort": "high",
+  "runner_commit": "a266d9c4f5052c78da373778f85b4b9efc58e5bb",
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXYY9HW0J97HPFHBPC7T18EH",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260720T045932Z-jcode-solo-gpt-5.6-sol-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXYYAX1Y2GDT5HXERBESAKJK",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260720T050016Z-jcode-solo-gpt-5.6-sol-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KXYYAX5W0SDVBQPVTXFP06B5",
+      "model": "gpt-5.6-sol",
+      "run_id": "20260720T050016Z-jcode-solo-gpt-5.6-sol-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    }
+  ],
+  "tasks_tree": "8eeb5e30f8987cc909f6b7324cb6a58263ff127c"
+}
