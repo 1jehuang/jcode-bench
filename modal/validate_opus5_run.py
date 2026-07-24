@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +35,9 @@ DEFAULT_VOLUME = "jcode-bench-v1-results"
 # A cell that exits cleanly after using less than this share of its wall-clock
 # budget is suspicious: the Opus 5 truncation bug produced a clean exit at 4.2%.
 MIN_BUDGET_FRACTION = 0.10
+# A container that starts well after the manifest was launched was preempted and
+# restarted, so its wall-clock duration is not comparable to a clean cell.
+RESTART_TOLERANCE_S = 15 * 60
 # Fields that must be identical across every cell for the comparison to be fair.
 MATCHED_FIELDS = (
     "bench_commit",
@@ -95,11 +99,19 @@ def artifacts_ready(volume: modal.Volume, run_id: str) -> bool:
     return True
 
 
-def check_cell(volume: modal.Volume, run: dict[str, Any]) -> dict[str, Any]:
+def check_cell(
+    volume: modal.Volume,
+    run: dict[str, Any],
+    manifest_launched_at: str | None = None,
+) -> dict[str, Any]:
     run_id = run["run_id"]
     agent = run["agent"]
     result = read_json(volume, f"runs/{run_id}/result.json")
+    # `problems` void a run. `disclosures` are true facts that change how the
+    # number must be presented (they belong in the published caveats) but do not
+    # by themselves make the measurement wrong.
     problems: list[str] = []
+    disclosures: list[str] = []
 
     if result.get("status") != "completed":
         problems.append(f"status={result.get('status')}")
@@ -115,7 +127,10 @@ def check_cell(volume: modal.Volume, run: dict[str, Any]) -> dict[str, Any]:
 
     ceiling = int(result.get("max_output_tokens") or 0)
     if ceiling <= 0:
-        problems.append("run did not record max_output_tokens, cannot check truncation")
+        problems.append(
+            "run did not record max_output_tokens, so truncation cannot be ruled out; "
+            "rerun on the current app version"
+        )
     log = read_volume_file(volume, f"runs/{run_id}/agent.log").decode(errors="replace")
     truncated = count_ceiling_turns(agent, log, ceiling)
     if truncated:
@@ -125,9 +140,32 @@ def check_cell(volume: modal.Volume, run: dict[str, Any]) -> dict[str, Any]:
     budget = result.get("agent_budget_s") or 0
     fraction = duration / budget if budget else 0
     if budget and not result.get("agent_timed_out") and fraction < MIN_BUDGET_FRACTION:
-        problems.append(
+        # Truncation is checked separately and is a hard failure. An untruncated
+        # agent that stops early genuinely decided it was finished, which is a
+        # real property of the harness, not an invalid run.
+        target = problems if truncated else disclosures
+        target.append(
             f"exited cleanly after {fraction:.1%} of its budget "
             f"({duration:.0f}s of {budget}s)"
+        )
+
+    # Modal can preempt a container and silently restart the same FunctionCall
+    # from scratch. The restart is legitimate work, but the run's wall-clock
+    # timing is then not comparable to a cell that ran straight through, so it
+    # must be surfaced rather than averaged in silently.
+    launched_at = run.get("launched_at") or manifest_launched_at
+    restarted_late_by_s = None
+    if launched_at:
+        try:
+            started = datetime.fromisoformat(str(result.get("started_at")))
+            launched = datetime.fromisoformat(str(launched_at))
+            restarted_late_by_s = (started - launched).total_seconds()
+        except (TypeError, ValueError):
+            restarted_late_by_s = None
+    if restarted_late_by_s is not None and restarted_late_by_s > RESTART_TOLERANCE_S:
+        disclosures.append(
+            f"container started {restarted_late_by_s / 60:.0f} min after launch, "
+            "which indicates a preemption restart; wall-clock timing is not comparable"
         )
 
     scores = [
@@ -150,8 +188,10 @@ def check_cell(volume: modal.Volume, run: dict[str, Any]) -> dict[str, Any]:
         "agent_duration_s": duration,
         "budget_fraction": round(fraction, 4),
         "truncated_turns": truncated,
+        "restarted_late_by_s": restarted_late_by_s,
         "matched": {field: result.get(field) for field in MATCHED_FIELDS},
         "problems": problems,
+        "disclosures": disclosures,
     }
 
 
@@ -180,7 +220,7 @@ def main() -> int:
         if not artifacts_ready(volume, run["run_id"]):
             pending.append(run["run_id"])
             continue
-        cells.append(check_cell(volume, run))
+        cells.append(check_cell(volume, run, manifest.get("launched_at")))
 
     report = {
         "manifest": str(args.manifest),
@@ -208,7 +248,9 @@ def main() -> int:
             f"budget={cell['budget_fraction']:.1%} truncated={cell['truncated_turns']}"
         )
         for problem in cell["problems"]:
-            print(f"         - {problem}")
+            print(f"         - FAIL {problem}")
+        for note in cell["disclosures"]:
+            print(f"         - disclose: {note}")
     for problem in report["matched_condition_problems"]:
         print(f"MISMATCH {problem}")
     for run_id in pending:

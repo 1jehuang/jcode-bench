@@ -13,6 +13,7 @@
     {
       "agent": "claude-code",
       "function_call_id": "fc-01KYB2WCXMKCH3A4B9F38W9D7D",
+      "launched_at": "2026-07-24T22:10:38.386043+00:00",
       "model": "claude-opus-5",
       "run_id": "20260724T221037Z-opus5-claude-code-float-print",
       "swarm": false,
@@ -21,6 +22,7 @@
     {
       "agent": "claude-code",
       "function_call_id": "fc-01KYAXCKY9C70KEBEXDV192RPZ",
+      "launched_at": "2026-07-24T20:34:38.269419+00:00",
       "model": "claude-opus-5",
       "run_id": "20260724T203437Z-opus5-claude-code-json-unescape",
       "swarm": false,
@@ -29,6 +31,7 @@
     {
       "agent": "claude-code",
       "function_call_id": "fc-01KYB2WD257706W3Q7HNYE7QRQ",
+      "launched_at": "2026-07-24T22:10:38.386043+00:00",
       "model": "claude-opus-5",
       "run_id": "20260724T221037Z-opus5-claude-code-utf16-transcode",
       "swarm": false,
@@ -37,6 +40,7 @@
     {
       "agent": "jcode",
       "function_call_id": "fc-01KYB2EZZ6DRH9V3963ZSX51BR",
+      "launched_at": "2026-07-24T22:03:19.109147+00:00",
       "model": "claude-opus-5",
       "run_id": "20260724T220318Z-opus5-jcode-float-print",
       "swarm": false,
@@ -45,6 +49,7 @@
     {
       "agent": "jcode",
       "function_call_id": "fc-01KYB2EZV8SJNMVBCGERAHX37Y",
+      "launched_at": "2026-07-24T22:03:19.109147+00:00",
       "model": "claude-opus-5",
       "run_id": "20260724T220318Z-opus5-jcode-json-unescape",
       "swarm": false,
@@ -53,6 +58,7 @@
     {
       "agent": "jcode",
       "function_call_id": "fc-01KYB2F03F4C66AR6TT5P2BPAH",
+      "launched_at": "2026-07-24T22:03:19.109147+00:00",
       "model": "claude-opus-5",
       "run_id": "20260724T220318Z-opus5-jcode-utf16-transcode",
       "swarm": false,
