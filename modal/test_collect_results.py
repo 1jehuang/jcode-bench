@@ -186,5 +186,21 @@ class ValidatorCeilingTests(unittest.TestCase):
         self.assertEqual(validator.check_matched_conditions(cells), [])
 
 
+class ValidatorGateCalibrationTests(unittest.TestCase):
+    """Only real defects may void a run; true-but-benign facts get disclosed."""
+
+    def test_disclosures_do_not_void_a_run(self) -> None:
+        # A clean early exit with no truncation is an agent decision, not a bug.
+        cell = {"problems": [], "disclosures": ["exited cleanly after 5.6% of its budget"]}
+        self.assertFalse(cell["problems"], "disclosure must not become a failure")
+
+    def test_missing_ceiling_metadata_is_a_hard_failure(self) -> None:
+        # Without the ceiling, the truncation check that voided the pilot cannot
+        # run, so the run is unverifiable rather than merely caveated.
+        log = json.dumps({"type": "tokens", "output": 32768})
+        self.assertEqual(validator.count_ceiling_turns("jcode", log, 0), 0)
+        self.assertEqual(validator.count_ceiling_turns("jcode", log, 32_768), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
