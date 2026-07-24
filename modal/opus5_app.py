@@ -37,6 +37,18 @@ BENCH_COMMIT = "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0"
 MODEL = "claude-opus-5"
 REASONING_EFFORT = "high"
 CLAUDE_CODE_VERSION = "2.1.219"
+# Claude Code 2.x ships as a native binary; the npm package only carries a
+# Windows shim, so the Linux artifact is fetched directly from Anthropic's
+# release channel and pinned by the checksum published in its manifest.
+CLAUDE_CODE_PLATFORM = "linux-x64"
+CLAUDE_CODE_SHA256 = "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691"
+CLAUDE_CODE_URL = (
+    "https://downloads.claude.ai/claude-code-releases/"
+    f"{CLAUDE_CODE_VERSION}/{CLAUDE_CODE_PLATFORM}/claude"
+)
+# The pinned binary identity is resolved locally at deploy time and baked into
+# the image as env vars, so the remote container verifies the exact same
+# artifact without the deploy shell's environment leaking in implicitly.
 JCODE_VERSION = os.environ.get("JCODE_BENCH_JCODE_VERSION", "")
 JCODE_SHA256 = os.environ.get("JCODE_BENCH_JCODE_SHA256", "")
 SWARM_CONCURRENCY = 8
@@ -46,6 +58,10 @@ AGENT_TIMEOUT_SECONDS = 20 * 60 * 60  # 20 hours of agent wall clock
 FUNCTION_TIMEOUT_SECONDS = 24 * 60 * 60  # Modal cap; leaves 4h for grading
 TASKS = ("json-unescape", "float-print", "utf16-transcode")
 HARNESSES = ("jcode", "claude-code")
+# Claude Code refuses --dangerously-skip-permissions under root. Modal
+# containers are root, so both harnesses drop to this unprivileged account to
+# keep the two cells matched on privileges as well as everything else.
+BENCH_USER = "bench"
 
 ROOT = Path(__file__).resolve().parents[1]
 JCODE_BIN = Path(
@@ -77,6 +93,10 @@ def _verify_pinned_binary(path: Path) -> None:
 
 
 if modal.is_local():
+    if not JCODE_VERSION:
+        raise RuntimeError(
+            "JCODE_BENCH_JCODE_VERSION must record the exact jcode version for this run"
+        )
     _verify_pinned_binary(JCODE_BIN)
 
 app = modal.App(APP_NAME)
@@ -86,8 +106,14 @@ anthropic_secret = modal.Secret.from_local_environ(["ANTHROPIC_API_KEY"])
 image = (
     modal.Image.from_registry("archlinux:base")
     .run_commands(
-        "pacman -Syu --noconfirm --needed base-devel valgrind git nodejs npm jq python",
-        f"npm install -g @anthropic-ai/claude-code@{CLAUDE_CODE_VERSION}",
+        "pacman -Syu --noconfirm --needed base-devel valgrind git jq python curl",
+        f"curl -fsSL -o /usr/local/bin/claude {CLAUDE_CODE_URL}",
+        f'echo "{CLAUDE_CODE_SHA256}  /usr/local/bin/claude" | sha256sum -c -',
+        "chmod 0755 /usr/local/bin/claude",
+        # Claude Code refuses --dangerously-skip-permissions as root, and Modal
+        # containers run as root, so every agent runs as this unprivileged user.
+        # Both harnesses use it so the two cells stay matched.
+        f"useradd --create-home --shell /bin/bash {BENCH_USER}",
     )
     .add_local_dir(
         ROOT,
@@ -97,7 +123,29 @@ image = (
     )
     .add_local_file(JCODE_BIN, "/usr/local/bin/jcode", copy=True)
     .run_commands("chmod 0755 /usr/local/bin/jcode")
+    .env(
+        {
+            "JCODE_BENCH_JCODE_VERSION": JCODE_VERSION,
+            "JCODE_BENCH_JCODE_SHA256": JCODE_SHA256,
+        }
+    )
 )
+
+
+def _demote() -> "tuple[int, int]":
+    """Resolve the unprivileged bench account's uid/gid inside the container."""
+    import pwd
+
+    record = pwd.getpwnam(BENCH_USER)
+    return record.pw_uid, record.pw_gid
+
+
+def _chown_tree(path: Path) -> None:
+    """Give the bench user ownership of everything it must read and write."""
+    uid, gid = _demote()
+    os.chown(path, uid, gid)
+    for child in path.rglob("*"):
+        os.chown(child, uid, gid)
 
 
 def utc_now() -> str:
@@ -217,6 +265,7 @@ def run_logged_with_budget(
 ) -> tuple[int, bool]:
     """Run the agent, enforcing the wall-clock budget. Returns (exit_code, timed_out)."""
     with log_path.open("w", buffering=1) as log:
+        uid, gid = _demote()
         process = subprocess.Popen(
             command,
             cwd=cwd,
@@ -225,6 +274,8 @@ def run_logged_with_budget(
             stdout=log,
             stderr=subprocess.STDOUT,
             text=True,
+            user=uid,
+            group=gid,
         )
         try:
             return process.wait(timeout=budget_seconds), False
@@ -245,6 +296,7 @@ def run_grade_with_retries(workdir: Path, log_path: Path) -> int:
     with log_path.open("w", buffering=1) as log:
         for attempt in range(1, GRADE_ATTEMPTS + 1):
             log.write(f"=== grade attempt {attempt}/{GRADE_ATTEMPTS} ===\n")
+            uid, gid = _demote()
             grade = subprocess.run(
                 ["./grade"],
                 cwd=workdir,
@@ -252,6 +304,8 @@ def run_grade_with_retries(workdir: Path, log_path: Path) -> int:
                 stderr=subprocess.STDOUT,
                 text=True,
                 check=False,
+                user=uid,
+                group=gid,
             )
             last_returncode = grade.returncode
             if grade.returncode == 0:
@@ -260,6 +314,34 @@ def run_grade_with_retries(workdir: Path, log_path: Path) -> int:
             shutil.rmtree(workdir / ".build", ignore_errors=True)
             time.sleep(min(attempt, 3))
     return last_returncode
+
+
+def _run_captured(command: list[str], env: dict[str, str], cwd: Path, timeout: int) -> str:
+    """Run a preflight command, surfacing its captured output on failure.
+
+    A bare CalledProcessError hides the CLI's own diagnostics, which is exactly
+    what is needed to tell a broken pin from a broken credential.
+    """
+    uid, gid = _demote()
+    completed = subprocess.run(
+        command,
+        cwd=cwd,
+        env=env,
+        stdin=subprocess.DEVNULL,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+        timeout=timeout,
+        user=uid,
+        group=gid,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(
+            f"preflight command {command[0]!r} exited {completed.returncode}:\n"
+            f"{completed.stdout[-4000:]}"
+        )
+    return completed.stdout
 
 
 def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, object]:
@@ -271,17 +353,8 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
     benchmark result.
     """
     if harness == "jcode":
-        version = subprocess.run(
-            ["jcode", "--version"],
-            cwd=cwd,
-            env=env,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            check=True,
-            timeout=120,
-        ).stdout.strip()
-        probe = subprocess.run(
+        version = _run_captured(["jcode", "--version"], env, cwd, 120).strip()
+        probe = _run_captured(
             [
                 "jcode",
                 "--no-update",
@@ -294,14 +367,10 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
                 "--ndjson",
                 "Reply with exactly: PREFLIGHT-OK",
             ],
-            cwd=cwd,
-            env=env,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            check=True,
-            timeout=600,
-        ).stdout
+            env,
+            cwd,
+            600,
+        )
         observed_model = None
         for line in probe.splitlines():
             try:
@@ -325,19 +394,10 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
             "swarm_enabled": env.get("JCODE_SWARM_ENABLED"),
         }
 
-    version = subprocess.run(
-        ["claude", "--version"],
-        cwd=cwd,
-        env=env,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=True,
-        timeout=120,
-    ).stdout.strip()
+    version = _run_captured(["claude", "--version"], env, cwd, 120).strip()
     if CLAUDE_CODE_VERSION not in version:
         raise RuntimeError(f"Expected Claude Code {CLAUDE_CODE_VERSION}, got {version!r}")
-    probe = subprocess.run(
+    probe = _run_captured(
         [
             "claude",
             "--print",
@@ -351,14 +411,10 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
             "--verbose",
             "Reply with exactly: PREFLIGHT-OK",
         ],
-        cwd=cwd,
-        env=env,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=True,
-        timeout=600,
-    ).stdout
+        env,
+        cwd,
+        600,
+    )
     init_event: dict[str, object] = {}
     for line in probe.splitlines():
         try:
@@ -376,6 +432,7 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
     return {
         "harness": harness,
         "claude_code_version": version,
+        "claude_code_sha256": _sha256_file(Path("/usr/local/bin/claude")),
         "observed_model": observed_model,
         "reasoning_effort": REASONING_EFFORT,
         "permission_mode": init_event.get("permissionMode"),
@@ -420,6 +477,8 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
     shutil.copytree(Path("/opt/jcode-bench/harness"), work_root / "harness")
     shutil.copytree(source, workdir, ignore=shutil.ignore_patterns(".build", "scores.jsonl"))
 
+    _chown_tree(work_root)
+
     result_dir.mkdir(parents=True, exist_ok=True)
     metadata = {
         "run_id": run_id,
@@ -436,6 +495,7 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
         "jcode_version": JCODE_VERSION,
         "jcode_sha256": JCODE_SHA256,
         "claude_code_version": CLAUDE_CODE_VERSION,
+        "claude_code_sha256": CLAUDE_CODE_SHA256,
         "started_at": utc_now(),
         "prompt": prompt_for(task),
     }
@@ -474,6 +534,7 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
     # Preflight runs in a scratch directory so it cannot touch the task tree.
     preflight_dir = work_root / "preflight"
     preflight_dir.mkdir(parents=True, exist_ok=True)
+    _chown_tree(preflight_dir)
     write_json(result_dir / "preflight.json", verify_preflight(harness, env, preflight_dir))
     results.commit()
 
