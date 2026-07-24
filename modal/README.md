@@ -158,7 +158,25 @@ modal deploy modal/opus5_app.py
   --markdown-output modal/runs/<date>-opus5-results.md
 ```
 
-Offline tests for the reporting logic:
+### Validity gates before publishing
+
+`validate_opus5_run.py` is the publish gate. The pilot showed a cell can pass
+the official grade, exit zero, and still be meaningless, so a favorable number
+is not publishable until every gate passes:
+
+- the preflight recorded the intended model;
+- no turn ended exactly at the model's output ceiling (truncation);
+- the official final grade exited zero;
+- the cell did not exit cleanly after a trivial slice of its budget;
+- all cells agree on commit, prompt, effort, budget, and pinned artifacts.
+
+```bash
+~/.local/share/uv/tools/modal/bin/python modal/validate_opus5_run.py \
+  modal/runs/2026-07-24-opus5-head-to-head.json
+# exit 0 publishable, 1 a gate failed, 2 cells still running
+```
+
+Offline tests for the reporting and validation logic:
 
 ```bash
 ~/.local/share/uv/tools/modal/bin/python modal/test_collect_results.py

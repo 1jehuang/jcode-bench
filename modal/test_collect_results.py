@@ -144,5 +144,47 @@ class HeadToHeadComparisonTests(unittest.TestCase):
         self.assertIn("2.000x", markdown)
 
 
+VALIDATOR_PATH = Path(__file__).with_name("validate_opus5_run.py")
+_VSPEC = importlib.util.spec_from_file_location("validate_opus5_run", VALIDATOR_PATH)
+assert _VSPEC and _VSPEC.loader
+validator = importlib.util.module_from_spec(_VSPEC)
+_VSPEC.loader.exec_module(validator)
+
+
+class ValidatorCeilingTests(unittest.TestCase):
+    """The publish gate must reject a run truncated at its output ceiling."""
+
+    def test_counts_only_turns_at_the_ceiling_in_force(self) -> None:
+        log = "\n".join(
+            [
+                json.dumps({"type": "tokens", "output": 32768}),
+                json.dumps({"type": "tokens", "output": 32768}),
+                json.dumps({"type": "tokens", "output": 17421}),
+            ]
+        )
+        # The void Opus 5 pilot shape: two capped turns under a 32K ceiling.
+        self.assertEqual(validator.count_ceiling_turns("jcode", log, 32_768), 2)
+        # The same log is clean once the ceiling is the real 128K.
+        self.assertEqual(validator.count_ceiling_turns("jcode", log, 128_000), 0)
+
+    def test_claude_code_usage_shape_is_understood(self) -> None:
+        log = json.dumps(
+            {"type": "assistant", "message": {"usage": {"output_tokens": 128000}}}
+        )
+        self.assertEqual(validator.count_ceiling_turns("claude-code", log, 128_000), 1)
+
+    def test_matched_conditions_detect_a_harness_mismatch(self) -> None:
+        cells = [
+            {"matched": {"bench_commit": "abc", "prompt": "p", "jcode_sha256": "1"}},
+            {"matched": {"bench_commit": "abc", "prompt": "p", "jcode_sha256": "2"}},
+        ]
+        problems = validator.check_matched_conditions(cells)
+        self.assertTrue(any("jcode_sha256" in problem for problem in problems))
+
+    def test_matched_conditions_pass_when_identical(self) -> None:
+        cells = [{"matched": {"bench_commit": "abc"}}, {"matched": {"bench_commit": "abc"}}]
+        self.assertEqual(validator.check_matched_conditions(cells), [])
+
+
 if __name__ == "__main__":
     unittest.main()
