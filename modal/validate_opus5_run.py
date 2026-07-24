@@ -168,6 +168,13 @@ def check_cell(
             "which indicates a preemption restart; wall-clock timing is not comparable"
         )
 
+    resumed = result.get("resumed_from_checkpoint")
+    if resumed:
+        disclosures.append(
+            f"resumed from checkpoint {resumed} after a preemption, so wall-clock "
+            "duration understates the work performed"
+        )
+
     scores = [
         json.loads(line)
         for line in read_volume_file(volume, f"runs/{run_id}/scores.jsonl")
@@ -189,6 +196,7 @@ def check_cell(
         "budget_fraction": round(fraction, 4),
         "truncated_turns": truncated,
         "restarted_late_by_s": restarted_late_by_s,
+        "resumed_from_checkpoint": resumed,
         "matched": {field: result.get(field) for field in MATCHED_FIELDS},
         "problems": problems,
         "disclosures": disclosures,

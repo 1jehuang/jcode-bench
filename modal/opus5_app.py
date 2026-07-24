@@ -175,6 +175,34 @@ def copy_checkpoint(workdir: Path, result_dir: Path, label: str) -> None:
     results.commit()
 
 
+def restore_latest_checkpoint(result_dir: Path, workdir: Path) -> str | None:
+    """Restore the newest committed submission snapshot into a fresh workdir.
+
+    Returns the checkpoint label restored, or None when starting clean. Only
+    `submission/` and `scores.jsonl` are restored: the task tree, harness, and
+    grader always come from the pinned image so a resume cannot smuggle in
+    modified grading code.
+    """
+    checkpoints = result_dir / "checkpoints"
+    if not checkpoints.is_dir():
+        return None
+    candidates = sorted(
+        (path for path in checkpoints.iterdir() if path.is_dir() and path.name != "baseline"),
+        key=lambda path: path.name,
+    )
+    for candidate in reversed(candidates):
+        submission = candidate / "submission"
+        if not submission.is_dir():
+            continue
+        shutil.rmtree(workdir / "submission", ignore_errors=True)
+        shutil.copytree(submission, workdir / "submission")
+        scores = candidate / "scores.jsonl"
+        if scores.exists():
+            shutil.copy2(scores, workdir / "scores.jsonl")
+        return candidate.name
+    return None
+
+
 def checkpoint_loop(stop: threading.Event, workdir: Path, result_dir: Path) -> None:
     while not stop.wait(CHECKPOINT_SECONDS):
         copy_checkpoint(
@@ -481,9 +509,13 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
     shutil.copytree(Path("/opt/jcode-bench/harness"), work_root / "harness")
     shutil.copytree(source, workdir, ignore=shutil.ignore_patterns(".build", "scores.jsonl"))
 
-    _chown_tree(work_root)
 
     result_dir.mkdir(parents=True, exist_ok=True)
+    # Modal preempts spot containers and restarts the same input from scratch.
+    # For a 20-hour agent that can mean never finishing, so resume from the most
+    # recent committed checkpoint when one exists.
+    resumed_from = restore_latest_checkpoint(result_dir, workdir)
+    _chown_tree(work_root)
     metadata = {
         "run_id": run_id,
         "status": "running",
@@ -502,6 +534,7 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
         "claude_code_sha256": CLAUDE_CODE_SHA256,
         "max_output_tokens": MAX_OUTPUT_TOKENS,
         "started_at": utc_now(),
+        "resumed_from_checkpoint": resumed_from,
         "prompt": prompt_for(task),
     }
     write_json(result_dir / "metadata.json", metadata)
