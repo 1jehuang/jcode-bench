@@ -17,10 +17,16 @@ They exist because the interactive path was unreliable in two specific ways:
 | `opus5-cc.sh` | launch the remaining Claude Code cells |
 | `opus5-monitor.sh` | log a compact status line for all six cells every 10 minutes |
 | `opus5-finish.sh` | wait for every cell to reach a terminal state, then run the publish gate and write the reports |
+| `opus5-keeper.sh` | restart the finisher if it ever dies, and exit once the reports exist |
 
 Each script hardcodes the pinned binary path used for that run
 (`~/.jcode/scratch/opus5-build/target/release/jcode`, `jcode v0.56.19-dev
 (b9b1470ad)`). Update the path and re-pin before reusing them.
+
+The keeper exists because `setsid` alone was not enough: killing the shell that
+had spawned a watcher also took the watcher down mid-run. The keeper polls every
+two minutes, relaunches `opus5-finish.sh` if it is missing, and stops once
+`REPORTS_WRITTEN` appears in the finisher log.
 
 Logs land at `/tmp/opus5-run.log`, `/tmp/opus5-cc.log`,
 `/tmp/opus5-monitor.log`, and `/tmp/opus5-finish.log`.
