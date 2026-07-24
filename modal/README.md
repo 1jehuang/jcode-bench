@@ -105,7 +105,67 @@ modal deploy modal/codex_ultra_app.py
   --markdown-output modal/runs/<timestamp>-codex-ultra-results.md
 ```
 
+## Claude Opus 5 harness head-to-head
+
+[`opus5_app.py`](opus5_app.py) is an isolated app (`jcode-bench-v1-opus5`) that
+compares two agent harnesses on one model, Anthropic `claude-opus-5` at `high`
+effort through the Anthropic API:
+
+| harness | delegation | version |
+|---|---|---|
+| jcode | solo (`JCODE_SWARM_ENABLED=false`) | pinned local binary, sha256-verified |
+| Claude Code | default built-in `Task` tool | `@anthropic-ai/claude-code@2.1.219` |
+
+Every cell shares the frozen benchmark commit, the historical benchmark prompt,
+four CPUs, 8 GiB RAM, `us-west`, single-use containers, a 20-hour agent
+wall-clock budget, and a 24-hour Modal function timeout so baseline and final
+grading always complete.
+
+Each cell writes a `preflight.json` that records the CLI version and, critically,
+the model the harness actually resolved. Both harnesses are probed with a
+throwaway prompt before the benchmark starts and the cell aborts if the observed
+model is not `claude-opus-5`. This exists because a jcode build without a
+`claude-opus-5` catalog entry silently fell back to `claude-fable-5`, which would
+have produced a plausible but wrong benchmark row.
+
+```bash
+set -a
+source ~/.config/jcode/anthropic.env
+set +a
+
+# Pin the exact binary. The app refuses to deploy without a matching sha256.
+export JCODE_BENCH_JCODE_BIN=/path/to/jcode
+export JCODE_BENCH_JCODE_VERSION="$("$JCODE_BENCH_JCODE_BIN" --version)"
+export JCODE_BENCH_JCODE_SHA256="$(sha256sum "$JCODE_BENCH_JCODE_BIN" | cut -d' ' -f1)"
+
+modal deploy modal/opus5_app.py
+
+# Canary first: one task, both harnesses.
+~/.local/share/uv/tools/modal/bin/python modal/opus5_launch.py \
+  --mode pilot --task json-unescape
+
+# Then the remaining four cells.
+~/.local/share/uv/tools/modal/bin/python modal/opus5_launch.py \
+  --mode full --tasks float-print utf16-transcode
+
+# Non-blocking status.
+~/.local/share/uv/tools/modal/bin/python modal/status.py modal/launches/<manifest>.json
+
+# Report. Exits 2 while cells remain active.
+~/.local/share/uv/tools/modal/bin/python modal/collect_results.py \
+  modal/launches/<manifest>.json \
+  --json-output modal/runs/<date>-opus5-results.json \
+  --markdown-output modal/runs/<date>-opus5-results.md
+```
+
+Offline tests for the reporting logic:
+
+```bash
+~/.local/share/uv/tools/modal/bin/python modal/test_collect_results.py
+```
+
 ## Multi-model jcode run (20-hour budget)
+
 
 [`multimodel_app.py`](multimodel_app.py) is a separate Modal app
 (`jcode-bench-v1-multimodel`) that runs jcode solo across four frontier

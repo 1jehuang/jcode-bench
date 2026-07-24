@@ -43,6 +43,29 @@ def helper_event_count(agent: str, log: str) -> int:
                 count += 1
         return count
 
+    if agent == "claude-code":
+        # Claude Code stream-json emits assistant messages whose content blocks
+        # carry tool_use entries; `Task` is its native subagent delegation tool.
+        count = 0
+        for line in log.splitlines():
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(event, dict) or event.get("type") != "assistant":
+                continue
+            message = event.get("message")
+            if not isinstance(message, dict):
+                continue
+            for block in message.get("content") or []:
+                if (
+                    isinstance(block, dict)
+                    and block.get("type") == "tool_use"
+                    and block.get("name") == "Task"
+                ):
+                    count += 1
+        return count
+
     event_types = {
         "collab_tool_call",
         "collab_tool_call_output",
@@ -96,14 +119,6 @@ def aggregate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]:
     by_mode = {(row["agent"], row["swarm"]): row for row in aggregates}
-    required = {
-        ("codex", False),
-        ("codex", True),
-        ("jcode", False),
-        ("jcode", True),
-    }
-    if not required.issubset(by_mode):
-        return {}
 
     def compare(
         left: tuple[str, bool], right: tuple[str, bool]
@@ -120,6 +135,21 @@ def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]
             "total_agent_time_delta_percent": round(duration_delta, 2),
         }
 
+    # Single-model, two-harness comparison (e.g. the Claude Opus 5 head-to-head).
+    if {("jcode", False), ("claude-code", False)}.issubset(by_mode):
+        return {
+            "jcode_vs_claude_code": compare(("jcode", False), ("claude-code", False)),
+        }
+
+    required = {
+        ("codex", False),
+        ("codex", True),
+        ("jcode", False),
+        ("jcode", True),
+    }
+    if not required.issubset(by_mode):
+        return {}
+
     return {
         "codex_swarm_vs_solo": compare(("codex", True), ("codex", False)),
         "jcode_swarm_vs_solo": compare(("jcode", True), ("jcode", False)),
@@ -131,7 +161,19 @@ def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]
 def render_markdown(report: dict[str, Any]) -> str:
     comparison = report["comparisons"]
     summary_lines = ["## Summary", ""]
-    if comparison:
+    if "jcode_vs_claude_code" in comparison:
+        head_to_head = comparison["jcode_vs_claude_code"]
+        summary_lines.extend(
+            [
+                f"- Jcode led Claude Code by **{head_to_head['mean_score_delta']:+.4f}** mean final score, "
+                f"a **{head_to_head['geomean_efficiency_factor']:.3f}x** geometric-mean "
+                "instruction-efficiency difference on the same model.",
+                f"- Total agent time difference: **{head_to_head['total_agent_time_delta_percent']:+.2f}%** "
+                "(Jcode relative to Claude Code).",
+            ]
+        )
+    elif comparison:
+
         summary_lines.extend(
             [
                 f"- Codex led Jcode by **{comparison['codex_vs_jcode_solo']['mean_score_delta']:+.4f}** "

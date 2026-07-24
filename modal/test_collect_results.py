@@ -1,0 +1,116 @@
+"""Offline tests for the Opus 5 head-to-head reporting logic.
+
+Run with the modal-provisioned interpreter so `import modal` resolves:
+
+    ~/.local/share/uv/tools/modal/bin/python modal/test_collect_results.py
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import json
+import unittest
+from pathlib import Path
+
+MODULE_PATH = Path(__file__).with_name("collect_results.py")
+SPEC = importlib.util.spec_from_file_location("collect_results", MODULE_PATH)
+assert SPEC and SPEC.loader
+collect = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(collect)
+
+
+def aggregate_row(agent: str, mean_final: float, duration_s: float) -> dict[str, object]:
+    return {
+        "agent": agent,
+        "swarm": False,
+        "model": "claude-opus-5",
+        "completed_tasks": 3,
+        "mean_final_score": mean_final,
+        "mean_best_score": mean_final,
+        "total_agent_duration_s": duration_s,
+        "helper_events": 0,
+    }
+
+
+class ClaudeCodeHelperEventTests(unittest.TestCase):
+    def test_counts_task_tool_use_blocks(self) -> None:
+        log = "\n".join(
+            [
+                json.dumps({"type": "system", "subtype": "init", "model": "claude-opus-5"}),
+                json.dumps(
+                    {
+                        "type": "assistant",
+                        "message": {
+                            "content": [
+                                {"type": "text", "text": "delegating"},
+                                {"type": "tool_use", "name": "Task", "input": {}},
+                                {"type": "tool_use", "name": "Bash", "input": {}},
+                            ]
+                        },
+                    }
+                ),
+                json.dumps(
+                    {
+                        "type": "assistant",
+                        "message": {"content": [{"type": "tool_use", "name": "Task"}]},
+                    }
+                ),
+                "not json at all",
+            ]
+        )
+        self.assertEqual(collect.helper_event_count("claude-code", log), 2)
+
+    def test_plain_text_turns_are_not_helper_events(self) -> None:
+        log = json.dumps(
+            {"type": "assistant", "message": {"content": [{"type": "text", "text": "Task done"}]}}
+        )
+        self.assertEqual(collect.helper_event_count("claude-code", log), 0)
+
+    def test_jcode_swarm_tool_calls_are_counted_separately(self) -> None:
+        log = '{"name":"swarm"}\n{"name": "swarm"}\n{"name":"bash"}'
+        self.assertEqual(collect.helper_event_count("jcode", log), 2)
+
+
+class HeadToHeadComparisonTests(unittest.TestCase):
+    def test_two_harness_manifest_produces_head_to_head(self) -> None:
+        aggregates = [
+            aggregate_row("jcode", 4.0, 3600.0),
+            aggregate_row("claude-code", 3.0, 1800.0),
+        ]
+        result = collect.comparisons(aggregates)
+        self.assertIn("jcode_vs_claude_code", result)
+        head_to_head = result["jcode_vs_claude_code"]
+        self.assertAlmostEqual(head_to_head["mean_score_delta"], 1.0)
+        # +1.0 doubling means a 2x instruction-efficiency advantage.
+        self.assertAlmostEqual(head_to_head["geomean_efficiency_factor"], 2.0)
+        self.assertAlmostEqual(head_to_head["total_agent_time_delta_percent"], 100.0)
+
+    def test_single_harness_manifest_has_no_comparison(self) -> None:
+        self.assertEqual(collect.comparisons([aggregate_row("jcode", 4.0, 3600.0)]), {})
+
+    def test_markdown_renders_head_to_head_summary(self) -> None:
+        report = {
+            "model": "claude-opus-5",
+            "reasoning_effort": "high",
+            "benchmark_commit": "abc123",
+            "run_count": 6,
+            "completed_count": 6,
+            "runs": [],
+            "aggregates": [
+                aggregate_row("jcode", 4.0, 3600.0),
+                aggregate_row("claude-code", 3.0, 1800.0),
+            ],
+            "comparisons": collect.comparisons(
+                [
+                    aggregate_row("jcode", 4.0, 3600.0),
+                    aggregate_row("claude-code", 3.0, 1800.0),
+                ]
+            ),
+        }
+        markdown = collect.render_markdown(report)
+        self.assertIn("Jcode led Claude Code by **+1.0000**", markdown)
+        self.assertIn("2.000x", markdown)
+
+
+if __name__ == "__main__":
+    unittest.main()
