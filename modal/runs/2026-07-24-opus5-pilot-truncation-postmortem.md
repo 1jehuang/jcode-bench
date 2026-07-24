@@ -57,6 +57,11 @@ structurally binding, not merely close:
   thinking.
 - That turn is impossible under a 32,768-token budget. On the old build the
   model's planning pass on the hardest task could not physically complete.
+- The next turn on the same cell emitted **78,077 output tokens** to produce a
+  4,595-character file, so roughly 77,000 tokens were thinking.
+- Both turns are 1.4x to 2.4x the entire old budget. On `float-print`, the
+  hardest of the three tasks, Opus 5 could not take a single one of its natural
+  reasoning steps under the old cap.
 - Across the observed rerun turns, no turn reached the real 128,000 ceiling, so
   the new budget is sufficient rather than merely larger.
 
