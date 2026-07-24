@@ -71,6 +71,38 @@ class ClaudeCodeHelperEventTests(unittest.TestCase):
         self.assertEqual(collect.helper_event_count("jcode", log), 2)
 
 
+class TruncationDetectionTests(unittest.TestCase):
+    def test_jcode_turns_at_the_ceiling_are_counted(self) -> None:
+        log = "\n".join(
+            [
+                json.dumps({"type": "tokens", "output": 128000}),
+                json.dumps({"type": "tokens", "output": 4321}),
+                json.dumps({"type": "tokens", "output": 128000}),
+            ]
+        )
+        self.assertEqual(collect.truncated_turn_count("jcode", log, 128_000), 2)
+
+    def test_claude_code_turns_at_the_ceiling_are_counted(self) -> None:
+        log = "\n".join(
+            [
+                json.dumps({"type": "assistant", "message": {"usage": {"output_tokens": 128000}}}),
+                json.dumps({"type": "assistant", "message": {"usage": {"output_tokens": 12}}}),
+            ]
+        )
+        self.assertEqual(collect.truncated_turn_count("claude-code", log, 128_000), 1)
+
+    def test_turns_below_the_ceiling_are_not_truncation(self) -> None:
+        # The legacy 32K cap must not be flagged once the ceiling is 128K.
+        log = json.dumps({"type": "tokens", "output": 32768})
+        self.assertEqual(collect.truncated_turn_count("jcode", log, 128_000), 0)
+        # But it is truncation when 32K *is* the ceiling.
+        self.assertEqual(collect.truncated_turn_count("jcode", log, 32_768), 1)
+
+    def test_unknown_ceiling_disables_the_check(self) -> None:
+        log = json.dumps({"type": "tokens", "output": 128000})
+        self.assertEqual(collect.truncated_turn_count("jcode", log, 0), 0)
+
+
 class HeadToHeadComparisonTests(unittest.TestCase):
     def test_two_harness_manifest_produces_head_to_head(self) -> None:
         aggregates = [

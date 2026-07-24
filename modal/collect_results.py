@@ -88,6 +88,34 @@ def helper_event_count(agent: str, log: str) -> int:
     return count
 
 
+def truncated_turn_count(agent: str, log: str, ceiling: int) -> int:
+    """Count turns whose output stopped exactly at the model's output ceiling.
+
+    A turn that ends at the ceiling was cut off mid-answer, which for an agent
+    usually means a truncated tool call and an early end to the run. The Opus 5
+    pilot lost 96% of its budget to this, so it is now a first-class validity
+    signal rather than something a human has to notice in a log.
+    """
+    if ceiling <= 0:
+        return 0
+    count = 0
+    for line in log.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(event, dict):
+            continue
+        if agent == "jcode":
+            if event.get("type") == "tokens" and event.get("output") == ceiling:
+                count += 1
+            continue
+        usage = event.get("message", {}).get("usage") if isinstance(event.get("message"), dict) else None
+        if isinstance(usage, dict) and usage.get("output_tokens") == ceiling:
+            count += 1
+    return count
+
+
 def aggregate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, bool, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -293,8 +321,20 @@ def collect(manifest: dict[str, Any], volume: modal.Volume) -> dict[str, Any]:
                 "final_score": score_values[-1],
                 "best_score": max(score_values),
                 "helper_events": helper_event_count(run["agent"], log),
+                "output_ceiling": result.get("max_output_tokens"),
+                "truncated_turns": truncated_turn_count(
+                    run["agent"], log, int(result.get("max_output_tokens") or 0)
+                ),
             }
         )
+        if row["truncated_turns"]:
+            # A truncated run is not a capability measurement, so it must never
+            # be silently averaged into a published comparison.
+            row["status"] = "truncated"
+            row["error"] = (
+                f"{row['truncated_turns']} turn(s) ended at the "
+                f"{row['output_ceiling']}-token output ceiling"
+            )
         rows.append(row)
 
     completed = [row for row in rows if row["status"] == "completed"]

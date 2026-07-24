@@ -36,6 +36,10 @@ APP_NAME = "jcode-bench-v1-opus5"
 BENCH_COMMIT = "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0"
 MODEL = "claude-opus-5"
 REASONING_EFFORT = "high"
+# Opus 5's published synchronous max output, verified against the live API
+# (max_tokens=128000 is accepted, 128001 is rejected). Recorded per run so the
+# collector can detect turns that stopped exactly at the ceiling.
+MAX_OUTPUT_TOKENS = 128_000
 CLAUDE_CODE_VERSION = "2.1.219"
 # Claude Code 2.x ships as a native binary; the npm package only carries a
 # Windows shim, so the Linux artifact is fetched directly from Anthropic's
@@ -496,6 +500,7 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
         "jcode_sha256": JCODE_SHA256,
         "claude_code_version": CLAUDE_CODE_VERSION,
         "claude_code_sha256": CLAUDE_CODE_SHA256,
+        "max_output_tokens": MAX_OUTPUT_TOKENS,
         "started_at": utc_now(),
         "prompt": prompt_for(task),
     }
