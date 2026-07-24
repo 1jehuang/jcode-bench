@@ -47,6 +47,19 @@ model's derived budget ever falls below the legacy 32K value.
 
 jcode commit: `b9b1470ad`.
 
+## Confirmation from the rerun
+
+The rerun on the fixed build produced direct evidence that the cap was
+structurally binding, not merely close:
+
+- `float-print`, jcode, Opus 5: a single planning turn emitted **46,878 output
+  tokens**, of which only ~51 tokens were visible text. The rest was adaptive
+  thinking.
+- That turn is impossible under a 32,768-token budget. On the old build the
+  model's planning pass on the hardest task could not physically complete.
+- Across the observed rerun turns, no turn reached the real 128,000 ceiling, so
+  the new budget is sufficient rather than merely larger.
+
 ## Consequence for this benchmark
 
 The pilot cell is void. Opus 5 cells must be rerun on a jcode build that
