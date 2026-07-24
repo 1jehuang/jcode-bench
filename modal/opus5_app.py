@@ -56,7 +56,7 @@ CLAUDE_CODE_URL = (
 JCODE_VERSION = os.environ.get("JCODE_BENCH_JCODE_VERSION", "")
 JCODE_SHA256 = os.environ.get("JCODE_BENCH_JCODE_SHA256", "")
 SWARM_CONCURRENCY = 8
-CHECKPOINT_SECONDS = 300
+CHECKPOINT_SECONDS = 120  # a preemption costs at most this much work
 GRADE_ATTEMPTS = 5
 AGENT_TIMEOUT_SECONDS = 20 * 60 * 60  # 20 hours of agent wall clock
 FUNCTION_TIMEOUT_SECONDS = 24 * 60 * 60  # Modal cap; leaves 4h for grading
@@ -483,7 +483,10 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
     max_containers=6,
     single_use_containers=True,
     region="us-west",
-    retries=modal.Retries(max_retries=2, initial_delay=5.0, backoff_coefficient=2.0),
+    # Spot preemption is frequent (6 observed in the first 90 minutes of this
+    # matrix). Combined with checkpoint resume, a generous retry budget means a
+    # late preemption costs one checkpoint interval instead of the whole run.
+    retries=modal.Retries(max_retries=10, initial_delay=5.0, backoff_coefficient=2.0),
 )
 def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
     if harness not in HARNESSES:
