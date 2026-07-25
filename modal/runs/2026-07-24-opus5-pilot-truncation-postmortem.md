@@ -145,6 +145,21 @@ ceiling here. It is included because both bugs share a shape worth noting: a
 transient provider condition silently converted into "the agent finished",
 producing a plausible score from an incomplete run.
 
+## Final measured turn sizes
+
+Across the clean matrix on the fixed build, single-turn output maxima were:
+
+| task | max single turn | vs the old 32,768 cap |
+|---|---:|---:|
+| json-unescape | 71,157 | 2.2x |
+| float-print | 84,966 | 2.6x |
+| utf16-transcode | 96,016 | 2.9x |
+
+Eight of 44 observed turns exceeded 32,768, and **zero** reached the real
+128,000 ceiling. The old build could not have completed any of those eight
+turns, and each of them is a planning or write step, i.e. the work that produces
+the submission.
+
 ## Consequence for this benchmark
 
 The pilot cell is void. Opus 5 cells must be rerun on a jcode build that
