@@ -96,6 +96,28 @@ structurally binding, not merely close:
 - No turn reached the real 128,000 ceiling, so the new budget is sufficient
   rather than merely larger.
 
+## End-to-end verification of the fix
+
+Confirmed live against the installed binary, `jcode v0.56.32-dev (de9f4802a)`,
+by forcing truncation with a tiny `JCODE_ANTHROPIC_MAX_TOKENS`:
+
+```
+$ JCODE_ANTHROPIC_MAX_TOKENS=150 jcode -p anthropic-api -m claude-opus-5 \
+    run --ndjson "Count from 1 to 80, one number per line."
+{"stop_reason":"max_tokens","type":"message_end"}
+{"stop_reason":"end_turn","type":"message_end"}
+```
+
+The full recovery chain now works:
+
+1. the turn hits the budget and reports `stop_reason: max_tokens` on the wire;
+2. the agent detects it and requests a continuation;
+3. the follow-up turn completes with `end_turn`.
+
+Before the fix, step 1 emitted a bare `{"type":"message_end"}`, so step 2 never
+happened and the run simply ended. That is the exact failure that produced the
+misleading pilot score.
+
 ## Consequence for this benchmark
 
 The pilot cell is void. Opus 5 cells must be rerun on a jcode build that
