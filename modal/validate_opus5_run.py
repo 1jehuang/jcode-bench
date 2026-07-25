@@ -39,6 +39,8 @@ MIN_BUDGET_FRACTION = 0.10
 # restarted, so its wall-clock duration is not comparable to a clean cell.
 RESTART_TOLERANCE_S = 15 * 60
 # Fields that must be identical across every cell for the comparison to be fair.
+# Fields that legitimately vary by task; compared per task, not globally.
+PER_TASK_FIELDS = frozenset({"prompt"})
 MATCHED_FIELDS = (
     "bench_commit",
     "prompt",
@@ -277,9 +279,26 @@ def check_cell(
 
 
 def check_matched_conditions(cells: list[dict[str, Any]]) -> list[str]:
-    """Every cell must agree on the experiment's controlled variables."""
+    """Every cell must agree on the experiment's controlled variables.
+
+    Per-task fields are compared within a task rather than globally: the prompt
+    legitimately names its own task, so a global comparison would always report a
+    mismatch and mask real drift.
+    """
     problems = []
     for field in MATCHED_FIELDS:
+        if field in PER_TASK_FIELDS:
+            by_task: dict[str, set[str]] = {}
+            for cell in cells:
+                by_task.setdefault(cell["task"], set()).add(
+                    json.dumps(cell["matched"].get(field), sort_keys=True)
+                )
+            for task, values in sorted(by_task.items()):
+                if len(values) > 1:
+                    problems.append(
+                        f"cells disagree on {field} within task {task}: {sorted(values)[:2]}"
+                    )
+            continue
         values = {json.dumps(cell["matched"].get(field), sort_keys=True) for cell in cells}
         if len(values) > 1:
             problems.append(f"cells disagree on {field}: {sorted(values)[:2]}")

@@ -118,6 +118,33 @@ Before the fix, step 1 emitted a bare `{"type":"message_end"}`, so step 2 never
 happened and the run simply ended. That is the exact failure that produced the
 misleading pilot score.
 
+## A second, independent harness bug the rerun exposed
+
+The clean rerun's jcode `utf16-transcode` cell finished with `status: completed`,
+`agent_exit_code: 0`, and a final score of **0.0** after 85 minutes.
+
+Turn-by-turn output tokens were:
+
+```
+153, 161, 170, 1108, 1018, 22395, 686, 20461, 80489,
+21338, 33653, 64532, 48409, 59086, 0
+```
+
+The last turn returned **zero output tokens**. The turn before it had
+successfully written a real file, so the agent was mid-task, not finished.
+`MAX_EMPTY_POST_TOOL_CONTINUATION_ATTEMPTS` was `1`, so that single empty
+response exhausted the retry budget and ended the turn loop, and the run
+reported success with an unoptimized submission.
+
+Exactly one empty response occurred in 43 observed Opus 5 turns, so a
+one-retry budget is far too tight for a 20-hour agentic run. Raised to 5 in
+jcode master, with a regression test.
+
+This is a distinct failure from the output-cap truncation: no turn hit the
+ceiling here. It is included because both bugs share a shape worth noting: a
+transient provider condition silently converted into "the agent finished",
+producing a plausible score from an incomplete run.
+
 ## Consequence for this benchmark
 
 The pilot cell is void. Opus 5 cells must be rerun on a jcode build that
