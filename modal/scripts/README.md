@@ -30,6 +30,18 @@ Each script hardcodes the pinned binary path used for that run
 terminal: the validity gate, the result reports, and then the website publish
 gate, which refuses on its own if the run is unpublishable or jcode did not win.
 
+## Reading progress correctly
+
+Opus 5 turns on these tasks are very large: observed sizes include 46,878,
+55,675, 65,291, 78,077, and **84,966** output tokens in a single turn. At
+streaming rates that is tens of minutes with no new log lines and no new score,
+so a cell can look hung for 40 minutes while working normally.
+
+Three separate times a cell that appeared frozen resumed on its own. Before
+concluding a cell is stuck, check that the agent log byte count is still growing
+over a span longer than the largest plausible turn, and remember that the score
+curve only moves when the agent runs `./grade`.
+
 ## Supervision
 
 `opus5-bench-watch.service` is the reliable entry point:
