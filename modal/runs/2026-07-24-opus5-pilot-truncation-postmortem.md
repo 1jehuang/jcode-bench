@@ -34,6 +34,33 @@ continuing to iterate on the benchmark.
 This is a jcode harness defect, not an Opus 5 capability result. It also
 understated every prior Anthropic row that ran close to the cap.
 
+## Why the run ended silently instead of erroring
+
+Reconstructing the pilot's turns shows the exact failure chain:
+
+| turn output tokens | tool_start events | tool_done events |
+|---:|---:|---:|
+| ... 18 normal turns ... | 1 | 1 |
+| **32,768** | **0** | 1 |
+| 3,485 | 1 | 0 |
+| **32,768** | **0** | 0 |
+| **32,768** | **0** | 0 |
+| **32,768** | **0** | 0 |
+
+Every capped turn produced **zero tool calls**: the entire budget went to
+adaptive thinking and the response was cut before the model could emit an
+action. The agent loop then saw a turn with no tool calls and finished.
+
+jcode already has recovery for this: `maybe_continue_incomplete_response`
+requests a continuation when the stop reason contains `max_tokens`. It never
+fired, because `ServerEvent::MessageEnd` discarded the provider's stop reason.
+All 23 `message_end` events in the pilot report no stop reason at all, so
+neither the agent loop nor any `--ndjson` consumer could distinguish a
+truncated turn from a clean `end_turn`.
+
+That is why a broken run produced a plausible score instead of an error, and it
+is fixed separately in jcode `a1b5a14c1`.
+
 ## Fix
 
 `anthropic_max_output_tokens` now derives the budget per model:
