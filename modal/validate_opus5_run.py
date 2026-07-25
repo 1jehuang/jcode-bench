@@ -88,6 +88,56 @@ def count_ceiling_turns(agent: str, log: str, ceiling: int) -> int:
     return count
 
 
+# Claude Opus 5 published API rates, USD per million tokens. Cache reads bill at
+# 10% of input and Anthropic cache writes at 125%, matching the convention used
+# by the existing published cost curves.
+OPUS5_INPUT_USD_PER_MTOK = 5.0
+OPUS5_OUTPUT_USD_PER_MTOK = 25.0
+CACHE_READ_MULTIPLIER = 0.10
+CACHE_WRITE_MULTIPLIER = 1.25
+
+
+def token_usage(agent: str, log: str) -> dict[str, int]:
+    """Sum token usage across a run's turns for either harness."""
+    totals = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0}
+    for line in log.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(event, dict):
+            continue
+        if agent == "jcode":
+            if event.get("type") != "tokens":
+                continue
+            totals["input"] += event.get("input") or 0
+            totals["output"] += event.get("output") or 0
+            totals["cache_read"] += event.get("cache_read_input") or 0
+            totals["cache_write"] += event.get("cache_creation_input") or 0
+            continue
+        # Claude Code reports cumulative usage on its terminal result event.
+        if event.get("type") == "result" and isinstance(event.get("usage"), dict):
+            usage = event["usage"]
+            totals["input"] = usage.get("input_tokens") or 0
+            totals["output"] = usage.get("output_tokens") or 0
+            totals["cache_read"] = usage.get("cache_read_input_tokens") or 0
+            totals["cache_write"] = usage.get("cache_creation_input_tokens") or 0
+    return totals
+
+
+def estimated_cost_usd(totals: dict[str, int]) -> float:
+    """Cost at published Opus 5 list prices, so both harnesses are billed alike."""
+    per_token_in = OPUS5_INPUT_USD_PER_MTOK / 1_000_000
+    per_token_out = OPUS5_OUTPUT_USD_PER_MTOK / 1_000_000
+    return round(
+        totals["input"] * per_token_in
+        + totals["output"] * per_token_out
+        + totals["cache_read"] * per_token_in * CACHE_READ_MULTIPLIER
+        + totals["cache_write"] * per_token_in * CACHE_WRITE_MULTIPLIER,
+        4,
+    )
+
+
 def artifacts_ready(volume: modal.Volume, run_id: str) -> bool:
     """True once a cell has written the artifacts every gate needs."""
     required = ("result.json", "preflight.json", "agent.log", "scores.jsonl")
@@ -186,6 +236,8 @@ def check_cell(
             "a self-determined completion"
         )
 
+    usage_totals = token_usage(agent, log)
+
     resumed = result.get("resumed_from_checkpoint")
     if resumed:
         disclosures.append(
@@ -216,6 +268,8 @@ def check_cell(
         "restarted_late_by_s": restarted_late_by_s,
         "resumed_from_checkpoint": resumed,
         "harness_terminal_reason": harness_terminal_reason,
+        "token_usage": usage_totals,
+        "estimated_cost_usd": estimated_cost_usd(usage_totals),
         "matched": {field: result.get(field) for field in MATCHED_FIELDS},
         "problems": problems,
         "disclosures": disclosures,

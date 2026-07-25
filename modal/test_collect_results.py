@@ -202,5 +202,57 @@ class ValidatorGateCalibrationTests(unittest.TestCase):
         self.assertEqual(validator.count_ceiling_turns("jcode", log, 32_768), 1)
 
 
+class CostModelTests(unittest.TestCase):
+    """The cost model must bill both harnesses identically and correctly."""
+
+    def test_matches_claude_codes_own_accounting(self) -> None:
+        # Real usage from a completed Claude Code cell that self-reported
+        # $22.32791425. Agreeing to the cent validates the pricing convention.
+        totals = {
+            "input": 200,
+            "output": 292280,
+            "cache_read": 24907741,
+            "cache_write": 410567,
+        }
+        self.assertAlmostEqual(validator.estimated_cost_usd(totals), 22.33, places=1)
+
+    def test_parses_jcode_token_events(self) -> None:
+        log = "\n".join(
+            [
+                json.dumps({"type": "tokens", "input": 100, "output": 200,
+                            "cache_read_input": 300, "cache_creation_input": 400}),
+                json.dumps({"type": "tokens", "input": 1, "output": 2,
+                            "cache_read_input": 3, "cache_creation_input": 4}),
+            ]
+        )
+        self.assertEqual(
+            validator.token_usage("jcode", log),
+            {"input": 101, "output": 202, "cache_read": 303, "cache_write": 404},
+        )
+
+    def test_parses_claude_code_terminal_usage(self) -> None:
+        log = json.dumps(
+            {"type": "result", "usage": {"input_tokens": 5, "output_tokens": 6,
+                                         "cache_read_input_tokens": 7,
+                                         "cache_creation_input_tokens": 8}}
+        )
+        self.assertEqual(
+            validator.token_usage("claude-code", log),
+            {"input": 5, "output": 6, "cache_read": 7, "cache_write": 8},
+        )
+
+    def test_output_tokens_dominate_cost(self) -> None:
+        # Output bills at 5x input, so a thinking-heavy run must cost more than
+        # an input-heavy one with the same token count.
+        heavy_out = validator.estimated_cost_usd(
+            {"input": 0, "output": 1_000_000, "cache_read": 0, "cache_write": 0}
+        )
+        heavy_in = validator.estimated_cost_usd(
+            {"input": 1_000_000, "output": 0, "cache_read": 0, "cache_write": 0}
+        )
+        self.assertAlmostEqual(heavy_out, 25.0)
+        self.assertAlmostEqual(heavy_in, 5.0)
+
+
 if __name__ == "__main__":
     unittest.main()
