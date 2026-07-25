@@ -62,8 +62,12 @@ structurally binding, not merely close:
 - Both turns are 1.4x to 2.4x the entire old budget. On `float-print`, the
   hardest of the three tasks, Opus 5 could not take a single one of its natural
   reasoning steps under the old cap.
-- Across the observed rerun turns, no turn reached the real 128,000 ceiling, so
-  the new budget is sufficient rather than merely larger.
+- Two hours in, that cell had produced nine turns of 139, 152, 173, 247, 46,878,
+  78,077, 63,544, 53,754, and 27,713 output tokens. **Four of nine turns (44%)
+  exceed the old 32,768 budget**, and every one of them is a `write` or planning
+  turn, i.e. exactly the steps that produce the submission.
+- No turn reached the real 128,000 ceiling, so the new budget is sufficient
+  rather than merely larger.
 
 ## Consequence for this benchmark
 
