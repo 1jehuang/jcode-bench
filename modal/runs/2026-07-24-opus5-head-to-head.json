@@ -3,64 +3,64 @@
   "app": "jcode-bench-v1-opus5",
   "jcode_sha256": "5c4b3055d49b6bd9be20cb8bbe8cf713ada7497e0ac77407c2f9d8d2c66ea58b",
   "jcode_version": "jcode v0.56.19-dev (b9b1470ad)",
-  "launched_at": "2026-07-24T20:34:38.269419+00:00",
+  "launched_at": "2026-07-25T00:51:52.797352+00:00",
   "mode": "full",
   "model": "claude-opus-5",
-  "note": "6-cell Claude Opus 5 head-to-head. jcode cells run the fixed per-model output budget (b9b1470ad); the earlier truncated jcode pilot is void and documented in 2026-07-24-opus5-pilot-truncation-postmortem.md.",
+  "note": "Clean 6-cell Claude Opus 5 head-to-head: all cells launched simultaneously on non-preemptible Modal capacity with change-driven checkpoints, after spot preemption repeatedly destroyed in-flight work. jcode is pinned to the build with the per-model output budget fix.",
   "reasoning_effort": "high",
   "runner_commit": "998638ca2bd0cc9c2db463c726220b860737b1c1",
   "runs": [
     {
       "agent": "claude-code",
-      "function_call_id": "fc-01KYB2WCXMKCH3A4B9F38W9D7D",
-      "launched_at": "2026-07-24T22:10:38.386043+00:00",
+      "function_call_id": "fc-01KYBC3MDGM0S5R9H0HWQGXB5Z",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260724T221037Z-opus5-claude-code-float-print",
+      "run_id": "20260725T005151Z-opus5-claude-code-float-print",
       "swarm": false,
       "task": "float-print"
     },
     {
       "agent": "claude-code",
-      "function_call_id": "fc-01KYB583NTS73GSEVP9E3YQJJ1",
-      "launched_at": "2026-07-24T22:51:59.146044+00:00",
+      "function_call_id": "fc-01KYBC3M2ZP5XMBN6J0VEBVQ5C",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260724T225158Z-opus5-claude-code-json-unescape",
+      "run_id": "20260725T005151Z-opus5-claude-code-json-unescape",
       "swarm": false,
       "task": "json-unescape"
     },
     {
       "agent": "claude-code",
-      "function_call_id": "fc-01KYB2WD257706W3Q7HNYE7QRQ",
-      "launched_at": "2026-07-24T22:10:38.386043+00:00",
+      "function_call_id": "fc-01KYBC3MQP2JDX73YYXVA6N65X",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260724T221037Z-opus5-claude-code-utf16-transcode",
+      "run_id": "20260725T005151Z-opus5-claude-code-utf16-transcode",
       "swarm": false,
       "task": "utf16-transcode"
     },
     {
       "agent": "jcode",
-      "function_call_id": "fc-01KYBB8C9C7AX23X52GRN6GMFW",
-      "launched_at": "2026-07-25T00:36:59.386900+00:00",
+      "function_call_id": "fc-01KYBC3M9A4NGA1Z11DMX9P72N",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260725T003658Z-opus5-jcode-float-print",
+      "run_id": "20260725T005151Z-opus5-jcode-float-print",
       "swarm": false,
       "task": "float-print"
     },
     {
       "agent": "jcode",
-      "function_call_id": "fc-01KYB2EZV8SJNMVBCGERAHX37Y",
-      "launched_at": "2026-07-24T22:03:19.109147+00:00",
+      "function_call_id": "fc-01KYBC3KXTQ8EFPFSMJYRGKX82",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260724T220318Z-opus5-jcode-json-unescape",
+      "run_id": "20260725T005151Z-opus5-jcode-json-unescape",
       "swarm": false,
       "task": "json-unescape"
     },
     {
       "agent": "jcode",
-      "function_call_id": "fc-01KYB2F03F4C66AR6TT5P2BPAH",
-      "launched_at": "2026-07-24T22:03:19.109147+00:00",
+      "function_call_id": "fc-01KYBC3MHPR5N4V2RGM5QTADAB",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260724T220318Z-opus5-jcode-utf16-transcode",
+      "run_id": "20260725T005151Z-opus5-jcode-utf16-transcode",
       "swarm": false,
       "task": "utf16-transcode"
     }
@@ -75,6 +75,30 @@
       "observed_final_score": -0.0001,
       "reason": "preempted three times under 5-minute checkpoints; each resume restored a snapshot predating the agent's completed solve.c, so the cell kept scoring 0 despite ~270k output tokens of real work",
       "run_id": "20260724T220318Z-opus5-jcode-float-print"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T221037Z-opus5-claude-code-float-print"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T225158Z-opus5-claude-code-json-unescape"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T221037Z-opus5-claude-code-utf16-transcode"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260725T003658Z-opus5-jcode-float-print"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T220318Z-opus5-jcode-json-unescape"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T220318Z-opus5-jcode-utf16-transcode"
     }
   ]
 }
