@@ -39,10 +39,10 @@
     },
     {
       "agent": "jcode",
-      "function_call_id": "fc-01KYB2EZZ6DRH9V3963ZSX51BR",
-      "launched_at": "2026-07-24T22:03:19.109147+00:00",
+      "function_call_id": "fc-01KYBB8C9C7AX23X52GRN6GMFW",
+      "launched_at": "2026-07-25T00:36:59.386900+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260724T220318Z-opus5-jcode-float-print",
+      "run_id": "20260725T003658Z-opus5-jcode-float-print",
       "swarm": false,
       "task": "float-print"
     },
@@ -70,6 +70,11 @@
       "observed_final_score": 2.922,
       "reason": "predates max_output_tokens metadata so truncation cannot be verified; also preempted and restarted 43 min after launch",
       "run_id": "20260724T203437Z-opus5-claude-code-json-unescape"
+    },
+    {
+      "observed_final_score": -0.0001,
+      "reason": "preempted three times under 5-minute checkpoints; each resume restored a snapshot predating the agent's completed solve.c, so the cell kept scoring 0 despite ~270k output tokens of real work",
+      "run_id": "20260724T220318Z-opus5-jcode-float-print"
     }
   ]
 }
