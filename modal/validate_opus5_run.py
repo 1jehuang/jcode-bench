@@ -168,6 +168,24 @@ def check_cell(
             "which indicates a preemption restart; wall-clock timing is not comparable"
         )
 
+    # Claude Code emits a terminal `result` event recording why it stopped.
+    # A `completed` terminal_reason means the agent decided it was finished,
+    # which distinguishes a legitimate early exit from a harness cutoff.
+    harness_terminal_reason = None
+    if agent == "claude-code":
+        for line in log.splitlines():
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(event, dict) and event.get("type") == "result":
+                harness_terminal_reason = event.get("terminal_reason")
+    if harness_terminal_reason and harness_terminal_reason != "completed":
+        disclosures.append(
+            f"harness reported terminal_reason={harness_terminal_reason!r} rather than "
+            "a self-determined completion"
+        )
+
     resumed = result.get("resumed_from_checkpoint")
     if resumed:
         disclosures.append(
@@ -197,6 +215,7 @@ def check_cell(
         "truncated_turns": truncated,
         "restarted_late_by_s": restarted_late_by_s,
         "resumed_from_checkpoint": resumed,
+        "harness_terminal_reason": harness_terminal_reason,
         "matched": {field: result.get(field) for field in MATCHED_FIELDS},
         "problems": problems,
         "disclosures": disclosures,
