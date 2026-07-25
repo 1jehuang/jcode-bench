@@ -294,7 +294,7 @@ def check_harness_pins(cells: list[dict[str, Any]]) -> list[str]:
             value = cell["matched"].get(field)
             if value is None:
                 continue
-            by_agent.setdefault(cell["agent"], set()).add(str(value))
+            by_agent.setdefault(cell.get("agent", "unknown"), set()).add(str(value))
         for agent, values in sorted(by_agent.items()):
             if len(values) > 1:
                 problems.append(
@@ -318,7 +318,7 @@ def check_matched_conditions(cells: list[dict[str, Any]]) -> list[str]:
         if field in PER_TASK_FIELDS:
             by_task: dict[str, set[str]] = {}
             for cell in cells:
-                by_task.setdefault(cell["task"], set()).add(
+                by_task.setdefault(cell.get("task", "unknown"), set()).add(
                     json.dumps(cell["matched"].get(field), sort_keys=True)
                 )
             for task, values in sorted(by_task.items()):

@@ -175,14 +175,19 @@ class ValidatorCeilingTests(unittest.TestCase):
 
     def test_matched_conditions_detect_a_harness_mismatch(self) -> None:
         cells = [
-            {"matched": {"bench_commit": "abc", "prompt": "p", "jcode_sha256": "1"}},
-            {"matched": {"bench_commit": "abc", "prompt": "p", "jcode_sha256": "2"}},
+            {"agent": "jcode", "task": "t",
+             "matched": {"bench_commit": "abc", "prompt": "p", "jcode_sha256": "1"}},
+            {"agent": "jcode", "task": "t",
+             "matched": {"bench_commit": "abc", "prompt": "p", "jcode_sha256": "2"}},
         ]
         problems = validator.check_matched_conditions(cells)
         self.assertTrue(any("jcode_sha256" in problem for problem in problems))
 
     def test_matched_conditions_pass_when_identical(self) -> None:
-        cells = [{"matched": {"bench_commit": "abc"}}, {"matched": {"bench_commit": "abc"}}]
+        cells = [
+            {"agent": "jcode", "task": "t", "matched": {"bench_commit": "abc"}},
+            {"agent": "jcode", "task": "t", "matched": {"bench_commit": "abc"}},
+        ]
         self.assertEqual(validator.check_matched_conditions(cells), [])
 
 
