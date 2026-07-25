@@ -42,6 +42,23 @@ concluding a cell is stuck, check that the agent log byte count is still growing
 over a span longer than the largest plausible turn, and remember that the score
 curve only moves when the agent runs `./grade`.
 
+## Grade count is not a progress metric
+
+The two harnesses use different strategies, both legitimate:
+
+- Claude Code edits, grades, reads the score, and repeats. It logged 63 grades on
+  `json-unescape` inside 73 minutes.
+- jcode front-loads reasoning: on `float-print` it spent its first 70 minutes
+  deriving Schubfach log-approximation constants and generating and validating
+  lookup tables in Python before writing any C, with the baseline grade as its
+  only score.
+
+So a low grade count early in a run does not mean a cell is unproductive, and a
+high grade count does not mean better work. Only the final official grade is
+comparable. This is the same trap as reading a frozen score curve as a stall,
+and it is why the 20-hour budget matters: judging jcode at 70 minutes would
+misrepresent it exactly the way the original truncated run did.
+
 ## Supervision
 
 `opus5-bench-watch.service` is the reliable entry point:
