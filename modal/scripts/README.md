@@ -30,6 +30,21 @@ Each script hardcodes the pinned binary path used for that run
 terminal: the validity gate, the result reports, and then the website publish
 gate, which refuses on its own if the run is unpublishable or jcode did not win.
 
+## Supervision
+
+`opus5-bench-watch.service` is the reliable entry point:
+
+```bash
+cp modal/scripts/opus5-bench-watch.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now opus5-bench-watch.service
+```
+
+Shell-level supervision was not enough. `setsid` survived a harness reload, but
+the keeper itself kept dying whenever the shell that spawned it was replaced,
+which silently left a 20-hour matrix unobserved. systemd restarts the keeper,
+and the keeper restarts the watcher and progress logger.
+
 The keeper exists because `setsid` alone was not enough: killing the shell that
 had spawned a watcher also took the watcher down mid-run. The keeper polls every
 two minutes, relaunches `opus5-finish.sh` if it is missing, and stops once

@@ -1,0 +1,16 @@
+[Unit]
+Description=Jcode Bench Opus 5 result watcher and progress logger
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jeremy/jcode-bench
+ExecStart=/home/jeremy/jcode-bench/modal/scripts/opus5-keeper.sh
+Restart=always
+RestartSec=30
+# The keeper polls and exits once REPORTS_WRITTEN appears, so a clean exit
+# should not be restarted forever.
+SuccessExitStatus=0
+
+[Install]
+WantedBy=default.target

@@ -14,7 +14,12 @@ import json;print(' '.join(x['run_id'] for x in json.load(open('modal/runs/2026-
 import sys,json
 v=[json.loads(l)['score'] for l in sys.stdin if l.strip() and l.startswith('{')]
 print(f'{len(v)} grades best={max(v):+.4f}' if v else 'no grades')" 2>/dev/null)
-    echo "  $(echo $r | sed 's/.*opus5-//'): $S"
+    # Log size distinguishes a genuinely stalled cell from one mid-generation.
+    # Opus 5 can spend 6+ minutes on a single 65k-token turn, during which the
+    # score curve and even the streamed log look frozen, so score alone is not a
+    # liveness signal.
+    BYTES=$($MV volume get jcode-bench-v1-results runs/$r/agent.log - 2>/dev/null | wc -c)
+    echo "  $(echo $r | sed 's/.*opus5-//'): $S log=${BYTES}B"
   done
   sleep 1800
 done
