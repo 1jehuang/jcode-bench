@@ -254,5 +254,51 @@ class CostModelTests(unittest.TestCase):
         self.assertAlmostEqual(heavy_in, 5.0)
 
 
+class HarnessPinDriftTests(unittest.TestCase):
+    """A mid-run redeploy must not silently split a harness across two builds."""
+
+    @staticmethod
+    def cell(agent, task, jsha=None, csha=None):
+        return {
+            "agent": agent,
+            "task": task,
+            "matched": {
+                "jcode_sha256": jsha,
+                "claude_code_sha256": csha,
+                "bench_commit": "abc",
+                "prompt": f"p-{task}",
+            },
+        }
+
+    def test_detects_split_jcode_pin(self) -> None:
+        # The real incident: rerunning one cell redeployed the app, leaving the
+        # other jcode cells on a build differing by 59 files.
+        cells = [
+            self.cell("jcode", "json-unescape", jsha="5c4b3055"),
+            self.cell("jcode", "utf16-transcode", jsha="6c2720bc"),
+            self.cell("claude-code", "json-unescape", csha="22cfd6f5"),
+        ]
+        problems = validator.check_harness_pins(cells)
+        self.assertTrue(any("jcode_sha256" in p for p in problems), problems)
+
+    def test_absent_cross_harness_field_is_not_drift(self) -> None:
+        # A jcode cell has no Claude Code sha; that must not read as a mismatch.
+        cells = [
+            self.cell("jcode", "json-unescape", jsha="6c2720bc"),
+            self.cell("jcode", "utf16-transcode", jsha="6c2720bc"),
+            self.cell("claude-code", "json-unescape", csha="22cfd6f5"),
+            self.cell("claude-code", "utf16-transcode", csha="22cfd6f5"),
+        ]
+        self.assertEqual(validator.check_harness_pins(cells), [])
+
+    def test_detects_split_claude_code_pin(self) -> None:
+        cells = [
+            self.cell("claude-code", "json-unescape", csha="22cfd6f5"),
+            self.cell("claude-code", "utf16-transcode", csha="deadbeef"),
+        ]
+        problems = validator.check_harness_pins(cells)
+        self.assertTrue(any("claude_code_sha256" in p for p in problems), problems)
+
+
 if __name__ == "__main__":
     unittest.main()

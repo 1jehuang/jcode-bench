@@ -278,6 +278,31 @@ def check_cell(
     }
 
 
+# Artifact pins are per harness: a jcode cell has no Claude Code sha and vice
+# versa, so these are compared within a harness. A mid-run redeploy silently
+# split the jcode cells across two builds differing by 59 files, which a global
+# comparison could not distinguish from a legitimately absent field.
+PER_HARNESS_FIELDS = frozenset({"jcode_sha256", "claude_code_sha256"})
+
+
+def check_harness_pins(cells: list[dict[str, Any]]) -> list[str]:
+    """Every cell of a harness must run the identical pinned artifact."""
+    problems = []
+    for field in sorted(PER_HARNESS_FIELDS):
+        by_agent: dict[str, set[str]] = {}
+        for cell in cells:
+            value = cell["matched"].get(field)
+            if value is None:
+                continue
+            by_agent.setdefault(cell["agent"], set()).add(str(value))
+        for agent, values in sorted(by_agent.items()):
+            if len(values) > 1:
+                problems.append(
+                    f"{agent} cells ran different {field} values: {sorted(values)}"
+                )
+    return problems
+
+
 def check_matched_conditions(cells: list[dict[str, Any]]) -> list[str]:
     """Every cell must agree on the experiment's controlled variables.
 
@@ -286,7 +311,10 @@ def check_matched_conditions(cells: list[dict[str, Any]]) -> list[str]:
     mismatch and mask real drift.
     """
     problems = []
+    problems.extend(check_harness_pins(cells))
     for field in MATCHED_FIELDS:
+        if field in PER_HARNESS_FIELDS:
+            continue
         if field in PER_TASK_FIELDS:
             by_task: dict[str, set[str]] = {}
             for cell in cells:
