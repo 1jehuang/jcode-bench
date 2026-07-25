@@ -515,6 +515,11 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
     memory=8192,
     max_containers=6,
     single_use_containers=True,
+    # These are 20-hour agent runs. Spot preemption hit this matrix at least ten
+    # times, and every restart costs the work since the last checkpoint, so a
+    # cell can spend hours without converging. Non-preemptible capacity is the
+    # correct trade for a long-running measurement whose timing is published.
+    nonpreemptible=True,
     region="us-west",
     # Spot preemption is frequent (6 observed in the first 90 minutes of this
     # matrix). Combined with checkpoint resume, a generous retry budget means a
