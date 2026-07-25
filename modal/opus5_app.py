@@ -60,8 +60,14 @@ SWARM_CONCURRENCY = 8
 # preemption costs seconds of work instead of a whole checkpoint window.
 CHECKPOINT_POLL_SECONDS = 15
 GRADE_ATTEMPTS = 5
-AGENT_TIMEOUT_SECONDS = 20 * 60 * 60  # 20 hours of agent wall clock
-FUNCTION_TIMEOUT_SECONDS = 24 * 60 * 60  # Modal cap; leaves 4h for grading
+# Runs are untimed: an agent finishes when it decides it is finished. The only
+# limit is Modal's hard 24h function ceiling, so the agent gets everything except
+# the time reserved for baseline and final grading. A run stopped by this ceiling
+# is an infrastructure truncation, not a completed measurement, and is recorded
+# as such so it can never be published as a natural finish.
+FUNCTION_TIMEOUT_SECONDS = 24 * 60 * 60  # Modal hard cap
+GRADING_RESERVE_SECONDS = 45 * 60
+AGENT_TIMEOUT_SECONDS = FUNCTION_TIMEOUT_SECONDS - GRADING_RESERVE_SECONDS
 TASKS = ("json-unescape", "float-print", "utf16-transcode")
 HARNESSES = ("jcode", "claude-code")
 # Claude Code refuses --dangerously-skip-permissions under root. Modal
@@ -328,7 +334,12 @@ def run_logged_with_budget(
     log_path: Path,
     budget_seconds: int,
 ) -> tuple[int, bool]:
-    """Run the agent, enforcing the wall-clock budget. Returns (exit_code, timed_out)."""
+    """Run the agent to natural completion. Returns (exit_code, hit_infra_ceiling).
+
+    The timeout exists only because Modal hard-caps a function at 24h. Hitting it
+    means the infrastructure cut the run short, which is a validity failure rather
+    than a result, so the caller records it distinctly from a natural finish.
+    """
     with log_path.open("w", buffering=1) as log:
         uid, gid = _demote()
         process = subprocess.Popen(
@@ -345,7 +356,10 @@ def run_logged_with_budget(
         try:
             return process.wait(timeout=budget_seconds), False
         except subprocess.TimeoutExpired:
-            log.write(f"\n=== agent budget of {budget_seconds}s exhausted; terminating ===\n")
+            log.write(
+                f"\n=== INFRASTRUCTURE TRUNCATION: hit Modal's function ceiling after "
+                f"{budget_seconds}s; the agent had not finished on its own ===\n"
+            )
             process.terminate()
             try:
                 process.wait(timeout=60)

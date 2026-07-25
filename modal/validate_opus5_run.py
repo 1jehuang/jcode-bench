@@ -188,6 +188,14 @@ def check_cell(
     if truncated:
         problems.append(f"{truncated} turn(s) ended at the {ceiling}-token ceiling")
 
+    # A run cut off by Modal's function ceiling never reached its own stopping
+    # point, so its score is a lower bound rather than a measurement.
+    if result.get("agent_timed_out"):
+        problems.append(
+            "agent was stopped by the infrastructure ceiling rather than finishing "
+            "on its own, so the score is a lower bound and not comparable"
+        )
+
     duration = result.get("agent_duration_s") or 0
     budget = result.get("agent_budget_s") or 0
     fraction = duration / budget if budget else 0

@@ -191,6 +191,31 @@ class ValidatorCeilingTests(unittest.TestCase):
         self.assertEqual(validator.check_matched_conditions(cells), [])
 
 
+class UntimedRunTests(unittest.TestCase):
+    """Runs are untimed: only a self-determined finish is a real measurement."""
+
+    def test_agent_budget_leaves_grading_headroom_under_the_modal_cap(self) -> None:
+        import ast, pathlib
+
+        src = pathlib.Path(__file__).with_name("opus5_app.py").read_text()
+        ast.parse(src)
+        ns: dict = {}
+        for line in src.splitlines():
+            if line.startswith(
+                ("FUNCTION_TIMEOUT_SECONDS", "GRADING_RESERVE_SECONDS", "AGENT_TIMEOUT_SECONDS")
+            ):
+                exec(line, ns)  # noqa: S102 - reading pinned constants from source
+        # The agent gets everything except grading reserve: no arbitrary deadline.
+        self.assertEqual(
+            ns["AGENT_TIMEOUT_SECONDS"],
+            ns["FUNCTION_TIMEOUT_SECONDS"] - ns["GRADING_RESERVE_SECONDS"],
+        )
+        # And it is far beyond the old 20h deadline that used to kill agents.
+        self.assertGreater(ns["AGENT_TIMEOUT_SECONDS"], 20 * 60 * 60)
+        # Grading still has real headroom so a final grade always completes.
+        self.assertGreaterEqual(ns["GRADING_RESERVE_SECONDS"], 30 * 60)
+
+
 class ValidatorGateCalibrationTests(unittest.TestCase):
     """Only real defects may void a run; true-but-benign facts get disclosed."""
 
