@@ -56,7 +56,9 @@ CLAUDE_CODE_URL = (
 JCODE_VERSION = os.environ.get("JCODE_BENCH_JCODE_VERSION", "")
 JCODE_SHA256 = os.environ.get("JCODE_BENCH_JCODE_SHA256", "")
 SWARM_CONCURRENCY = 8
-CHECKPOINT_SECONDS = 120  # a preemption costs at most this much work
+# Poll the submission tree this often and snapshot only when it changed, so a
+# preemption costs seconds of work instead of a whole checkpoint window.
+CHECKPOINT_POLL_SECONDS = 15
 GRADE_ATTEMPTS = 5
 AGENT_TIMEOUT_SECONDS = 20 * 60 * 60  # 20 hours of agent wall clock
 FUNCTION_TIMEOUT_SECONDS = 24 * 60 * 60  # Modal cap; leaves 4h for grading
@@ -203,11 +205,42 @@ def restore_latest_checkpoint(result_dir: Path, workdir: Path) -> str | None:
     return None
 
 
+def submission_fingerprint(workdir: Path) -> str:
+    """Content fingerprint of the submission tree, for change detection."""
+    import hashlib
+
+    digest = hashlib.sha256()
+    submission = workdir / "submission"
+    if not submission.is_dir():
+        return ""
+    for path in sorted(submission.rglob("*")):
+        if not path.is_file():
+            continue
+        digest.update(str(path.relative_to(submission)).encode())
+        try:
+            digest.update(path.read_bytes())
+        except OSError:
+            continue
+    return digest.hexdigest()
+
+
 def checkpoint_loop(stop: threading.Event, workdir: Path, result_dir: Path) -> None:
-    while not stop.wait(CHECKPOINT_SECONDS):
-        copy_checkpoint(
-            workdir, result_dir, datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        )
+    """Snapshot the submission whenever it changes.
+
+    A fixed long interval loses everything written since the last tick: a
+    preempted float-print cell lost a completed 136-line solve.c that way and
+    resumed from the pristine given implementation. Polling for content changes
+    on a short interval bounds the loss to seconds of work, and snapshotting
+    only on change keeps the volume from filling with identical copies.
+    """
+    last = submission_fingerprint(workdir)
+    while not stop.wait(CHECKPOINT_POLL_SECONDS):
+        current = submission_fingerprint(workdir)
+        if current and current != last:
+            last = current
+            copy_checkpoint(
+                workdir, result_dir, datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+            )
 
 
 def prompt_for(task: str) -> str:

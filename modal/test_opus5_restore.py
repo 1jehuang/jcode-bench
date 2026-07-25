@@ -60,5 +60,36 @@ class RestoreTests(unittest.TestCase):
         self._ckpt("20260724T235959Z", "", with_submission=False)
         self.assertEqual(app.restore_latest_checkpoint(self.rd, self.wd), "20260724T230000Z")
 
+class FingerprintTests(unittest.TestCase):
+    """Change detection must notice real edits and ignore no-ops."""
+
+    def setUp(self):
+        self.root = pathlib.Path(tempfile.mkdtemp())
+        (self.root/"submission").mkdir()
+        (self.root/"submission"/"solve.c").write_text("// given\n")
+
+    def tearDown(self):
+        shutil.rmtree(self.root, ignore_errors=True)
+
+    def test_fingerprint_changes_when_content_changes(self):
+        before = app.submission_fingerprint(self.root)
+        (self.root/"submission"/"solve.c").write_text("// optimized\n")
+        self.assertNotEqual(before, app.submission_fingerprint(self.root))
+
+    def test_fingerprint_stable_without_edits(self):
+        self.assertEqual(
+            app.submission_fingerprint(self.root), app.submission_fingerprint(self.root)
+        )
+
+    def test_fingerprint_notices_new_files(self):
+        # The float-print agent added gen_tables.py alongside solve.c.
+        before = app.submission_fingerprint(self.root)
+        (self.root/"submission"/"gen_tables.py").write_text("print(1)\n")
+        self.assertNotEqual(before, app.submission_fingerprint(self.root))
+
+    def test_missing_submission_is_empty_not_an_error(self):
+        self.assertEqual(app.submission_fingerprint(self.root/"nope"), "")
+
+
 if __name__ == "__main__":
     unittest.main()
