@@ -6,7 +6,7 @@
   "launched_at": "2026-07-25T00:51:52.797352+00:00",
   "mode": "full",
   "model": "claude-opus-5",
-  "note": "Clean 6-cell Claude Opus 5 head-to-head: all cells launched simultaneously on non-preemptible Modal capacity with change-driven checkpoints, after spot preemption repeatedly destroyed in-flight work. jcode is pinned to the build with the per-model output budget fix.",
+  "note": "Claude Opus 5 head-to-head. All jcode cells are pinned to jcode v0.58.0-dev (5e064af4a), which carries the per-model output budget and empty-post-tool retry fixes. Claude Code cells are pinned to 2.1.219. Non-preemptible capacity with change-driven checkpoints.",
   "reasoning_effort": "high",
   "runner_commit": "998638ca2bd0cc9c2db463c726220b860737b1c1",
   "runs": [
@@ -39,28 +39,28 @@
     },
     {
       "agent": "jcode",
-      "function_call_id": "fc-01KYBC3M9A4NGA1Z11DMX9P72N",
-      "launched_at": "2026-07-25T00:51:52.797352+00:00",
+      "function_call_id": "fc-01KYBKHZQNYBGV8MQ0896NYKWG",
+      "launched_at": "2026-07-25T03:02:02.823200+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260725T005151Z-opus5-jcode-float-print",
+      "run_id": "20260725T030202Z-opus5-jcode-float-print",
       "swarm": false,
       "task": "float-print"
     },
     {
       "agent": "jcode",
-      "function_call_id": "fc-01KYBC3KXTQ8EFPFSMJYRGKX82",
-      "launched_at": "2026-07-25T00:51:52.797352+00:00",
+      "function_call_id": "fc-01KYBKHZJXA9JYJFF71EKCMPBC",
+      "launched_at": "2026-07-25T03:02:02.823200+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260725T005151Z-opus5-jcode-json-unescape",
+      "run_id": "20260725T030202Z-opus5-jcode-json-unescape",
       "swarm": false,
       "task": "json-unescape"
     },
     {
       "agent": "jcode",
-      "function_call_id": "fc-01KYBC3MHPR5N4V2RGM5QTADAB",
-      "launched_at": "2026-07-25T00:51:52.797352+00:00",
+      "function_call_id": "fc-01KYBKB1EPJSMM63P2J2D626DK",
+      "launched_at": "2026-07-25T02:58:15.209613+00:00",
       "model": "claude-opus-5",
-      "run_id": "20260725T005151Z-opus5-jcode-utf16-transcode",
+      "run_id": "20260725T025814Z-opus5-jcode-utf16-transcode",
       "swarm": false,
       "task": "utf16-transcode"
     }
@@ -99,6 +99,19 @@
     {
       "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
       "run_id": "20260724T220318Z-opus5-jcode-utf16-transcode"
+    },
+    {
+      "observed_final_score": 0.0,
+      "reason": "final turn returned zero output tokens; the empty-post-tool retry budget was 1, so the turn loop ended with the submission unoptimized and the run reported success at 0.0",
+      "run_id": "20260725T005151Z-opus5-jcode-utf16-transcode"
+    },
+    {
+      "reason": "pinned to jcode v0.56.19-dev; the utf16 rerun required v0.58.0 for the empty-post-tool retry fix, and the two builds differ by 59 files, so all jcode cells were relaunched on one pin rather than assuming the delta was score-neutral",
+      "run_id": "20260725T005151Z-opus5-jcode-float-print"
+    },
+    {
+      "reason": "pinned to jcode v0.56.19-dev; the utf16 rerun required v0.58.0 for the empty-post-tool retry fix, and the two builds differ by 59 files, so all jcode cells were relaunched on one pin rather than assuming the delta was score-neutral",
+      "run_id": "20260725T005151Z-opus5-jcode-json-unescape"
     }
   ]
 }
