@@ -70,6 +70,23 @@ def main(here, fn, extra_cflags=None, verify_args=None):
         sh(["valgrind", "--tool=callgrind", f"--toggle-collect={func}",
             "--collect-atstart=no", "--dump-line=no",
             f"--callgrind-out-file={cg}", os.path.join(BUILD, binary), corpus])
+        # Sum every callgrind cost line. Note this is NOT raw Ir: a cost line
+        # also follows each `calls=` record carrying the callee's *inclusive*
+        # cost, so every ancestor on the call chain above the collect toggle
+        # re-counts the whole subtree. Measured here: callgrind's own
+        # `totals:` is 15,575,649 while this sum is 77,880,000, a 5.0001x
+        # inflation from the fixed chain
+        # 0x1f100 -> (below main) -> __libc_start_main -> main -> target.
+        #
+        # This is deliberate to leave alone: the depth is set by verify/runner.c
+        # and is identical for the submission and the frozen `given` binary, so
+        # the factor cancels exactly in log2(given / cost) and scores are
+        # comparable. Verified by grading three variants of one algorithm
+        # (stock, an extra noinline call site, and an immintrin.h include to
+        # force a source-file switch): the ratio stayed 5.0001x in all three,
+        # so a submission cannot move it. Do not "fix" this without
+        # rebaselining every published score, and do not report the sum as an
+        # instruction count.
         total = 0
         with open(cg) as f:
             for line in f:
@@ -104,5 +121,5 @@ def main(here, fn, extra_cflags=None, verify_args=None):
     if not args.quiet:
         print(f"build   {t_build:5.1f}s")
         print(f"verify  {t_verify:5.1f}s  PASS{' (FULL gate)' if args.full else ''}")
-        print(f"measure {t_measure:5.1f}s  {cost:,} instructions (given: {given:,})")
+        print(f"measure {t_measure:5.1f}s  {cost:,} cost units (given: {given:,})")
     print(f"SCORE   {score:+.4f}  ({given / cost:.3f}x)")
