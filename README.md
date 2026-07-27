@@ -30,6 +30,44 @@ score-over-time curve.
 | float-print | live | all 2^32 floats (--full) | shortest round-trip float to decimal |
 | utf16-transcode | live | exhaustive | UTF-16 -> UTF-8 |
 
+## Interpreting scores: run-to-run variance dominates
+
+Two jcode runs of the same task on the same pinned binary, `claude-opus-5`
+high, `utf16-transcode`:
+
+| run | final | peak | peak at grade |
+|---|---|---|---|
+| `20260725T030202Z` | 3.3056 | 3.3099 | 14/27 |
+| `20260727T064423Z` | 3.2032* | 3.2123 | 24/27 |
+
+\* still in flight at the time of writing; its curve had been flat within
+seed noise for six grades, so the final is not expected to move much.
+
+That is a **0.10 spread from agent behavior alone**, roughly a 0.09 standard
+deviation. Separately, regrading one unchanged program across 15 corpus seeds
+moves the score by only stdev 0.0040, so measurement noise is ~24x smaller than
+run-to-run noise: an agent's search path, not the grader, is what varies.
+
+Consequences for reading a k=1 matrix:
+
+| gap between two harnesses | runs needed to resolve at ~95% |
+|---|---|
+| 0.25 | k >= 2 |
+| 0.08 | k >= 11 |
+| 0.02 | k >= 237 |
+
+So a single-cell difference under roughly 0.1 says nothing, and differences
+under 0.02 are not worth measuring at any sane cost. Treat k=1 cells as
+directional only, and do not attribute a sub-0.1 gap to a harness change
+without rerunning. A worked example of getting this wrong: a 0.081
+`float-print` gap was investigated as a regression before this variance was
+measured, and it sits comfortably inside the spread above.
+
+The trajectory shape is also unstable. The first run peaked at grade 14 of 27
+and then flatlined; the second peaked at 24 of 27. Conclusions of the form
+"this harness stops searching early" need several runs, since a single curve
+does not pin the behavior down.
+
 ## Run
 
 ```
