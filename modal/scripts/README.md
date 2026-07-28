@@ -21,6 +21,9 @@ They exist because the interactive path was unreliable in two specific ways:
 | `opus5-progress.sh` | log a compact per-cell score line every 30 minutes |
 | `opus5-clean-matrix.sh` | launch all six cells simultaneously on non-preemptible capacity |
 | `opus5-effort-sweep.sh` | deploy and launch the 18-cell low/medium/high effort sweep |
+| `opus5-effort-finish.sh` | wait for a sweep to go terminal, then gate and write its reports |
+| `opus5-effort-progress.sh` | log a per-cell score line for a sweep every 30 minutes |
+| `opus5-effort-keeper.sh` | supervise the sweep watcher and progress logger |
 | `opus5-redeploy.sh` | redeploy the app with the pinned binary, retrying stalled uploads |
 
 Each script hardcodes the pinned binary path used for that run
@@ -82,3 +85,23 @@ two minutes, relaunches `opus5-finish.sh` if it is missing, and stops once
 
 Logs land at `/tmp/opus5-run.log`, `/tmp/opus5-cc.log`,
 `/tmp/opus5-monitor.log`, and `/tmp/opus5-finish.log`.
+
+## Effort sweep supervision
+
+The sweep has its own watcher chain so it cannot collide with a head-to-head run
+still being supervised: separate logs, separate PID directory, separate systemd
+unit, and a manifest passed as an argument instead of hardcoded.
+
+```bash
+cp modal/scripts/opus5-effort-watch.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now opus5-effort-watch.service
+```
+
+The sweep finisher deliberately stops after the validity gate and the reports. It
+does not run the website payload builder, because that builder encodes a
+two-harness head-to-head claim and a three-effort sweep would need a gate that
+understands the extra axis before it could be published.
+
+Logs: `/tmp/opus5-effort-sweep.log`, `/tmp/opus5-effort-finish.log`,
+`/tmp/opus5-effort-progress.log`, `/tmp/opus5-effort-keeper.log`.
