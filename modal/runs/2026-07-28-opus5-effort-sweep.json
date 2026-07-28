@@ -1,0 +1,178 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-opus5",
+  "launched_at": "2026-07-28T08:44:41.292405+00:00",
+  "mode": "full",
+  "model": "claude-opus-5",
+  "reasoning_effort": "swept",
+  "reasoning_efforts": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "runner_commit": "1ddf3d15d9f63f1c1e4abc633c2a9cfe8f49de26",
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBF3QYZB2WPY7DR0DQQPJ",
+      "model": "claude-opus-5",
+      "reasoning_effort": "low",
+      "run_id": "20260728T084428Z-opus5-low-jcode-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBF7T2DZQD1NRPPAJ3QX7",
+      "model": "claude-opus-5",
+      "reasoning_effort": "low",
+      "run_id": "20260728T084428Z-opus5-low-claude-code-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBFC7DT4MAFBREBM9D8D3",
+      "model": "claude-opus-5",
+      "reasoning_effort": "low",
+      "run_id": "20260728T084428Z-opus5-low-jcode-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBFGHGM5W4PKZWWEP4H2H",
+      "model": "claude-opus-5",
+      "reasoning_effort": "low",
+      "run_id": "20260728T084428Z-opus5-low-claude-code-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBFMPGCFJHGPME966D97T",
+      "model": "claude-opus-5",
+      "reasoning_effort": "low",
+      "run_id": "20260728T084428Z-opus5-low-jcode-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBFRQ06BRHBKVG79YRAJH",
+      "model": "claude-opus-5",
+      "reasoning_effort": "low",
+      "run_id": "20260728T084428Z-opus5-low-claude-code-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBFX386HH1T9GA2BSDQEF",
+      "model": "claude-opus-5",
+      "reasoning_effort": "medium",
+      "run_id": "20260728T084428Z-opus5-medium-jcode-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBG18XHYXEZ3C2JFVKNRF",
+      "model": "claude-opus-5",
+      "reasoning_effort": "medium",
+      "run_id": "20260728T084428Z-opus5-medium-claude-code-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBG5NW7N3ST03A8AR63ZZ",
+      "model": "claude-opus-5",
+      "reasoning_effort": "medium",
+      "run_id": "20260728T084428Z-opus5-medium-jcode-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBGA7FSQYZT45E17R1R33",
+      "model": "claude-opus-5",
+      "reasoning_effort": "medium",
+      "run_id": "20260728T084428Z-opus5-medium-claude-code-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBGEGJSHS3YGA1ZWFNMM3",
+      "model": "claude-opus-5",
+      "reasoning_effort": "medium",
+      "run_id": "20260728T084428Z-opus5-medium-jcode-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBGJSCCQBNJWZBDEPBVGK",
+      "model": "claude-opus-5",
+      "reasoning_effort": "medium",
+      "run_id": "20260728T084428Z-opus5-medium-claude-code-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBGQ5PYB4JR6BCM9493MX",
+      "model": "claude-opus-5",
+      "reasoning_effort": "high",
+      "run_id": "20260728T084428Z-opus5-high-jcode-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBGVAETREW0NNFGM5VWJS",
+      "model": "claude-opus-5",
+      "reasoning_effort": "high",
+      "run_id": "20260728T084428Z-opus5-high-claude-code-json-unescape",
+      "swarm": false,
+      "task": "json-unescape"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBGZY42GKX2ZASHYTDA2V",
+      "model": "claude-opus-5",
+      "reasoning_effort": "high",
+      "run_id": "20260728T084428Z-opus5-high-jcode-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBH4P3GVR2JYWWRRYBJ3N",
+      "model": "claude-opus-5",
+      "reasoning_effort": "high",
+      "run_id": "20260728T084428Z-opus5-high-claude-code-float-print",
+      "swarm": false,
+      "task": "float-print"
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYKYBH8XS85QG04E96H5JH8A",
+      "model": "claude-opus-5",
+      "reasoning_effort": "high",
+      "run_id": "20260728T084428Z-opus5-high-jcode-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYKYBHD2C7HSQ9YJE9VH31SN",
+      "model": "claude-opus-5",
+      "reasoning_effort": "high",
+      "run_id": "20260728T084428Z-opus5-high-claude-code-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode"
+    }
+  ]
+}
