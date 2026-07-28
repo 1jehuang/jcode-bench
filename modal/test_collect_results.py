@@ -288,6 +288,44 @@ class EffortSweepTests(unittest.TestCase):
         self.assertIn("sweep is not complete", markdown)
 
 
+class ReadmeSweepTableTests(unittest.TestCase):
+    """The README's sweep table must agree with the report it summarizes.
+
+    The table is hand-maintained prose next to machine-generated results, and a
+    stale published number is indistinguishable from a real measurement, so the
+    two are pinned together here rather than by care alone.
+    """
+
+    REPO = Path(__file__).resolve().parents[1]
+    RESULTS = REPO / "modal/runs/2026-07-28-opus5-effort-sweep-results.json"
+    README = REPO / "README.md"
+
+    def setUp(self) -> None:
+        if not self.RESULTS.exists():
+            self.skipTest("sweep results are not present in this checkout")
+        self.results = json.loads(self.RESULTS.read_text())
+        text = self.README.read_text()
+        self.assertIn("Claude Opus 5 reasoning-effort sweep", text)
+        self.section = text.split("### Claude Opus 5 reasoning-effort sweep", 1)[1]
+
+    def test_every_mean_in_the_table_matches_the_report(self) -> None:
+        for row in self.results["aggregates"]:
+            self.assertIn(
+                f"{row['mean_final_score']:.4f}",
+                self.section,
+                f"{row['agent']} at {row['reasoning_effort']} is stale or missing",
+            )
+
+    def test_table_names_the_winner_of_every_effort(self) -> None:
+        for effort in self.results["reasoning_efforts"]:
+            self.assertIn(f"| {effort} |", self.section)
+
+    def test_table_discloses_the_noise_bound_high_effort_gap(self) -> None:
+        collapsed = " ".join(self.section.split()).lower()
+        self.assertIn("noise floor", collapsed)
+        self.assertIn("one run does not resolve it", collapsed)
+
+
 VALIDATOR_PATH = Path(__file__).with_name("validate_opus5_run.py")
 _VSPEC = importlib.util.spec_from_file_location("validate_opus5_run", VALIDATOR_PATH)
 assert _VSPEC and _VSPEC.loader
