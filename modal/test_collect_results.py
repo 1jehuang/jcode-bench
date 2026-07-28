@@ -160,8 +160,27 @@ class HeadToHeadComparisonTests(unittest.TestCase):
             ),
         }
         markdown = collect.render_markdown(report)
-        self.assertIn("Jcode led Claude Code by **+1.0000**", markdown)
+        self.assertIn("Jcode led Claude Code by **1.0000**", markdown)
         self.assertIn("2.000x", markdown)
+
+    def test_a_loss_is_not_described_as_a_lead(self) -> None:
+        aggregates = [
+            aggregate_row("jcode", 3.0, 1800.0),
+            aggregate_row("claude-code", 4.0, 1800.0),
+        ]
+        report = {
+            "model": "claude-opus-5",
+            "reasoning_effort": "high",
+            "benchmark_commit": "abc123",
+            "run_count": 6,
+            "completed_count": 6,
+            "runs": [],
+            "aggregates": aggregates,
+            "comparisons": collect.comparisons(aggregates),
+        }
+        markdown = collect.render_markdown(report)
+        self.assertIn("Jcode trailed Claude Code by **1.0000**", markdown)
+        self.assertNotIn("Jcode led Claude Code", markdown)
 
 
 class EffortSweepTests(unittest.TestCase):
@@ -225,6 +244,34 @@ class EffortSweepTests(unittest.TestCase):
         self.assertIn("going from `low` to `high`", markdown)
         # The effort must be visible on each row, not just in the header.
         self.assertIn("| jcode | claude-opus-5 | low |", markdown)
+        # Aggregates walk the effort axis in capability order, so a reader is not
+        # handed "high" before "low".
+        agg = markdown.split("## Aggregate results")[1]
+        self.assertLess(
+            agg.index("| claude-code | claude-opus-5 | low |"),
+            agg.index("| claude-code | claude-opus-5 | high |"),
+        )
+
+    def test_swept_loss_is_not_described_as_a_lead(self) -> None:
+        aggregates = [
+            aggregate_row("jcode", 1.0, 1000.0, "low"),
+            aggregate_row("claude-code", 2.0, 1000.0, "low"),
+            aggregate_row("jcode", 4.0, 1000.0, "high"),
+            aggregate_row("claude-code", 3.0, 1000.0, "high"),
+        ]
+        report = {
+            "model": "claude-opus-5",
+            "reasoning_efforts": ["low", "high"],
+            "benchmark_commit": "abc123",
+            "run_count": 12,
+            "completed_count": 12,
+            "runs": [],
+            "aggregates": aggregates,
+            "comparisons": collect.comparisons(aggregates),
+        }
+        markdown = collect.render_markdown(report)
+        self.assertIn("At `low` effort, Jcode trailed Claude Code by **1.0000**", markdown)
+        self.assertIn("At `high` effort, Jcode led Claude Code by **1.0000**", markdown)
 
     def test_incomplete_sweep_renders_without_comparisons(self) -> None:
         report = {

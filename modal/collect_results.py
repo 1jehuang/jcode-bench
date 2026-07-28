@@ -248,9 +248,13 @@ def render_markdown(report: dict[str, Any]) -> str:
         for effort in sorted(swept_efforts, key=effort_rank):
             head_to_head = comparison.get(f"jcode_vs_claude_code_{effort}")
             if head_to_head:
+                # "led by -0.25" is not a lead. The sign of the delta decides the
+                # verb, so a losing cell is never described as a win.
+                score_delta = head_to_head["mean_score_delta"]
+                verb = "led" if score_delta > 0 else "trailed"
                 summary_lines.append(
-                    f"- At `{effort}` effort, Jcode led Claude Code by "
-                    f"**{head_to_head['mean_score_delta']:+.4f}** mean final score "
+                    f"- At `{effort}` effort, Jcode {verb} Claude Code by "
+                    f"**{abs(score_delta):.4f}** mean final score "
                     f"(**{head_to_head['geomean_efficiency_factor']:.3f}x**), with "
                     f"**{head_to_head['total_agent_time_delta_percent']:+.2f}%** total agent time."
                 )
@@ -276,9 +280,11 @@ def render_markdown(report: dict[str, Any]) -> str:
         )
     elif "jcode_vs_claude_code" in comparison:
         head_to_head = comparison["jcode_vs_claude_code"]
+        verb = "led" if head_to_head["mean_score_delta"] > 0 else "trailed"
         summary_lines.extend(
             [
-                f"- Jcode led Claude Code by **{head_to_head['mean_score_delta']:+.4f}** mean final score, "
+                f"- Jcode {verb} Claude Code by "
+                f"**{abs(head_to_head['mean_score_delta']):.4f}** mean final score, "
                 f"a **{head_to_head['geomean_efficiency_factor']:.3f}x** geometric-mean "
                 "instruction-efficiency difference on the same model.",
                 f"- Total agent time difference: **{head_to_head['total_agent_time_delta_percent']:+.2f}%** "
@@ -354,7 +360,12 @@ def render_markdown(report: dict[str, Any]) -> str:
             "|---|---|---|---:|---:|---:|---:|---:|---:|",
         ]
     )
-    for row in report["aggregates"]:
+    # Aggregates are grouped for stable keys, but a reader walks the effort axis
+    # in capability order, so present them that way instead of alphabetically.
+    for row in sorted(
+        report["aggregates"],
+        key=lambda row: (row["agent"], effort_rank(row.get("reasoning_effort", "unknown"))),
+    ):
         lines.append(
             f"| {row['agent']} | {row.get('model', report.get('model', 'unknown'))} | "
             f"{row.get('reasoning_effort', report.get('reasoning_effort', 'unknown'))} | "
