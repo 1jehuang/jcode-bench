@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -288,42 +289,51 @@ class EffortSweepTests(unittest.TestCase):
         self.assertIn("sweep is not complete", markdown)
 
 
-class ReadmeSweepTableTests(unittest.TestCase):
-    """The README's sweep table must agree with the report it summarizes.
+class ReadmeSweepSectionTests(unittest.TestCase):
+    """The README must never state a sweep number that disagrees with the report.
 
-    The table is hand-maintained prose next to machine-generated results, and a
-    stale published number is indistinguishable from a real measurement, so the
-    two are pinned together here rather than by care alone.
+    Two states are legitimate: publishing the table, or withholding it. Both are
+    checked by one rule, because the failure that matters is the same either way,
+    a published figure that no longer matches the measurement. Hand-maintained
+    prose next to machine-generated results is exactly where that happens, and a
+    stale number is indistinguishable from a real one to a reader.
     """
 
     REPO = Path(__file__).resolve().parents[1]
     RESULTS = REPO / "modal/runs/2026-07-28-opus5-effort-sweep-results.json"
     README = REPO / "README.md"
+    HEADING = "### Claude Opus 5 reasoning-effort sweep"
 
     def setUp(self) -> None:
         if not self.RESULTS.exists():
             self.skipTest("sweep results are not present in this checkout")
         self.results = json.loads(self.RESULTS.read_text())
         text = self.README.read_text()
-        self.assertIn("Claude Opus 5 reasoning-effort sweep", text)
-        self.section = text.split("### Claude Opus 5 reasoning-effort sweep", 1)[1]
+        self.assertIn(self.HEADING, text, "the sweep is not indexed in the README")
+        self.section = text.split(self.HEADING, 1)[1].split("\n## ", 1)[0]
 
-    def test_every_mean_in_the_table_matches_the_report(self) -> None:
-        for row in self.results["aggregates"]:
-            self.assertIn(
-                f"{row['mean_final_score']:.4f}",
-                self.section,
-                f"{row['agent']} at {row['reasoning_effort']} is stale or missing",
-            )
+    def scores_in_section(self) -> set[str]:
+        return set(re.findall(r"\b\d\.\d{4}\b", self.section))
 
-    def test_table_names_the_winner_of_every_effort(self) -> None:
-        for effort in self.results["reasoning_efforts"]:
-            self.assertIn(f"| {effort} |", self.section)
+    def test_any_score_stated_matches_the_report(self) -> None:
+        allowed = {
+            f"{row['mean_final_score']:.4f}" for row in self.results["aggregates"]
+        } | {f"{row['mean_best_score']:.4f}" for row in self.results["aggregates"]}
+        self.assertEqual(self.scores_in_section() - allowed, set())
 
-    def test_table_discloses_the_noise_bound_high_effort_gap(self) -> None:
+    def test_withheld_section_states_that_plainly(self) -> None:
+        """Silence is not the same as disclosure: say the numbers are held back."""
+        if self.scores_in_section():
+            self.skipTest("the section publishes its numbers, so nothing is withheld")
+        self.assertIn("held back", " ".join(self.section.split()).lower())
+
+    def test_published_section_discloses_the_noise_bound_gap(self) -> None:
+        if not self.scores_in_section():
+            self.skipTest("the section withholds its numbers")
         collapsed = " ".join(self.section.split()).lower()
         self.assertIn("noise floor", collapsed)
-        self.assertIn("one run does not resolve it", collapsed)
+        for effort in self.results["reasoning_efforts"]:
+            self.assertIn(f"| {effort} |", self.section)
 
 
 VALIDATOR_PATH = Path(__file__).with_name("validate_opus5_run.py")

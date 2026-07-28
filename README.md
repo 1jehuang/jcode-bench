@@ -100,22 +100,10 @@ The Jcode-solo GPT-5.6 Sol versus Opus 4.8 comparison is available as
 
 An 18-cell sweep on 2026-07-28 varies only reasoning effort: `low`, `medium`,
 and `high` x Jcode and Claude Code x all three tasks, on one model and one
-sha256-pinned Jcode build. All 18 cells passed the validity gate. Results as
-[`Markdown`](modal/runs/2026-07-28-opus5-effort-sweep-results.md),
-[`JSON`](modal/runs/2026-07-28-opus5-effort-sweep-results.json),
-[`validation`](modal/runs/2026-07-28-opus5-effort-sweep-validation.json), and
-the [`launch manifest`](modal/runs/2026-07-28-opus5-effort-sweep.json).
-
-| effort | jcode | Claude Code | gap |
-|---|---:|---:|---|
-| low | 4.2016 | **4.4516** | Claude Code by 0.250 |
-| medium | 4.5640 | **4.8628** | Claude Code by 0.299 |
-| high | **5.1544** | 5.0516 | Jcode by 0.103, at the noise floor |
-
-Both harnesses convert effort into score monotonically and the ranking flips.
-The high-effort gap is the size of the run-to-run spread measured above, so one
-run does not resolve it; the low and medium gaps are larger than that spread.
-Jcode also spent 17.0 agent hours at high effort against Claude Code's 5.1.
+sha256-pinned Jcode build. All 18 cells passed the validity gate. The numbers
+are held back pending review, so only the reproducible runner and the launch
+manifest are documented here; see [`modal/README.md`](modal/README.md) for how
+to run the sweep and generate the reports.
 
 ## Rules
 
