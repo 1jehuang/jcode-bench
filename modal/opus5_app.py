@@ -1,7 +1,8 @@
 """Modal worker for the Jcode Bench v1 Claude Opus 5 harness comparison.
 
 Runs the three frozen Jcode Bench v1 tasks under two agent harnesses on the
-same model (Anthropic `claude-opus-5`, high effort, Anthropic API):
+same model (Anthropic `claude-opus-5`, Anthropic API) at a caller-selected
+reasoning effort:
 
 | harness | version | delegation |
 |---|---|---|
@@ -9,9 +10,11 @@ same model (Anthropic `claude-opus-5`, high effort, Anthropic API):
 | Claude Code | pinned npm release | default built-in Task tool |
 
 Every cell shares the benchmark commit, prompt, CPU, memory, region, container
-policy, model, reasoning effort, and a 20-hour agent wall-clock budget. The
-Modal function timeout is 24h so baseline and final grading always complete
-even when an agent uses its whole budget.
+policy, model, and a 20-hour agent wall-clock budget. Reasoning effort is the
+one deliberately swept axis: it is a per-call argument, so a single deployment
+serves the whole low/medium/high sweep and every cell in the sweep is otherwise
+byte-identical. The Modal function timeout is 24h so baseline and final grading
+always complete even when an agent uses its whole budget.
 
 Deploy with ANTHROPIC_API_KEY in the local environment:
 
@@ -35,7 +38,10 @@ import modal
 APP_NAME = "jcode-bench-v1-opus5"
 BENCH_COMMIT = "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0"
 MODEL = "claude-opus-5"
-REASONING_EFFORT = "high"
+# The swept axis. Both harnesses accept exactly these spellings: jcode through
+# JCODE_ANTHROPIC_REASONING_EFFORT and Claude Code through `--effort`.
+REASONING_EFFORTS = ("low", "medium", "high")
+DEFAULT_REASONING_EFFORT = "high"
 # Opus 5's published synchronous max output, verified against the live API
 # (max_tokens=128000 is accepted, 128001 is rejected). Recorded per run so the
 # collector can detect turns that stopped exactly at the ceiling.
@@ -267,6 +273,7 @@ def command_for(
     workdir: Path,
     prompt: str,
     home: Path,
+    effort: str,
 ) -> tuple[list[str], dict[str, str]]:
     env = os.environ.copy()
     env.update({"HOME": str(home), "CI": "1", "TERM": "dumb", "NO_COLOR": "1"})
@@ -276,7 +283,7 @@ def command_for(
             {
                 "JCODE_PROVIDER": "anthropic-api",
                 "JCODE_MODEL": MODEL,
-                "JCODE_ANTHROPIC_REASONING_EFFORT": REASONING_EFFORT,
+                "JCODE_ANTHROPIC_REASONING_EFFORT": effort,
                 "JCODE_SWARM_ENABLED": "false",
                 "JCODE_SWARM_MODEL": f"claude-api:{MODEL}",
                 "JCODE_SWARM_SPAWN_MODE": "headless",
@@ -315,7 +322,7 @@ def command_for(
             "--model",
             MODEL,
             "--effort",
-            REASONING_EFFORT,
+            effort,
             "--dangerously-skip-permissions",
             "--output-format",
             "stream-json",
@@ -423,7 +430,9 @@ def _run_captured(command: list[str], env: dict[str, str], cwd: Path, timeout: i
     return completed.stdout
 
 
-def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, object]:
+def verify_preflight(
+    harness: str, env: dict[str, str], cwd: Path, effort: str
+) -> dict[str, object]:
     """Prove the pinned CLI is present and resolves the intended model.
 
     Both harnesses are asked to emit a one-word answer with the exact benchmark
@@ -469,7 +478,7 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
             "jcode_version": version,
             "jcode_sha256": _sha256_file(Path("/usr/local/bin/jcode")),
             "observed_model": observed_model,
-            "reasoning_effort": REASONING_EFFORT,
+            "reasoning_effort": effort,
             "swarm_enabled": env.get("JCODE_SWARM_ENABLED"),
         }
 
@@ -483,7 +492,7 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
             "--model",
             MODEL,
             "--effort",
-            REASONING_EFFORT,
+            effort,
             "--dangerously-skip-permissions",
             "--output-format",
             "stream-json",
@@ -513,7 +522,7 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
         "claude_code_version": version,
         "claude_code_sha256": _sha256_file(Path("/usr/local/bin/claude")),
         "observed_model": observed_model,
-        "reasoning_effort": REASONING_EFFORT,
+        "reasoning_effort": effort,
         "permission_mode": init_event.get("permissionMode"),
         "api_key_source": init_event.get("apiKeySource"),
         "tools": init_event.get("tools"),
@@ -527,7 +536,10 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
     timeout=FUNCTION_TIMEOUT_SECONDS,
     cpu=4,
     memory=8192,
-    max_containers=6,
+    # One container per cell of the widest matrix this app launches: three
+    # efforts x two harnesses x three tasks. A lower cap silently serializes
+    # cells, which would stretch an 18-cell sweep across several days.
+    max_containers=len(REASONING_EFFORTS) * len(HARNESSES) * len(TASKS),
     single_use_containers=True,
     # These are 20-hour agent runs. Spot preemption hit this matrix at least ten
     # times, and every restart costs the work since the last checkpoint, so a
@@ -540,11 +552,15 @@ def verify_preflight(harness: str, env: dict[str, str], cwd: Path) -> dict[str, 
     # late preemption costs one checkpoint interval instead of the whole run.
     retries=modal.Retries(max_retries=10, initial_delay=5.0, backoff_coefficient=2.0),
 )
-def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
+def run_case(
+    harness: str, task: str, run_id: str, effort: str = DEFAULT_REASONING_EFFORT
+) -> dict[str, object]:
     if harness not in HARNESSES:
         raise ValueError(f"harness must be one of {HARNESSES}")
     if task not in TASKS:
         raise ValueError(f"task must be one of {TASKS}")
+    if effort not in REASONING_EFFORTS:
+        raise ValueError(f"effort must be one of {REASONING_EFFORTS}")
     _verify_pinned_binary(Path("/usr/local/bin/jcode"))
 
     result_dir = Path("/results/runs") / run_id
@@ -580,7 +596,7 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
         "model": MODEL,
         "provider": "anthropic-api",
         "vendor": "anthropic",
-        "reasoning_effort": REASONING_EFFORT,
+        "reasoning_effort": effort,
         "agent_budget_s": AGENT_TIMEOUT_SECONDS,
         "bench_commit": BENCH_COMMIT,
         "jcode_version": JCODE_VERSION,
@@ -609,7 +625,7 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
         raise RuntimeError("baseline grader failed after infrastructure retries")
 
     copy_checkpoint(workdir, result_dir, "baseline")
-    command, env = command_for(harness, workdir, prompt_for(task), home)
+    command, env = command_for(harness, workdir, prompt_for(task), home, effort)
     write_json(
         result_dir / "command.json",
         {
@@ -628,7 +644,10 @@ def run_case(harness: str, task: str, run_id: str) -> dict[str, object]:
     preflight_dir = work_root / "preflight"
     preflight_dir.mkdir(parents=True, exist_ok=True)
     _chown_tree(preflight_dir)
-    write_json(result_dir / "preflight.json", verify_preflight(harness, env, preflight_dir))
+    write_json(
+        result_dir / "preflight.json",
+        verify_preflight(harness, env, preflight_dir, effort),
+    )
     results.commit()
 
     stop = threading.Event()

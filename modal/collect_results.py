@@ -117,18 +117,29 @@ def truncated_turn_count(agent: str, log: str, ceiling: int) -> int:
 
 
 def aggregate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    groups: dict[tuple[str, bool, str], list[dict[str, Any]]] = defaultdict(list)
+    # Reasoning effort is part of the identity of a cell. Grouping without it
+    # would average low, medium, and high into one meaningless mean and hide the
+    # very axis an effort sweep exists to measure.
+    groups: dict[tuple[str, bool, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         if row["status"] == "completed":
-            groups[(row["agent"], row["swarm"], row.get("model", "unknown"))].append(row)
+            groups[
+                (
+                    row["agent"],
+                    row["swarm"],
+                    row.get("model", "unknown"),
+                    row.get("reasoning_effort", "unknown"),
+                )
+            ].append(row)
 
     result = []
-    for (agent, swarm, model), values in sorted(groups.items()):
+    for (agent, swarm, model, effort), values in sorted(groups.items()):
         result.append(
             {
                 "agent": agent,
                 "swarm": swarm,
                 "model": model,
+                "reasoning_effort": effort,
                 "completed_tasks": len(values),
                 "mean_final_score": round(
                     statistics.fmean(value["final_score"] for value in values), 4
@@ -145,23 +156,62 @@ def aggregate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
-def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]:
-    by_mode = {(row["agent"], row["swarm"]): row for row in aggregates}
+# Ordered weakest to strongest, so a swept report walks the axis in the order a
+# reader expects rather than alphabetically ("high" before "low").
+EFFORT_ORDER = ("low", "medium", "high", "xhigh", "max")
 
-    def compare(
-        left: tuple[str, bool], right: tuple[str, bool]
-    ) -> dict[str, float]:
-        left_row = by_mode[left]
-        right_row = by_mode[right]
-        score_delta = left_row["mean_final_score"] - right_row["mean_final_score"]
-        duration_delta = (
-            left_row["total_agent_duration_s"] / right_row["total_agent_duration_s"] - 1
-        ) * 100
-        return {
-            "mean_score_delta": round(score_delta, 4),
-            "geomean_efficiency_factor": round(2**score_delta, 4),
-            "total_agent_time_delta_percent": round(duration_delta, 2),
-        }
+
+def effort_rank(effort: str) -> tuple[int, str]:
+    if effort in EFFORT_ORDER:
+        return (EFFORT_ORDER.index(effort), effort)
+    return (len(EFFORT_ORDER), effort)
+
+
+def delta(left: dict[str, Any], right: dict[str, Any]) -> dict[str, float]:
+    """Score and agent-time movement of `left` relative to `right`."""
+    score_delta = left["mean_final_score"] - right["mean_final_score"]
+    duration_delta = (
+        left["total_agent_duration_s"] / right["total_agent_duration_s"] - 1
+    ) * 100
+    return {
+        "mean_score_delta": round(score_delta, 4),
+        "geomean_efficiency_factor": round(2**score_delta, 4),
+        "total_agent_time_delta_percent": round(duration_delta, 2),
+    }
+
+
+def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]:
+    by_effort: dict[str, dict[tuple[str, bool], dict[str, Any]]] = defaultdict(dict)
+    for row in aggregates:
+        by_effort[row.get("reasoning_effort", "unknown")][
+            (row["agent"], row["swarm"])
+        ] = row
+    efforts = sorted(by_effort, key=effort_rank)
+
+    if len(efforts) > 1:
+        # A swept manifest gets one harness comparison per effort, plus how each
+        # harness moves as effort rises, which is the question the sweep asks.
+        swept: dict[str, dict[str, float]] = {}
+        for effort in efforts:
+            table = by_effort[effort]
+            if {("jcode", False), ("claude-code", False)}.issubset(table):
+                swept[f"jcode_vs_claude_code_{effort}"] = delta(
+                    table[("jcode", False)], table[("claude-code", False)]
+                )
+        for agent in ("jcode", "claude-code"):
+            key = (agent, False)
+            for lower, higher in zip(efforts, efforts[1:]):
+                if key in by_effort[lower] and key in by_effort[higher]:
+                    swept[f"{agent}_{higher}_vs_{lower}"] = delta(
+                        by_effort[higher][key], by_effort[lower][key]
+                    )
+        return swept
+
+    by_mode = by_effort[efforts[0]] if efforts else {}
+
+    def compare(left: tuple[str, bool], right: tuple[str, bool]) -> dict[str, float]:
+        return delta(by_mode[left], by_mode[right])
+
 
     # Single-model, two-harness comparison (e.g. the Claude Opus 5 head-to-head).
     if {("jcode", False), ("claude-code", False)}.issubset(by_mode):
@@ -188,8 +238,43 @@ def comparisons(aggregates: list[dict[str, Any]]) -> dict[str, dict[str, float]]
 
 def render_markdown(report: dict[str, Any]) -> str:
     comparison = report["comparisons"]
+    swept_efforts = report.get("reasoning_efforts") or []
     summary_lines = ["## Summary", ""]
-    if "jcode_vs_claude_code" in comparison:
+    if len(swept_efforts) > 1:
+        if not comparison:
+            summary_lines.append(
+                "The sweep is not complete, so no effort comparison is published yet."
+            )
+        for effort in sorted(swept_efforts, key=effort_rank):
+            head_to_head = comparison.get(f"jcode_vs_claude_code_{effort}")
+            if head_to_head:
+                summary_lines.append(
+                    f"- At `{effort}` effort, Jcode led Claude Code by "
+                    f"**{head_to_head['mean_score_delta']:+.4f}** mean final score "
+                    f"(**{head_to_head['geomean_efficiency_factor']:.3f}x**), with "
+                    f"**{head_to_head['total_agent_time_delta_percent']:+.2f}%** total agent time."
+                )
+        ordered = sorted(swept_efforts, key=effort_rank)
+        for agent in ("jcode", "claude-code"):
+            # Reconstruct the step keys from the effort axis rather than by
+            # prefix matching: `jcode_vs_claude_code_low` also starts with
+            # "jcode_" and is a harness comparison, not an effort step.
+            for lower, higher in zip(ordered, ordered[1:]):
+                move = comparison.get(f"{agent}_{higher}_vs_{lower}")
+                if not move:
+                    continue
+                summary_lines.append(
+                    f"- `{agent}` moved **{move['mean_score_delta']:+.4f}** "
+                    f"(**{move['geomean_efficiency_factor']:.3f}x**) going from "
+                    f"`{lower}` to `{higher}`, spending "
+                    f"**{move['total_agent_time_delta_percent']:+.2f}%** agent time."
+                )
+        summary_lines.append(
+            "Per the README variance measurement, a single-cell gap under roughly 0.1 "
+            "is inside run-to-run noise at k=1, so read these effort steps as "
+            "directional until they are rerun."
+        )
+    elif "jcode_vs_claude_code" in comparison:
         head_to_head = comparison["jcode_vs_claude_code"]
         summary_lines.extend(
             [
@@ -226,18 +311,23 @@ def render_markdown(report: dict[str, Any]) -> str:
         summary_lines.append("No four-way Codex/Jcode comparison is defined for this manifest.")
     summary_lines.append("")
 
+    effort_label = (
+        "/".join(sorted(swept_efforts, key=effort_rank))
+        if swept_efforts
+        else str(report.get("reasoning_effort", "unknown"))
+    )
     lines = [
-        f"# Jcode Bench v1: {report.get('model', 'mixed')} high",
+        f"# Jcode Bench v1: {report.get('model', 'mixed')} {effort_label}",
         "",
         f"Benchmark commit: `{report.get('benchmark_commit', 'unknown')}`  ",
-        f"Model: `{report.get('model', 'mixed')}` with `{report.get('reasoning_effort', 'unknown')}` reasoning  ",
+        f"Model: `{report.get('model', 'mixed')}` with `{effort_label}` reasoning  ",
         f"Completed cells: **{report['completed_count']}/{report['run_count']}**",
         "",
         *summary_lines,
         "## Per-task results",
         "",
-        "| Agent | Model | Swarm enabled | Task | Final | Best | Agent time | Grades | Explicit helper events |",
-        "|---|---|---:|---|---:|---:|---:|---:|---:|",
+        "| Agent | Model | Effort | Swarm enabled | Task | Final | Best | Agent time | Grades | Explicit helper events |",
+        "|---|---|---|---:|---|---:|---:|---:|---:|---:|",
     ]
     for row in report["runs"]:
         final = f"{row['final_score']:.4f}" if row.get("final_score") is not None else "-"
@@ -249,6 +339,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         )
         lines.append(
             f"| {row['agent']} | {row.get('model', report.get('model', 'unknown'))} | "
+            f"{row.get('reasoning_effort', report.get('reasoning_effort', 'unknown'))} | "
             f"{'yes' if row['swarm'] else 'no'} | {row['task']} | "
             f"{final} | {best} | {duration} | {row.get('grade_count', 0)} | "
             f"{row.get('helper_events', 0)} |"
@@ -259,13 +350,14 @@ def render_markdown(report: dict[str, Any]) -> str:
             "",
             "## Aggregate results",
             "",
-            "| Agent | Model | Swarm enabled | Tasks | Mean final | Mean best | Total agent time | Helper events |",
-            "|---|---|---:|---:|---:|---:|---:|---:|",
+            "| Agent | Model | Effort | Swarm enabled | Tasks | Mean final | Mean best | Total agent time | Helper events |",
+            "|---|---|---|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for row in report["aggregates"]:
         lines.append(
             f"| {row['agent']} | {row.get('model', report.get('model', 'unknown'))} | "
+            f"{row.get('reasoning_effort', report.get('reasoning_effort', 'unknown'))} | "
             f"{'yes' if row['swarm'] else 'no'} | "
             f"{row['completed_tasks']} | {row['mean_final_score']:.4f} | "
             f"{row['mean_best_score']:.4f} | {row['total_agent_duration_s']:.1f}s | "
@@ -289,6 +381,10 @@ def collect(manifest: dict[str, Any], volume: modal.Volume) -> dict[str, Any]:
     for run in manifest["runs"]:
         row: dict[str, Any] = {**run, "status": "running"}
         row.setdefault("model", manifest.get("model", "unknown"))
+        # Older manifests recorded effort once at the top level; swept manifests
+        # record it per run. Either way every row carries its own effort so the
+        # aggregation key is never silently "unknown".
+        row.setdefault("reasoning_effort", manifest.get("reasoning_effort", "unknown"))
         call = modal.FunctionCall.from_id(run["function_call_id"])
         try:
             remote = call.get(timeout=0)

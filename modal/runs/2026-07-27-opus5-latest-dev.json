@@ -1,0 +1,80 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-opus5",
+  "launched_at": "2026-07-27T09:11:08.208153+00:00",
+  "mode": "full",
+  "model": "claude-opus-5",
+  "reasoning_effort": "high",
+  "runner_commit": "79327d9bc96eb7e5e2c9990a38b3ed4853d89dd3",
+  "run_count": 3,
+  "completed_count": 3,
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYHDF7TCBWXNR9DQTY62QH7K",
+      "model": "claude-opus-5",
+      "run_id": "20260727T091107Z-opus5-jcode-json-unescape",
+      "swarm": false,
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 9685.398,
+      "grade_count": 35,
+      "final_score": 3.1041,
+      "best_score": 3.1197,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYHDF7ZG95862GFZ7D04K74P",
+      "model": "claude-opus-5",
+      "run_id": "20260727T091107Z-opus5-jcode-float-print",
+      "swarm": false,
+      "task": "float-print",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 12073.243,
+      "grade_count": 22,
+      "final_score": 8.9923,
+      "best_score": 8.9923,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYHDF8328GTRMEJ135DJBVVV",
+      "model": "claude-opus-5",
+      "run_id": "20260727T091107Z-opus5-jcode-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 11739.739,
+      "grade_count": 74,
+      "final_score": 2.6876,
+      "best_score": 2.6945,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "jcode",
+      "swarm": false,
+      "model": "claude-opus-5",
+      "completed_tasks": 3,
+      "mean_final_score": 4.928,
+      "mean_best_score": 4.9355,
+      "total_agent_duration_s": 33498.38,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
+}

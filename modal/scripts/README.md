@@ -20,6 +20,7 @@ They exist because the interactive path was unreliable in two specific ways:
 | `opus5-keeper.sh` | restart the finisher if it ever dies, and exit once the reports exist |
 | `opus5-progress.sh` | log a compact per-cell score line every 30 minutes |
 | `opus5-clean-matrix.sh` | launch all six cells simultaneously on non-preemptible capacity |
+| `opus5-effort-sweep.sh` | deploy and launch the 18-cell low/medium/high effort sweep |
 | `opus5-redeploy.sh` | redeploy the app with the pinned binary, retrying stalled uploads |
 
 Each script hardcodes the pinned binary path used for that run

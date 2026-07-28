@@ -108,8 +108,8 @@ modal deploy modal/codex_ultra_app.py
 ## Claude Opus 5 harness head-to-head
 
 [`opus5_app.py`](opus5_app.py) is an isolated app (`jcode-bench-v1-opus5`) that
-compares two agent harnesses on one model, Anthropic `claude-opus-5` at `high`
-effort through the Anthropic API:
+compares two agent harnesses on one model, Anthropic `claude-opus-5` through the
+Anthropic API, at a caller-selected reasoning effort:
 
 | harness | delegation | version |
 |---|---|---|
@@ -158,6 +158,33 @@ modal deploy modal/opus5_app.py
   --markdown-output modal/runs/<date>-opus5-results.md
 ```
 
+### Reasoning-effort sweep
+
+Reasoning effort is a per-call argument, so one deployment serves the whole
+sweep and every cell is otherwise byte-identical. The default launch is 18
+cells: `low`/`medium`/`high` x `jcode`/`claude-code` x three tasks. The effort is
+part of each run id, because two cells sharing a results directory would make the
+second one resume the first one's checkpoint.
+
+```bash
+# Detached, retrying deploy, pinned to a clean build.
+setsid modal/scripts/opus5-effort-sweep.sh &
+
+# Or by hand, after deploying as above:
+~/.local/share/uv/tools/modal/bin/python modal/opus5_launch.py \
+  --mode full --harnesses jcode claude-code --efforts low medium high
+```
+
+The collector keys aggregates on `(agent, swarm, model, reasoning_effort)`, so a
+sweep is never averaged across the axis it exists to measure. A swept report adds
+a harness comparison per effort plus each harness's movement from one effort to
+the next, ordered by capability (`low` < `medium` < `high` < `xhigh` < `max`)
+rather than alphabetically.
+
+Read the steps against the variance section of the top-level README: run-to-run
+spread at k=1 is roughly 0.1, so an effort step smaller than that is not evidence
+of anything on its own.
+
 ### Validity gates before publishing
 
 `validate_opus5_run.py` is the publish gate. The pilot showed a cell can pass
@@ -168,7 +195,10 @@ is not publishable until every gate passes:
 - no turn ended exactly at the model's output ceiling (truncation);
 - the official final grade exited zero;
 - the cell did not exit cleanly after a trivial slice of its budget;
-- all cells agree on commit, prompt, effort, budget, and pinned artifacts.
+- all cells agree on commit, prompt, budget, and pinned artifacts (effort is
+  excluded when it is the swept variable, and is instead checked per cell against
+  the effort that cell was launched with, so a silent effort fallback still voids
+  the run).
 
 ```bash
 ~/.local/share/uv/tools/modal/bin/python modal/validate_opus5_run.py \

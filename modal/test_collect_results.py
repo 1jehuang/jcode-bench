@@ -19,15 +19,35 @@ collect = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(collect)
 
 
-def aggregate_row(agent: str, mean_final: float, duration_s: float) -> dict[str, object]:
+def aggregate_row(
+    agent: str, mean_final: float, duration_s: float, effort: str = "high"
+) -> dict[str, object]:
     return {
         "agent": agent,
         "swarm": False,
         "model": "claude-opus-5",
+        "reasoning_effort": effort,
         "completed_tasks": 3,
         "mean_final_score": mean_final,
         "mean_best_score": mean_final,
         "total_agent_duration_s": duration_s,
+        "helper_events": 0,
+    }
+
+
+def task_row(
+    agent: str, task: str, effort: str, final: float, duration_s: float
+) -> dict[str, object]:
+    return {
+        "agent": agent,
+        "swarm": False,
+        "task": task,
+        "model": "claude-opus-5",
+        "reasoning_effort": effort,
+        "status": "completed",
+        "final_score": final,
+        "best_score": final,
+        "agent_duration_s": duration_s,
         "helper_events": 0,
     }
 
@@ -144,6 +164,83 @@ class HeadToHeadComparisonTests(unittest.TestCase):
         self.assertIn("2.000x", markdown)
 
 
+class EffortSweepTests(unittest.TestCase):
+    """An effort sweep must be reported per effort, never averaged across it."""
+
+    def test_aggregate_keeps_efforts_separate(self) -> None:
+        rows = [
+            task_row("jcode", "json-unescape", "low", 1.0, 100.0),
+            task_row("jcode", "json-unescape", "high", 3.0, 300.0),
+        ]
+        aggregates = collect.aggregate(rows)
+        self.assertEqual(len(aggregates), 2)
+        by_effort = {row["reasoning_effort"]: row for row in aggregates}
+        self.assertAlmostEqual(by_effort["low"]["mean_final_score"], 1.0)
+        self.assertAlmostEqual(by_effort["high"]["mean_final_score"], 3.0)
+
+    def test_swept_comparisons_cover_harness_and_effort_axes(self) -> None:
+        aggregates = [
+            aggregate_row("jcode", 1.0, 1000.0, "low"),
+            aggregate_row("claude-code", 0.5, 1000.0, "low"),
+            aggregate_row("jcode", 2.0, 2000.0, "medium"),
+            aggregate_row("claude-code", 1.0, 1000.0, "medium"),
+            aggregate_row("jcode", 3.0, 4000.0, "high"),
+            aggregate_row("claude-code", 1.5, 1000.0, "high"),
+        ]
+        result = collect.comparisons(aggregates)
+        for effort in ("low", "medium", "high"):
+            self.assertIn(f"jcode_vs_claude_code_{effort}", result)
+        # Effort steps must follow capability order, not alphabetical order.
+        self.assertIn("jcode_medium_vs_low", result)
+        self.assertIn("jcode_high_vs_medium", result)
+        self.assertNotIn("jcode_low_vs_high", result)
+        self.assertAlmostEqual(result["jcode_medium_vs_low"]["mean_score_delta"], 1.0)
+        self.assertAlmostEqual(
+            result["jcode_medium_vs_low"]["total_agent_time_delta_percent"], 100.0
+        )
+
+    def test_markdown_reports_every_effort_and_its_step(self) -> None:
+        aggregates = [
+            aggregate_row("jcode", 1.0, 1000.0, "low"),
+            aggregate_row("claude-code", 0.5, 1000.0, "low"),
+            aggregate_row("jcode", 3.0, 4000.0, "high"),
+            aggregate_row("claude-code", 1.5, 1000.0, "high"),
+        ]
+        report = {
+            "model": "claude-opus-5",
+            "reasoning_efforts": ["high", "low"],
+            "benchmark_commit": "abc123",
+            "run_count": 12,
+            "completed_count": 12,
+            "runs": [
+                task_row("jcode", "json-unescape", "low", 1.0, 1000.0),
+            ],
+            "aggregates": aggregates,
+            "comparisons": collect.comparisons(aggregates),
+        }
+        markdown = collect.render_markdown(report)
+        self.assertIn("low/high", markdown)
+        self.assertIn("At `low` effort", markdown)
+        self.assertIn("At `high` effort", markdown)
+        self.assertIn("going from `low` to `high`", markdown)
+        # The effort must be visible on each row, not just in the header.
+        self.assertIn("| jcode | claude-opus-5 | low |", markdown)
+
+    def test_incomplete_sweep_renders_without_comparisons(self) -> None:
+        report = {
+            "model": "claude-opus-5",
+            "reasoning_efforts": ["low", "medium", "high"],
+            "benchmark_commit": "abc123",
+            "run_count": 18,
+            "completed_count": 4,
+            "runs": [],
+            "aggregates": [],
+            "comparisons": {},
+        }
+        markdown = collect.render_markdown(report)
+        self.assertIn("sweep is not complete", markdown)
+
+
 VALIDATOR_PATH = Path(__file__).with_name("validate_opus5_run.py")
 _VSPEC = importlib.util.spec_from_file_location("validate_opus5_run", VALIDATOR_PATH)
 assert _VSPEC and _VSPEC.loader
@@ -182,6 +279,27 @@ class ValidatorCeilingTests(unittest.TestCase):
         ]
         problems = validator.check_matched_conditions(cells)
         self.assertTrue(any("jcode_sha256" in problem for problem in problems))
+
+    def test_swept_effort_is_not_treated_as_a_mismatch(self) -> None:
+        """Effort is the sweep's independent variable, not a controlled one."""
+        cells = [
+            {"agent": "jcode", "task": "t",
+             "matched": {"bench_commit": "abc", "reasoning_effort": "low"}},
+            {"agent": "jcode", "task": "t",
+             "matched": {"bench_commit": "abc", "reasoning_effort": "high"}},
+        ]
+        self.assertEqual(validator.check_matched_conditions(cells), [])
+
+    def test_other_conditions_still_checked_across_a_sweep(self) -> None:
+        cells = [
+            {"agent": "jcode", "task": "t",
+             "matched": {"bench_commit": "abc", "reasoning_effort": "low"}},
+            {"agent": "jcode", "task": "t",
+             "matched": {"bench_commit": "def", "reasoning_effort": "high"}},
+        ]
+        problems = validator.check_matched_conditions(cells)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("bench_commit", problems[0])
 
     def test_matched_conditions_pass_when_identical(self) -> None:
         cells = [

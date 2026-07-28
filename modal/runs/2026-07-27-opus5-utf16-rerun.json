@@ -1,0 +1,44 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-opus5",
+  "launched_at": "2026-07-27T06:44:23.781054+00:00",
+  "mode": "full",
+  "model": "claude-opus-5",
+  "reasoning_effort": "high",
+  "runner_commit": "79327d9bc96eb7e5e2c9990a38b3ed4853d89dd3",
+  "run_count": 1,
+  "completed_count": 1,
+  "runs": [
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYH52J0FQRD4T6VR7CA8GDBC",
+      "model": "claude-opus-5",
+      "run_id": "20260727T064423Z-opus5-jcode-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 16165.093,
+      "grade_count": 140,
+      "final_score": 3.1672,
+      "best_score": 3.2405,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "jcode",
+      "swarm": false,
+      "model": "claude-opus-5",
+      "completed_tasks": 1,
+      "mean_final_score": 3.1672,
+      "mean_best_score": 3.2405,
+      "total_agent_duration_s": 16165.093,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {}
+}

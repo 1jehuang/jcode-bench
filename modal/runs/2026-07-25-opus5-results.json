@@ -1,0 +1,208 @@
+{
+  "agent_budget_hours": 20,
+  "app": "jcode-bench-v1-opus5",
+  "jcode_sha256": "5c4b3055d49b6bd9be20cb8bbe8cf713ada7497e0ac77407c2f9d8d2c66ea58b",
+  "jcode_version": "jcode v0.56.19-dev (b9b1470ad)",
+  "launched_at": "2026-07-25T00:51:52.797352+00:00",
+  "mode": "full",
+  "model": "claude-opus-5",
+  "note": "Claude Opus 5 head-to-head. All jcode cells are pinned to jcode v0.58.0-dev (5e064af4a), which carries the per-model output budget and empty-post-tool retry fixes. Claude Code cells are pinned to 2.1.219. Non-preemptible capacity with change-driven checkpoints.",
+  "reasoning_effort": "high",
+  "runner_commit": "998638ca2bd0cc9c2db463c726220b860737b1c1",
+  "superseded_runs": [
+    {
+      "observed_final_score": 2.922,
+      "reason": "predates max_output_tokens metadata so truncation cannot be verified; also preempted and restarted 43 min after launch",
+      "run_id": "20260724T203437Z-opus5-claude-code-json-unescape"
+    },
+    {
+      "observed_final_score": -0.0001,
+      "reason": "preempted three times under 5-minute checkpoints; each resume restored a snapshot predating the agent's completed solve.c, so the cell kept scoring 0 despite ~270k output tokens of real work",
+      "run_id": "20260724T220318Z-opus5-jcode-float-print"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T221037Z-opus5-claude-code-float-print"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T225158Z-opus5-claude-code-json-unescape"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T221037Z-opus5-claude-code-utf16-transcode"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260725T003658Z-opus5-jcode-float-print"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T220318Z-opus5-jcode-json-unescape"
+    },
+    {
+      "reason": "ran on preemptible capacity; cancelled and relaunched on non-preemptible for a clean simultaneous matrix",
+      "run_id": "20260724T220318Z-opus5-jcode-utf16-transcode"
+    },
+    {
+      "observed_final_score": 0.0,
+      "reason": "final turn returned zero output tokens; the empty-post-tool retry budget was 1, so the turn loop ended with the submission unoptimized and the run reported success at 0.0",
+      "run_id": "20260725T005151Z-opus5-jcode-utf16-transcode"
+    },
+    {
+      "reason": "pinned to jcode v0.56.19-dev; the utf16 rerun required v0.58.0 for the empty-post-tool retry fix, and the two builds differ by 59 files, so all jcode cells were relaunched on one pin rather than assuming the delta was score-neutral",
+      "run_id": "20260725T005151Z-opus5-jcode-float-print"
+    },
+    {
+      "reason": "pinned to jcode v0.56.19-dev; the utf16 rerun required v0.58.0 for the empty-post-tool retry fix, and the two builds differ by 59 files, so all jcode cells were relaunched on one pin rather than assuming the delta was score-neutral",
+      "run_id": "20260725T005151Z-opus5-jcode-json-unescape"
+    }
+  ],
+  "run_count": 6,
+  "completed_count": 6,
+  "runs": [
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYBC3MDGM0S5R9H0HWQGXB5Z",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
+      "model": "claude-opus-5",
+      "run_id": "20260725T005151Z-opus5-claude-code-float-print",
+      "swarm": false,
+      "task": "float-print",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 5910.458,
+      "grade_count": 15,
+      "final_score": 8.8524,
+      "best_score": 8.8545,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYBC3M2ZP5XMBN6J0VEBVQ5C",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
+      "model": "claude-opus-5",
+      "run_id": "20260725T005151Z-opus5-claude-code-json-unescape",
+      "swarm": false,
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 4399.402,
+      "grade_count": 63,
+      "final_score": 3.0106,
+      "best_score": 3.0358,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    },
+    {
+      "agent": "claude-code",
+      "function_call_id": "fc-01KYBC3MQP2JDX73YYXVA6N65X",
+      "launched_at": "2026-07-25T00:51:52.797352+00:00",
+      "model": "claude-opus-5",
+      "run_id": "20260725T005151Z-opus5-claude-code-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 9209.508,
+      "grade_count": 33,
+      "final_score": 3.5543,
+      "best_score": 3.5664,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYBKHZQNYBGV8MQ0896NYKWG",
+      "launched_at": "2026-07-25T03:02:02.823200+00:00",
+      "model": "claude-opus-5",
+      "run_id": "20260725T030202Z-opus5-jcode-float-print",
+      "swarm": false,
+      "task": "float-print",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 10129.35,
+      "grade_count": 24,
+      "final_score": 8.7714,
+      "best_score": 8.7714,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYBKHZJXA9JYJFF71EKCMPBC",
+      "launched_at": "2026-07-25T03:02:02.823200+00:00",
+      "model": "claude-opus-5",
+      "run_id": "20260725T030202Z-opus5-jcode-json-unescape",
+      "swarm": false,
+      "task": "json-unescape",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 14201.188,
+      "grade_count": 62,
+      "final_score": 3.0273,
+      "best_score": 3.0478,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "function_call_id": "fc-01KYBKB1EPJSMM63P2J2D626DK",
+      "launched_at": "2026-07-25T02:58:15.209613+00:00",
+      "model": "claude-opus-5",
+      "run_id": "20260725T025814Z-opus5-jcode-utf16-transcode",
+      "swarm": false,
+      "task": "utf16-transcode",
+      "status": "completed",
+      "agent_exit_code": 0,
+      "final_grade_exit_code": 0,
+      "agent_duration_s": 13222.609,
+      "grade_count": 29,
+      "final_score": 3.3056,
+      "best_score": 3.3099,
+      "helper_events": 0,
+      "output_ceiling": 128000,
+      "truncated_turns": 0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "claude-code",
+      "swarm": false,
+      "model": "claude-opus-5",
+      "completed_tasks": 3,
+      "mean_final_score": 5.1391,
+      "mean_best_score": 5.1522,
+      "total_agent_duration_s": 19519.368,
+      "helper_events": 0
+    },
+    {
+      "agent": "jcode",
+      "swarm": false,
+      "model": "claude-opus-5",
+      "completed_tasks": 3,
+      "mean_final_score": 5.0348,
+      "mean_best_score": 5.043,
+      "total_agent_duration_s": 37553.147,
+      "helper_events": 0
+    }
+  ],
+  "comparisons": {
+    "jcode_vs_claude_code": {
+      "mean_score_delta": -0.1043,
+      "geomean_efficiency_factor": 0.9303,
+      "total_agent_time_delta_percent": 92.39
+    }
+  }
+}

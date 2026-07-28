@@ -1,0 +1,210 @@
+{
+  "cells": [
+    {
+      "agent": "claude-code",
+      "agent_duration_s": 5910.458,
+      "best_score": 8.8545,
+      "budget_fraction": 0.0821,
+      "disclosures": [
+        "exited cleanly after 8.2% of its budget (5910s of 72000s)"
+      ],
+      "estimated_cost_usd": 29.8995,
+      "final_score": 8.8524,
+      "grade_count": 15,
+      "harness_terminal_reason": "completed",
+      "matched": {
+        "agent_budget_s": 72000,
+        "bench_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+        "claude_code_sha256": "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691",
+        "jcode_sha256": "5c4b3055d49b6bd9be20cb8bbe8cf713ada7497e0ac77407c2f9d8d2c66ea58b",
+        "max_output_tokens": 128000,
+        "model": "claude-opus-5",
+        "prompt": "You are being benchmarked on jcode bench task float-print, in this directory.\n\nRead spec.md. Your job: make submission/solve.c faster. Correctness on every input is a hard gate, verified by ./grade. Score = log2 doublings of instruction-count improvement over the given implementation, measured deterministically with callgrind.\n\nThe loop: edit submission/solve.c (you may add more .c/.h files in submission/), run ./grade, read your score. Grade often; every grade is logged to scores.jsonl as your score-over-time curve.\n\nRules: edit only files under submission/. Self-contained C17, libc only. Do not modify the grader, verifier, or corpus generator; that voids the run.\n\nWork until you genuinely cannot improve further. Aim as high as you can; +1.0 means 2x, +2.0 means 4x. Report your final score.",
+        "reasoning_effort": "high"
+      },
+      "problems": [],
+      "restarted_late_by_s": 2.642364,
+      "resumed_from_checkpoint": null,
+      "run_id": "20260725T005151Z-opus5-claude-code-float-print",
+      "task": "float-print",
+      "token_usage": {
+        "cache_read": 26002618,
+        "cache_write": 1637374,
+        "input": 216,
+        "output": 266541
+      },
+      "truncated_turns": 0
+    },
+    {
+      "agent": "claude-code",
+      "agent_duration_s": 4399.402,
+      "best_score": 3.0358,
+      "budget_fraction": 0.0611,
+      "disclosures": [
+        "exited cleanly after 6.1% of its budget (4399s of 72000s)"
+      ],
+      "estimated_cost_usd": 29.4318,
+      "final_score": 3.0106,
+      "grade_count": 63,
+      "harness_terminal_reason": "completed",
+      "matched": {
+        "agent_budget_s": 72000,
+        "bench_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+        "claude_code_sha256": "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691",
+        "jcode_sha256": "5c4b3055d49b6bd9be20cb8bbe8cf713ada7497e0ac77407c2f9d8d2c66ea58b",
+        "max_output_tokens": 128000,
+        "model": "claude-opus-5",
+        "prompt": "You are being benchmarked on jcode bench task json-unescape, in this directory.\n\nRead spec.md. Your job: make submission/solve.c faster. Correctness on every input is a hard gate, verified by ./grade. Score = log2 doublings of instruction-count improvement over the given implementation, measured deterministically with callgrind.\n\nThe loop: edit submission/solve.c (you may add more .c/.h files in submission/), run ./grade, read your score. Grade often; every grade is logged to scores.jsonl as your score-over-time curve.\n\nRules: edit only files under submission/. Self-contained C17, libc only. Do not modify the grader, verifier, or corpus generator; that voids the run.\n\nWork until you genuinely cannot improve further. Aim as high as you can; +1.0 means 2x, +2.0 means 4x. Report your final score.",
+        "reasoning_effort": "high"
+      },
+      "problems": [],
+      "restarted_late_by_s": 2.332482,
+      "resumed_from_checkpoint": null,
+      "run_id": "20260725T005151Z-opus5-claude-code-json-unescape",
+      "task": "json-unescape",
+      "token_usage": {
+        "cache_read": 37882072,
+        "cache_write": 425831,
+        "input": 278,
+        "output": 313119
+      },
+      "truncated_turns": 0
+    },
+    {
+      "agent": "claude-code",
+      "agent_duration_s": 9209.508,
+      "best_score": 3.5664,
+      "budget_fraction": 0.1279,
+      "disclosures": [],
+      "estimated_cost_usd": 37.222,
+      "final_score": 3.5543,
+      "grade_count": 33,
+      "harness_terminal_reason": "completed",
+      "matched": {
+        "agent_budget_s": 72000,
+        "bench_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+        "claude_code_sha256": "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691",
+        "jcode_sha256": "5c4b3055d49b6bd9be20cb8bbe8cf713ada7497e0ac77407c2f9d8d2c66ea58b",
+        "max_output_tokens": 128000,
+        "model": "claude-opus-5",
+        "prompt": "You are being benchmarked on jcode bench task utf16-transcode, in this directory.\n\nRead spec.md. Your job: make submission/solve.c faster. Correctness on every input is a hard gate, verified by ./grade. Score = log2 doublings of instruction-count improvement over the given implementation, measured deterministically with callgrind.\n\nThe loop: edit submission/solve.c (you may add more .c/.h files in submission/), run ./grade, read your score. Grade often; every grade is logged to scores.jsonl as your score-over-time curve.\n\nRules: edit only files under submission/. Self-contained C17, libc only. Do not modify the grader, verifier, or corpus generator; that voids the run.\n\nWork until you genuinely cannot improve further. Aim as high as you can; +1.0 means 2x, +2.0 means 4x. Report your final score.",
+        "reasoning_effort": "high"
+      },
+      "problems": [],
+      "restarted_late_by_s": 3.138493,
+      "resumed_from_checkpoint": null,
+      "run_id": "20260725T005151Z-opus5-claude-code-utf16-transcode",
+      "task": "utf16-transcode",
+      "token_usage": {
+        "cache_read": 33431876,
+        "cache_write": 761750,
+        "input": 223,
+        "output": 629759
+      },
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "agent_duration_s": 10129.35,
+      "best_score": 8.7714,
+      "budget_fraction": 0.1407,
+      "disclosures": [],
+      "estimated_cost_usd": 39.6687,
+      "final_score": 8.7714,
+      "grade_count": 24,
+      "harness_terminal_reason": null,
+      "matched": {
+        "agent_budget_s": 72000,
+        "bench_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+        "claude_code_sha256": "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691",
+        "jcode_sha256": "6c2720bc8084dac64eb1e2c189988024fac777bf8ffc410b38ca6d36249741a6",
+        "max_output_tokens": 128000,
+        "model": "claude-opus-5",
+        "prompt": "You are being benchmarked on jcode bench task float-print, in this directory.\n\nRead spec.md. Your job: make submission/solve.c faster. Correctness on every input is a hard gate, verified by ./grade. Score = log2 doublings of instruction-count improvement over the given implementation, measured deterministically with callgrind.\n\nThe loop: edit submission/solve.c (you may add more .c/.h files in submission/), run ./grade, read your score. Grade often; every grade is logged to scores.jsonl as your score-over-time curve.\n\nRules: edit only files under submission/. Self-contained C17, libc only. Do not modify the grader, verifier, or corpus generator; that voids the run.\n\nWork until you genuinely cannot improve further. Aim as high as you can; +1.0 means 2x, +2.0 means 4x. Report your final score.",
+        "reasoning_effort": "high"
+      },
+      "problems": [],
+      "restarted_late_by_s": 3.44377,
+      "resumed_from_checkpoint": null,
+      "run_id": "20260725T030202Z-opus5-jcode-float-print",
+      "task": "float-print",
+      "token_usage": {
+        "cache_read": 42062025,
+        "cache_write": 297034,
+        "input": 110822,
+        "output": 649084
+      },
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "agent_duration_s": 14201.188,
+      "best_score": 3.0478,
+      "budget_fraction": 0.1972,
+      "disclosures": [],
+      "estimated_cost_usd": 56.9038,
+      "final_score": 3.0273,
+      "grade_count": 62,
+      "harness_terminal_reason": null,
+      "matched": {
+        "agent_budget_s": 72000,
+        "bench_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+        "claude_code_sha256": "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691",
+        "jcode_sha256": "6c2720bc8084dac64eb1e2c189988024fac777bf8ffc410b38ca6d36249741a6",
+        "max_output_tokens": 128000,
+        "model": "claude-opus-5",
+        "prompt": "You are being benchmarked on jcode bench task json-unescape, in this directory.\n\nRead spec.md. Your job: make submission/solve.c faster. Correctness on every input is a hard gate, verified by ./grade. Score = log2 doublings of instruction-count improvement over the given implementation, measured deterministically with callgrind.\n\nThe loop: edit submission/solve.c (you may add more .c/.h files in submission/), run ./grade, read your score. Grade often; every grade is logged to scores.jsonl as your score-over-time curve.\n\nRules: edit only files under submission/. Self-contained C17, libc only. Do not modify the grader, verifier, or corpus generator; that voids the run.\n\nWork until you genuinely cannot improve further. Aim as high as you can; +1.0 means 2x, +2.0 means 4x. Report your final score.",
+        "reasoning_effort": "high"
+      },
+      "problems": [],
+      "restarted_late_by_s": 3.151307,
+      "resumed_from_checkpoint": null,
+      "run_id": "20260725T030202Z-opus5-jcode-json-unescape",
+      "task": "json-unescape",
+      "token_usage": {
+        "cache_read": 61493267,
+        "cache_write": 360705,
+        "input": 140676,
+        "output": 927974
+      },
+      "truncated_turns": 0
+    },
+    {
+      "agent": "jcode",
+      "agent_duration_s": 13222.609,
+      "best_score": 3.3099,
+      "budget_fraction": 0.1836,
+      "disclosures": [],
+      "estimated_cost_usd": 50.6901,
+      "final_score": 3.3056,
+      "grade_count": 29,
+      "harness_terminal_reason": null,
+      "matched": {
+        "agent_budget_s": 72000,
+        "bench_commit": "a9bfcdd9ed6cba355bef1025b552ee3da70ce2c0",
+        "claude_code_sha256": "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691",
+        "jcode_sha256": "6c2720bc8084dac64eb1e2c189988024fac777bf8ffc410b38ca6d36249741a6",
+        "max_output_tokens": 128000,
+        "model": "claude-opus-5",
+        "prompt": "You are being benchmarked on jcode bench task utf16-transcode, in this directory.\n\nRead spec.md. Your job: make submission/solve.c faster. Correctness on every input is a hard gate, verified by ./grade. Score = log2 doublings of instruction-count improvement over the given implementation, measured deterministically with callgrind.\n\nThe loop: edit submission/solve.c (you may add more .c/.h files in submission/), run ./grade, read your score. Grade often; every grade is logged to scores.jsonl as your score-over-time curve.\n\nRules: edit only files under submission/. Self-contained C17, libc only. Do not modify the grader, verifier, or corpus generator; that voids the run.\n\nWork until you genuinely cannot improve further. Aim as high as you can; +1.0 means 2x, +2.0 means 4x. Report your final score.",
+        "reasoning_effort": "high"
+      },
+      "problems": [],
+      "restarted_late_by_s": 2.81736,
+      "resumed_from_checkpoint": null,
+      "run_id": "20260725T025814Z-opus5-jcode-utf16-transcode",
+      "task": "utf16-transcode",
+      "token_usage": {
+        "cache_read": 48257453,
+        "cache_write": 336029,
+        "input": 138463,
+        "output": 950756
+      },
+      "truncated_turns": 0
+    }
+  ],
+  "manifest": "modal/runs/2026-07-24-opus5-head-to-head.json",
+  "matched_condition_problems": [],
+  "pending": [],
+  "publishable": true
+}

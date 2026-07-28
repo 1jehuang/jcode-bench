@@ -41,6 +41,11 @@ RESTART_TOLERANCE_S = 15 * 60
 # Fields that must be identical across every cell for the comparison to be fair.
 # Fields that legitimately vary by task; compared per task, not globally.
 PER_TASK_FIELDS = frozenset({"prompt"})
+# The deliberately swept axis. When a manifest sweeps effort, cells are compared
+# within an effort instead of globally, and every cell is separately checked
+# against the effort it was actually launched with, so a silent effort fallback
+# still voids the run.
+SWEPT_FIELDS = frozenset({"reasoning_effort"})
 MATCHED_FIELDS = (
     "bench_commit",
     "prompt",
@@ -176,6 +181,19 @@ def check_cell(
         problems.append(
             f"preflight model {preflight.get('observed_model')!r} != {expected_model!r}"
         )
+    # In an effort sweep the effort is the independent variable, so a cell that
+    # ran at some other effort measures the wrong thing entirely.
+    requested_effort = run.get("reasoning_effort")
+    if requested_effort is not None:
+        for source, observed in (
+            ("result", result.get("reasoning_effort")),
+            ("preflight", preflight.get("reasoning_effort")),
+        ):
+            if observed != requested_effort:
+                problems.append(
+                    f"{source} reasoning_effort {observed!r} != requested "
+                    f"{requested_effort!r}"
+                )
 
     ceiling = int(result.get("max_output_tokens") or 0)
     if ceiling <= 0:
@@ -269,6 +287,7 @@ def check_cell(
         "run_id": run_id,
         "agent": agent,
         "task": run["task"],
+        "reasoning_effort": result.get("reasoning_effort"),
         "final_score": float(scores[-1]["score"]) if scores else None,
         "best_score": max(float(s["score"]) for s in scores) if scores else None,
         "grade_count": len(scores),
@@ -321,7 +340,7 @@ def check_matched_conditions(cells: list[dict[str, Any]]) -> list[str]:
     problems = []
     problems.extend(check_harness_pins(cells))
     for field in MATCHED_FIELDS:
-        if field in PER_HARNESS_FIELDS:
+        if field in PER_HARNESS_FIELDS or field in SWEPT_FIELDS:
             continue
         if field in PER_TASK_FIELDS:
             by_task: dict[str, set[str]] = {}
@@ -380,6 +399,7 @@ def main() -> int:
         verdict = "OK" if not cell["problems"] else "INVALID"
         print(
             f"{verdict:8} {cell['agent']:12} {cell['task']:16} "
+            f"effort={cell.get('reasoning_effort')!s:7} "
             f"final={cell['final_score']} grades={cell['grade_count']} "
             f"budget={cell['budget_fraction']:.1%} truncated={cell['truncated_turns']}"
         )
